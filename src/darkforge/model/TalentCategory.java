@@ -3,7 +3,7 @@ package darkforge.model;
 public enum TalentCategory {
     COMBAT("Combat"),
     SOCIAL("Social"),
-    VEHICLE_EXO("Vehivle & Exo"),
+    VEHICLE_EXO("Vehicle & Exo"),
     KNOWLEDGE("Knowledge"),
     INSIGHT("Insight"),
     EQUIPMENT("Equipment"),
