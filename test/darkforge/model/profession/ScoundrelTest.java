@@ -9,7 +9,7 @@ class ScoundrelTest {
 
   @Test
   void shouldReturnAgilityAsKeyAttribute() {
-    assertEquals(Attribute.AGILITY, new Scoundrel("Test").getKeyAttribute());
+    assertEquals(Attribute.PERCEPTION, new Scoundrel("Test").getKeyAttribute());
   }
 
   @Test

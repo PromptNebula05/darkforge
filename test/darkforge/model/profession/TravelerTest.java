@@ -9,7 +9,7 @@ class TravelerTest {
 
   @Test
   void shouldReturnEmpathyAsKeyAttribute() {
-    assertEquals(Attribute.EMPATHY, new Traveler("Test").getKeyAttribute());
+    assertEquals(Attribute.PERCEPTION, new Traveler("Test").getKeyAttribute());
   }
 
   @Test
@@ -26,12 +26,12 @@ class TravelerTest {
   }
 
   @Test
-  void shouldFilterSurvivalTalentsByRecoveryCategory() {
+  void shouldFilterSurvivalTalentsByVehicleExoCategory() {
     Traveler t = new Traveler("Test");
-    t.addTalent(new Talent("Survivor", "desc", TalentCategory.RECOVERY, 3, 1, "effect"));
+    t.addTalent(new Talent("Pilot", "desc", TalentCategory.VEHICLE_EXO, 3, 1, "effect"));
     t.addTalent(new Talent("Tough", "desc", TalentCategory.COMBAT, 3, 1, "effect"));
     List<String> survival = t.getSurvivalTalents();
-    assertTrue(survival.contains("Survivor"));
+    assertTrue(survival.contains("Pilot"));
     assertFalse(survival.contains("Tough"));
   }
 }

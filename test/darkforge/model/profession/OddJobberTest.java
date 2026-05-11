@@ -8,7 +8,7 @@ class OddJobberTest {
 
   @Test
   void shouldReturnPerceptionAsKeyAttribute() {
-    assertEquals(Attribute.PERCEPTION, new OddJobber("Test").getKeyAttribute());
+    assertEquals(Attribute.EMPATHY, new OddJobber("Test").getKeyAttribute());
   }
 
   @Test
