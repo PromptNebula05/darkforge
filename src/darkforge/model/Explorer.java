@@ -10,6 +10,7 @@ public abstract class Explorer extends GameEntity implements Displayable {
   private Origin origin;
   private Specialty specialty;
   private final List<Talent> talents;
+  private List<Equipment> equipment = new ArrayList<>();
   private String quirk;
   private String keepsake;
   private String appearance;
@@ -91,6 +92,14 @@ public abstract class Explorer extends GameEntity implements Displayable {
     }
     talents.add(talent);
     return true;
+  }
+
+  public List<Equipment> getEquipment() {
+    return Collections.unmodifiableList(equipment);
+  }
+
+  public void setEquipment(List<Equipment> equipment) {
+    this.equipment = new ArrayList<>(equipment);
   }
 
   public String getQuirk() {

@@ -1,6 +1,7 @@
 package darkforge.display;
 
 import darkforge.model.*;
+import java.util.List;
 
 public class CharacterSheetRenderer implements Displayable {
 
@@ -59,6 +60,17 @@ public class CharacterSheetRenderer implements Displayable {
       String dots = ".".repeat(Math.max(1, 24 - talent.getName().length()));
       sb.append(
           String.format("  %s %s Lv %d/%d%n", talent.getName(), dots, talent.getCurrentLevel(), talent.getMaxLevel()));
+    }
+
+    sb.append(SINGLE_LINE).append("\n");
+    sb.append(" EQUIPMENT\n");
+    List<Equipment> gear = explorer.getEquipment();
+    if (gear.isEmpty()) {
+      sb.append("  (none)\n");
+    } else {
+      for (Equipment equip : gear) {
+        sb.append(String.format("  %s%n", equip.display()));
+      }
     }
 
     sb.append(SINGLE_LINE).append("\n");

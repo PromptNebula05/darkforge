@@ -419,6 +419,11 @@ public class ExplorerFactory {
     EXPLORER_REASON_TABLE.roll();
     explorer.setExplorerReason(EXPLORER_REASON_TABLE.getResult(EXPLORER_REASON_TABLE.getLastRollValue()));
 
+    // Roll starting equipment set
+    List<List<Equipment>> equipSets = explorer.getStartingEquipmentSets();
+    int equipRoll = rng.nextInt(equipSets.size());
+    explorer.setEquipment(equipSets.get(equipRoll));
+
     return explorer;
   }
 
