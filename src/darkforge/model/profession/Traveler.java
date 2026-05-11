@@ -29,7 +29,7 @@ public class Traveler extends Explorer {
         new Talent("Driver", "Driving ground vehicles", TalentCategory.VEHICLE_EXO, 3,
             "+1 base die per talent level for driving any kind of ground vehicle"),
         new Talent("Mechanic", "Repairing vehicles and devices", TalentCategory.EQUIPMENT, 3,
-            "+1 base die per talent level for repairing vehicles and other mechanical devices"),
+            "+1 base die per talent level for repairing vehicles and other mechanical devices. You also get +1 die per talent level to close combat rolls when fighting with any kind of tools, such as drills, hammers, and cutting torches."),
         new Talent("Exo-Specialist", "Exo suit operation", TalentCategory.VEHICLE_EXO, 3,
             "+1 base die per talent level when handling an exo of some kind"),
         new Talent("Zero-G Training", "Zero gravity operations", TalentCategory.STEALTH_MOBILITY, 1,

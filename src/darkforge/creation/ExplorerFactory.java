@@ -199,7 +199,7 @@ public class ExplorerFactory {
       // D66 11: The Decrepit Halls of an Orphanage
       new Origin("The Decrepit Halls of an Orphanage",
           new Talent("Stealthy", "Staying hidden", TalentCategory.STEALTH_MOBILITY, 3,
-              "+1 base die per talent level for staying hidden"),
+              "+1 base die per talent level for staying hidden. Cannot be used for ambushes."),
           "The Navigators Guild",
           contacts("Second Cartographer Masmirand", "Thief Youkobos", "Algebraist Anapur"),
           11, 11),
@@ -213,14 +213,14 @@ public class ExplorerFactory {
       // D66 15-22: Deep Inside the Factory City of the Turbine Halls
       new Origin("Deep Inside the Factory City of the Turbine Halls",
           new Talent("Mechanic", "Repairing vehicles and devices", TalentCategory.EQUIPMENT, 3,
-              "+1 base die per talent level for repairing vehicles and other mechanical devices"),
+              "+1 base die per talent level for repairing vehicles and other mechanical devices. You also get +1 die per talent level to close combat rolls when fighting with any kind of tools, such as drills, hammers, and cutting torches."),
           "The Machinists Guild",
           contacts("Driller Hasara Doukem", "Loader Bor Berkem", "Third mechanic Yina Caph"),
           15, 22),
       // D66 23-31: In the Purple Meadows of the Cave Gardens
       new Origin("In the Purple Meadows of the Cave Gardens",
           new Talent("Botanist", "Cultivating and understanding flora", TalentCategory.KNOWLEDGE, 3,
-              "+1 base die per talent level for cultivating plants or fungi and understanding flora and ivy"),
+              "+1 base die per talent level for cultivating plants or fungi as well as understanding flora and ivy"),
           "The Gardeners Guild",
           contacts("Gardener Preci Loukou", "Second botanist Zahre Uhat", "Root cutter Yisam Recha"),
           23, 31),

@@ -55,13 +55,13 @@ public class Enforcer extends Explorer {
   public static List<Talent> getAvailableWeaponTalents() {
     return List.of(
         new Talent("Blade Fighter", "Bladed weapon combat", TalentCategory.COMBAT, 3,
-            "+1 base die per talent level to close combat rolls when fighting with blade weapons"),
+            "+1 base die per talent level to close combat rolls when fighting with blade weapons, i.e. swords, knives, axes and spears"),
         new Talent("Bowman", "Bow and crossbow accuracy", TalentCategory.COMBAT, 3,
             "+1 base die per talent level when firing a bow or crossbow"),
         new Talent("Demolitions Expert", "Explosive weapons", TalentCategory.COMBAT, 3,
-            "+1 base die per talent level when using explosive weapons, including hand grenades"),
+            "+1 base die per talent level when using explosive weapons, including hand grenades and improvised explosives"),
         new Talent("Heavy Weapons", "Heavy mounted weapons", TalentCategory.COMBAT, 3,
-            "+1 base die per talent level when firing heavy weapons such as rocket launchers and flamers"),
+            "+1 base die per talent level when firing heavy weapons such as rocket launchers, flamers, and vehicle mounted weapons"),
         new Talent("Pistoleer", "Pistol accuracy", TalentCategory.COMBAT, 3,
             "+1 base die per talent level when firing a pistol"),
         new Talent("Polearms", "Blunt weapon combat", TalentCategory.COMBAT, 3,
@@ -86,7 +86,7 @@ public class Enforcer extends Explorer {
         new Talent("Evasive", "Dodging ranged attacks", TalentCategory.COMBAT, 3,
             "+1 base die per talent level to Agility rolls for dodging ranged attacks"),
         new Talent("Medic", "Treating the wounded", TalentCategory.RECOVERY, 3,
-            "+1 base die per talent level when trying to help someone broken by damage"));
+            "+1 base die per talent level when trying to help someone broken by damage. Medical equipment give you gear dice."));
   }
 
   @Override
@@ -100,7 +100,7 @@ public class Enforcer extends Explorer {
                 "+1 base die per talent level to rolls for spotting approaching threats")),
         new Specialty("Fusillard Protector", "Shielding clients from attacks with fusillard and armor",
             new Talent("Bodyguard", "Diving in to protect others", TalentCategory.COMBAT, 1,
-                "If someone within Short range is hit by an attack, you can dive in to take the hit")),
+                "If someone within Short range of you is hit by an attack, you can dive in to take the hit. Roll for Agility and if you succeed you take the hit instead. You can push the roll. This doesn't count as an action in combat.")),
         new Specialty("Guild Investigator", "Solving complex crimes for the Guilds and private patrons",
             new Talent("Investigator", "Searching for clues", TalentCategory.KNOWLEDGE, 3,
                 "+1 base die per talent level when searching an area for clues")),
@@ -109,7 +109,7 @@ public class Enforcer extends Explorer {
                 "+1 base die per talent level to close combat rolls when using blunt weapons")),
         new Specialty("Bounty Hunter", "Tracking and capturing bounties across Jumuah",
             new Talent("Streetwise", "Urban connections and rumors", TalentCategory.STEALTH_MOBILITY, 3,
-                "+1 base die per talent level for acquiring stolen goods, finding a contact, or hearing rumors")));
+                "+1 base die per talent level for acquiring stolen goods, finding a contact, or hearing rumors in Ship City and the colonies")));
   }
 
   @Override

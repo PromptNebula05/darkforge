@@ -55,7 +55,7 @@ public class Roughneck extends Explorer {
                 "+1 base die per talent level to jumping, climbing, and running")),
         new Specialty("Machine Tender", "Disassembling and reassembling machines, circuits, and gizmos",
             new Talent("Mechanic", "Repairing vehicles and devices", TalentCategory.EQUIPMENT, 3,
-                "+1 base die per talent level for repairing vehicles and other mechanical devices")));
+                "+1 base die per talent level for repairing vehicles and other mechanical devices. You also get +1 die per talent level to close combat rolls when fighting with any kind of tools, such as drills, hammers, and cutting torches.")));
   }
 
   @Override
