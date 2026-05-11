@@ -360,11 +360,13 @@ public class ExplorerFactory {
     Talent originTalent = new Talent(origin.getFreeTalent().getName(), origin.getFreeTalent().getDescription(),
         origin.getFreeTalent().getCategory(), origin.getFreeTalent().getMaxLevel(), 1,
         origin.getFreeTalent().getEffect());
+    originTalent.setSource("Origin");
     explorer.addTalent(originTalent);
 
     Talent specTalent = new Talent(specialty.getFreeTalent().getName(), specialty.getFreeTalent().getDescription(),
         specialty.getFreeTalent().getCategory(), specialty.getFreeTalent().getMaxLevel(), 1,
         specialty.getFreeTalent().getEffect());
+    specTalent.setSource("Specialty");
     explorer.addTalent(specTalent);
 
     AttributeDistributor.validate(attributes, explorer.getKeyAttribute());
@@ -384,6 +386,7 @@ public class ExplorerFactory {
         Talent keyTalent = new Talent(keyTalents.get(i).getName(), keyTalents.get(i).getDescription(),
             keyTalents.get(i).getCategory(), keyTalents.get(i).getMaxLevel(), talentPoints[i],
             keyTalents.get(i).getEffect());
+        keyTalent.setSource("Chosen");
         explorer.addTalent(keyTalent);
       }
     }

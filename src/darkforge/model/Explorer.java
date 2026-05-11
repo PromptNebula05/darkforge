@@ -10,7 +10,7 @@ public abstract class Explorer extends GameEntity implements Displayable {
   private Origin origin;
   private Specialty specialty;
   private final List<Talent> talents;
-  private List<Equipment> equipment = new ArrayList<>();
+  private final LinkedHashMap<String, List<Equipment>> equipmentBySource = new LinkedHashMap<>();
   private String quirk;
   private String keepsake;
   private String appearance;
@@ -94,12 +94,28 @@ public abstract class Explorer extends GameEntity implements Displayable {
     return true;
   }
 
+  /** Returns all equipment as a flat list (all sources combined). */
   public List<Equipment> getEquipment() {
-    return Collections.unmodifiableList(equipment);
+    List<Equipment> all = new ArrayList<>();
+    for (List<Equipment> list : equipmentBySource.values())
+      all.addAll(list);
+    return Collections.unmodifiableList(all);
   }
 
+  /** Returns equipment grouped by source (e.g., "Starting Gear"). */
+  public LinkedHashMap<String, List<Equipment>> getEquipmentBySource() {
+    return new LinkedHashMap<>(equipmentBySource);
+  }
+
+  /** Sets equipment under the default "Starting Gear" source (replaces all). */
   public void setEquipment(List<Equipment> equipment) {
-    this.equipment = new ArrayList<>(equipment);
+    this.equipmentBySource.clear();
+    this.equipmentBySource.put("Starting Gear", new ArrayList<>(equipment));
+  }
+
+  /** Adds equipment under a named source (e.g., "Starting Gear", "Acquired"). */
+  public void addEquipment(String source, List<Equipment> equipment) {
+    this.equipmentBySource.computeIfAbsent(source, k -> new ArrayList<>()).addAll(equipment);
   }
 
   public String getQuirk() {

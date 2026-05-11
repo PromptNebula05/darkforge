@@ -1,7 +1,7 @@
 package darkforge.display;
 
 import darkforge.model.*;
-import java.util.List;
+import java.util.*;
 
 public class CharacterSheetRenderer implements Displayable {
 
@@ -57,19 +57,23 @@ public class CharacterSheetRenderer implements Displayable {
     sb.append(SINGLE_LINE).append("\n");
     sb.append(" TALENTS\n");
     for (Talent talent : explorer.getTalents()) {
+      String sourceTag = (talent.getSource() != null) ? " [" + talent.getSource() + "]" : "";
       String dots = ".".repeat(Math.max(1, 24 - talent.getName().length()));
-      sb.append(
-          String.format("  %s %s Lv %d/%d%n", talent.getName(), dots, talent.getCurrentLevel(), talent.getMaxLevel()));
+      sb.append(String.format("  %s %s Lv %d/%d%s%n", talent.getName(), dots, talent.getCurrentLevel(),
+          talent.getMaxLevel(), sourceTag));
     }
 
     sb.append(SINGLE_LINE).append("\n");
     sb.append(" EQUIPMENT\n");
-    List<Equipment> gear = explorer.getEquipment();
-    if (gear.isEmpty()) {
+    LinkedHashMap<String, List<Equipment>> equipBySource = explorer.getEquipmentBySource();
+    if (equipBySource.isEmpty()) {
       sb.append("  (none)\n");
     } else {
-      for (Equipment equip : gear) {
-        sb.append(String.format("  %s%n", equip.display()));
+      for (Map.Entry<String, List<Equipment>> entry : equipBySource.entrySet()) {
+        sb.append(String.format("  [%s]%n", entry.getKey()));
+        for (Equipment equip : entry.getValue()) {
+          sb.append(String.format("    %s%n", equip.display()));
+        }
       }
     }
 

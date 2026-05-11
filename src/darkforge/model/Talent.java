@@ -1,31 +1,12 @@
 package darkforge.model;
 
-/**
- * A talent in Coriolis — a learned skill or special ability.
- * Talents have a category, a current level, and a maximum level.
- *
- * <p>
- * Extends GameEntity because a talent has a name ("Smart")
- * and a description of its effect.
- * </p>
- */
 public class Talent extends GameEntity {
   private final TalentCategory category;
   private final int maxLevel;
   private int currentLevel;
   private final String effect;
+  private String source; // e.g., "Origin", "Specialty", "Chosen"
 
-  /**
-   * Constructs a Talent.
-   *
-   * @param name         the talent's name (e.g., "Smart")
-   * @param description  brief description
-   * @param category     the talent category from Ch. 3
-   * @param maxLevel     maximum achievable level (typically 3)
-   * @param currentLevel current level (0 = untrained)
-   * @param effect       the talent's mechanical effect description
-   * @throws IllegalArgumentException if currentLevel < 0 or > maxLevel
-   */
   public Talent(String name, String description, TalentCategory category,
       int maxLevel, int currentLevel, String effect) {
     super(name, description);
@@ -42,7 +23,6 @@ public class Talent extends GameEntity {
     this.effect = (effect != null) ? effect : "";
   }
 
-  /** Convenience constructor with currentLevel = 1. */
   public Talent(String name, String description, TalentCategory category,
       int maxLevel, String effect) {
     this(name, description, category, maxLevel, 1, effect);
@@ -64,11 +44,14 @@ public class Talent extends GameEntity {
     return effect;
   }
 
-  /**
-   * Increases the talent level by 1.
-   *
-   * @throws IllegalStateException if already at max level
-   */
+  public String getSource() {
+    return source;
+  }
+
+  public void setSource(String source) {
+    this.source = source;
+  }
+
   public void increaseLevel() {
     if (currentLevel >= maxLevel) {
       throw new IllegalStateException(
@@ -77,12 +60,6 @@ public class Talent extends GameEntity {
     currentLevel++;
   }
 
-  /**
-   * Sets the current level directly.
-   *
-   * @param level the new level
-   * @throws IllegalArgumentException if level is out of bounds
-   */
   public void setCurrentLevel(int level) {
     if (level < 0 || level > maxLevel) {
       throw new IllegalArgumentException(
@@ -93,7 +70,8 @@ public class Talent extends GameEntity {
 
   @Override
   public String display() {
-    return String.format("%s [%s] Lv %d/%d — %s",
-        name, category.getDisplayName(), currentLevel, maxLevel, effect);
+    String src = (source != null) ? " (" + source + ")" : "";
+    return String.format("%s [%s] Lv %d/%d%s — %s",
+        name, category.getDisplayName(), currentLevel, maxLevel, src, effect);
   }
 }
