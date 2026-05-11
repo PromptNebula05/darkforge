@@ -2,6 +2,7 @@ package darkforge.model.profession;
 
 import darkforge.model.*;
 import java.util.*;
+import darkforge.mechanics.D6Table;
 
 public class Artist extends Explorer {
 
@@ -79,5 +80,15 @@ public class Artist extends Explorer {
       }
     }
     return bonus;
+  }
+
+  /** Sample first names for Artist (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleFirstNames() {
+    return new D6Table<>(Map.of(1, "Iosop", 2, "Picar", 3, "Alvereto", 4, "Charita", 5, "Yisma", 6, "Demetria"));
+  }
+
+  /** Sample surnames for Artist (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleSurnames() {
+    return new D6Table<>(Map.of(1, "Berin", 2, "Harkoum", 3, "Misiopio", 4, "Dargar", 5, "Coumar", 6, "Kalventer"));
   }
 }

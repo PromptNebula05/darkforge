@@ -3,6 +3,7 @@ package darkforge.model.profession;
 import darkforge.model.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import darkforge.mechanics.D6Table;
 
 public class Traveler extends Explorer {
 
@@ -77,5 +78,15 @@ public class Traveler extends Explorer {
         .filter(t -> t.getCategory() == TalentCategory.VEHICLE_EXO)
         .map(Talent::getName)
         .collect(Collectors.toList());
+  }
+
+  /** Sample first names for Traveler (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleFirstNames() {
+    return new D6Table<>(Map.of(1, "Dacos", 2, "Juvero", 3, "Hamza", 4, "Farzine", 5, "Nilette", 6, "Sahma"));
+  }
+
+  /** Sample surnames for Traveler (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleSurnames() {
+    return new D6Table<>(Map.of(1, "Lesmodere", 2, "Quiro", 3, "Rosmahneh", 4, "Ashrum", 5, "Semili", 6, "Nour"));
   }
 }

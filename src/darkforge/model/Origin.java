@@ -1,45 +1,80 @@
 package darkforge.model;
 
+import darkforge.mechanics.D6Table;
+import java.util.*;
+
 /**
- * An Explorer's origin in Coriolis — where they come from.
- * Origins are determined by a D66 roll and grant a free talent,
- * an associated faction, and a contact NPC.
+ * Represents an Explorer's origin in the Coriolis: The Great Dark setting.
+ * Origins are selected from the D66 Origin Table (Ch. 2).
  *
- * <p>
- * Not a GameEntity — origins are data records, not named display entities.
- * </p>
+ * Each origin provides:
+ * - A free talent at level 1
+ * - An associated faction (fixed, or variable via D6 roll)
+ * - A contact (determined by D6 roll: 1-2, 3-4, 5-6)
+ * - A D66 range for random selection
  */
 public class Origin {
   private final String location;
   private final Talent freeTalent;
-  private final String associatedFaction;
-  private final String contact;
+  private final String fixedFaction;
+  private final D6Table<String> factionTable;
+  private final Map<Integer, String> contacts;
   private final int d66RangeLow;
   private final int d66RangeHigh;
 
   /**
-   * Constructs an Origin.
+   * Creates an Origin with a fixed associated faction.
    *
-   * @param location          the origin location description
-   * @param freeTalent        the talent granted by this origin at level 1
-   * @param associatedFaction the faction associated with this origin
-   * @param contact           the contact NPC name/description
-   * @param d66RangeLow       the low end of the D66 range (e.g., 11)
-   * @param d66RangeHigh      the high end of the D66 range (e.g., 12)
-   * @throws IllegalArgumentException if D66 range values have invalid digits
+   * @param location     the origin location name
+   * @param freeTalent   the talent granted at level 1
+   * @param fixedFaction the associated faction name
+   * @param contacts     D6 value (1-6) mapped to contact name; pairs share values
+   *                     (1-2, 3-4, 5-6)
+   * @param d66RangeLow  lower bound of the D66 range
+   * @param d66RangeHigh upper bound of the D66 range
    */
-  public Origin(String location, Talent freeTalent, String associatedFaction,
-      String contact, int d66RangeLow, int d66RangeHigh) {
+  public Origin(String location, Talent freeTalent, String fixedFaction,
+      Map<Integer, String> contacts, int d66RangeLow, int d66RangeHigh) {
     validateD66Value(d66RangeLow);
     validateD66Value(d66RangeHigh);
     if (d66RangeLow > d66RangeHigh) {
       throw new IllegalArgumentException(
           "D66 range low (" + d66RangeLow + ") must be <= high (" + d66RangeHigh + ")");
     }
+    validateContacts(contacts);
     this.location = location;
     this.freeTalent = freeTalent;
-    this.associatedFaction = associatedFaction;
-    this.contact = contact;
+    this.fixedFaction = fixedFaction;
+    this.factionTable = null;
+    this.contacts = Map.copyOf(contacts);
+    this.d66RangeLow = d66RangeLow;
+    this.d66RangeHigh = d66RangeHigh;
+  }
+
+  /**
+   * Creates an Origin with a variable associated faction (determined by D6 roll).
+   *
+   * @param location     the origin location name
+   * @param freeTalent   the talent granted at level 1
+   * @param factionTable D6 table mapping roll results to faction names
+   * @param contacts     D6 value (1-6) mapped to contact name
+   * @param d66RangeLow  lower bound of the D66 range
+   * @param d66RangeHigh upper bound of the D66 range
+   */
+  public Origin(String location, Talent freeTalent, D6Table<String> factionTable,
+      Map<Integer, String> contacts, int d66RangeLow, int d66RangeHigh) {
+    validateD66Value(d66RangeLow);
+    validateD66Value(d66RangeHigh);
+    if (d66RangeLow > d66RangeHigh) {
+      throw new IllegalArgumentException(
+          "D66 range low (" + d66RangeLow + ") must be <= high (" + d66RangeHigh + ")");
+    }
+    validateContacts(contacts);
+    this.location = location;
+    this.freeTalent = freeTalent;
+    this.fixedFaction = null;
+    this.factionTable = factionTable;
+    this.contacts = Map.copyOf(contacts);
     this.d66RangeLow = d66RangeLow;
     this.d66RangeHigh = d66RangeHigh;
   }
@@ -53,6 +88,15 @@ public class Origin {
     }
   }
 
+  private static void validateContacts(Map<Integer, String> contacts) {
+    for (int i = 1; i <= 6; i++) {
+      if (!contacts.containsKey(i)) {
+        throw new IllegalArgumentException(
+            "Contacts map must contain entry for D6 value: " + i);
+      }
+    }
+  }
+
   public String getLocation() {
     return location;
   }
@@ -61,12 +105,60 @@ public class Origin {
     return freeTalent;
   }
 
-  public String getAssociatedFaction() {
-    return associatedFaction;
+  /** Returns true if this origin's faction is determined by a D6 roll. */
+  public boolean hasVariableFaction() {
+    return factionTable != null;
   }
 
-  public String getContact() {
-    return contact;
+  /**
+   * Returns the fixed associated faction.
+   * 
+   * @throws IllegalStateException if the faction is variable (use getFaction(int)
+   *                               instead)
+   */
+  public String getAssociatedFaction() {
+    if (fixedFaction == null) {
+      throw new IllegalStateException(
+          "Origin '" + location + "' has a variable faction — use getFaction(int d6Value)");
+    }
+    return fixedFaction;
+  }
+
+  /**
+   * Returns the faction for a given D6 roll. Works for both fixed and variable
+   * factions.
+   * 
+   * @param d6Value a value from 1 to 6
+   */
+  public String getFaction(int d6Value) {
+    if (factionTable != null) {
+      return factionTable.getResult(d6Value);
+    }
+    return fixedFaction;
+  }
+
+  /**
+   * Returns the D6Table for variable faction selection, or null if faction is
+   * fixed.
+   */
+  public D6Table<String> getFactionTable() {
+    return factionTable;
+  }
+
+  /**
+   * Returns the contact for a given D6 roll value (1-6).
+   * Contacts are grouped in pairs: 1-2, 3-4, 5-6.
+   */
+  public String getContact(int d6Value) {
+    if (d6Value < 1 || d6Value > 6) {
+      throw new IllegalArgumentException("D6 value must be 1-6, got " + d6Value);
+    }
+    return contacts.get(d6Value);
+  }
+
+  /** Returns the full contacts map (D6 value 1-6 to contact name). */
+  public Map<Integer, String> getContacts() {
+    return contacts;
   }
 
   public int getD66RangeLow() {
@@ -77,9 +169,6 @@ public class Origin {
     return d66RangeHigh;
   }
 
-  /**
-   * Returns true if this origin matches the given D66 value.
-   */
   public boolean matchesD66(int d66Value) {
     return d66Value >= d66RangeLow && d66Value <= d66RangeHigh;
   }

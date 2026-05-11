@@ -35,7 +35,7 @@ public class Esoteric extends Explorer {
             "+1 base die per talent level when using a library or info cubes to find information"));
   }
 
-  @Override
+@Override
   public List<Specialty> getSpecialties() {
     return List.of(
         new Specialty("Spice Engineer", "Experimenting with orchid dust and ingredients in a makeshift laboratory",
@@ -53,30 +53,3 @@ public class Esoteric extends Explorer {
         new Specialty("Toad Dreamer", "Chasing epiphanies and truth through orchid dust dreams",
             new Talent("Hardened", "Resisting Blight", TalentCategory.RESILIENCE, 3,
                 "Roll base dice equal to the talent level when suffering Blight; for each six rolled, ignore one point of Blight")),
-        new Specialty("Rim Zealot", "Preaching expansion of the colonies beyond Jumuah",
-            new Talent("Mentalist", "Reading people", TalentCategory.SOCIAL, 3,
-                "+1 base die per talent level to Empathy rolls for reading a subject and understanding if they are lying or hiding something")));
-  }
-
-  @Override
-  public List<List<Equipment>> getStartingEquipmentSets() {
-    return List.of(
-        List.of(
-            new Equipment("Smelling Spice (5 doses)", "Aromatic spice with mystical properties", EquipmentWeight.TINY),
-            new Equipment("Pipe", "Smoking pipe", EquipmentWeight.TINY),
-            new Equipment("Antidote", "Counteragent for poisons", EquipmentWeight.TINY)),
-        List.of(new Equipment("Bird Candy", "Treats for attracting and calming Birds", EquipmentWeight.TINY),
-            new Equipment("Star Chart", "Map of celestial bodies", EquipmentWeight.TINY, 1),
-            new Equipment("Deck of Cards", "Divination or gaming cards", EquipmentWeight.TINY)),
-        List.of(new Equipment("Revolutionary Pamphlets", "Fiery propaganda writings", EquipmentWeight.TINY),
-            new Equipment("Fusillard Cricket", "Small concealable fusillard", EquipmentWeight.LIGHT, 1),
-            new Equipment("Flask with Makh Spirits", "Strong liquor from the Turbine Halls", EquipmentWeight.TINY)));
-  }
-
-  public List<String> getMysticalTalents() {
-    return getTalents().stream()
-        .filter(t -> t.getCategory() == TalentCategory.INSIGHT)
-        .map(Talent::getName)
-        .collect(Collectors.toList());
-  }
-}

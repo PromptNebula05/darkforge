@@ -2,6 +2,7 @@ package darkforge.model.profession;
 
 import darkforge.model.*;
 import java.util.*;
+import darkforge.mechanics.D6Table;
 
 public class OddJobber extends Explorer {
 
@@ -73,5 +74,15 @@ public class OddJobber extends Explorer {
 
   public int getAdaptabilityBonus() {
     return (int) getTalents().stream().map(Talent::getCategory).distinct().count();
+  }
+
+  /** Sample first names for Odd Jobber (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleFirstNames() {
+    return new D6Table<>(Map.of(1, "Chandra", 2, "Dharr", 3, "Margou", 4, "Steem", 5, "Vasil", 6, "Xemene"));
+  }
+
+  /** Sample surnames for Odd Jobber (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleSurnames() {
+    return new D6Table<>(Map.of(1, "Nemkassur", 2, "Kavour", 3, "N'rama", 4, "Soltev", 5, "Koulidis", 6, "Zhou"));
   }
 }

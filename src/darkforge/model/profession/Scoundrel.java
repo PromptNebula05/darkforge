@@ -3,6 +3,7 @@ package darkforge.model.profession;
 import darkforge.model.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import darkforge.mechanics.D6Table;
 
 public class Scoundrel extends Explorer {
 
@@ -77,5 +78,15 @@ public class Scoundrel extends Explorer {
         .filter(t -> t.getCategory() == TalentCategory.STEALTH_MOBILITY)
         .map(Talent::getName)
         .collect(Collectors.toList());
+  }
+
+  /** Sample first names for Scoundrel (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleFirstNames() {
+    return new D6Table<>(Map.of(1, "Aruma", 2, "Etila", 3, "Jevgi", 4, "Kef", 5, "Salamana", 6, "Wallih"));
+  }
+
+  /** Sample surnames for Scoundrel (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleSurnames() {
+    return new D6Table<>(Map.of(1, "mir-Caph", 2, "Xem", 3, "Ramastan", 4, "Koud", 5, "Zerzim", 6, "din-Tallah"));
   }
 }

@@ -2,6 +2,7 @@ package darkforge.model.profession;
 
 import darkforge.model.*;
 import java.util.*;
+import darkforge.mechanics.D6Table;
 
 public class Roughneck extends Explorer {
 
@@ -79,5 +80,15 @@ public class Roughneck extends Explorer {
       }
     }
     return bonus;
+  }
+
+  /** Sample first names for Roughneck (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleFirstNames() {
+    return new D6Table<>(Map.of(1, "Jurji", 2, "Amman", 3, "Geov", 4, "Gorgija", 5, "Asmirad", 6, "Fassour"));
+  }
+
+  /** Sample surnames for Roughneck (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleSurnames() {
+    return new D6Table<>(Map.of(1, "Mammahr", 2, "Ahsouli", 3, "Christofor", 4, "Mell", 5, "Iortis", 6, "Belkovoro"));
   }
 }

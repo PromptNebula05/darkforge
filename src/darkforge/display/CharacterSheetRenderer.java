@@ -27,8 +27,8 @@ public class CharacterSheetRenderer implements Displayable {
     sb.append(String.format(" Profession: %s%s%n", explorer.getProfessionName(), spec));
     if (explorer.getOrigin() != null) {
       sb.append(String.format(" Origin:     %s%n", explorer.getOrigin().getLocation()));
-      sb.append(String.format(" Faction:    %s%n", explorer.getOrigin().getAssociatedFaction()));
-      sb.append(String.format(" Contact:    %s%n", explorer.getOrigin().getContact()));
+      sb.append(String.format(" Faction:    %s%n", explorer.getResolvedFaction()));
+      sb.append(String.format(" Contact:    %s%n", explorer.getResolvedContact()));
     }
     if (explorer.getQuirk() != null)
       sb.append(String.format(" Quirk:      %s%n", explorer.getQuirk()));
@@ -36,6 +36,8 @@ public class CharacterSheetRenderer implements Displayable {
       sb.append(String.format(" Keepsake:   %s%n", explorer.getKeepsake()));
     if (explorer.getAppearance() != null)
       sb.append(String.format(" Appearance: %s%n", explorer.getAppearance()));
+    if (explorer.getExplorerReason() != null)
+      sb.append(String.format(" Why Explore: %s%n", explorer.getExplorerReason()));
 
     sb.append(SINGLE_LINE).append("\n");
     sb.append(" ATTRIBUTES          DERIVED STATS\n");

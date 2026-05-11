@@ -13,6 +13,9 @@ public abstract class Explorer extends GameEntity implements Displayable {
   private String quirk;
   private String keepsake;
   private String appearance;
+  private String resolvedContact;
+  private String resolvedFaction;
+  private String explorerReason;
 
   protected Explorer(String name, String description) {
     super(name, description);
@@ -112,6 +115,40 @@ public abstract class Explorer extends GameEntity implements Displayable {
 
   public void setAppearance(String appearance) {
     this.appearance = appearance;
+  }
+
+  /**
+   * Returns the resolved contact name (set during Explorer creation via D6 roll).
+   */
+  public String getResolvedContact() {
+    return resolvedContact;
+  }
+
+  public void setResolvedContact(String resolvedContact) {
+    this.resolvedContact = resolvedContact;
+  }
+
+  /**
+   * Returns the resolved faction name (set during Explorer creation; may be from
+   * D6 roll).
+   */
+  public String getResolvedFaction() {
+    return resolvedFaction;
+  }
+
+  public void setResolvedFaction(String resolvedFaction) {
+    this.resolvedFaction = resolvedFaction;
+  }
+
+  /**
+   * Returns the reason this Explorer joined the Explorers Guild (Ch. 2 step 10).
+   */
+  public String getExplorerReason() {
+    return explorerReason;
+  }
+
+  public void setExplorerReason(String explorerReason) {
+    this.explorerReason = explorerReason;
   }
 
   @Override

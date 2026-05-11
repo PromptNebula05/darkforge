@@ -3,6 +3,7 @@ package darkforge.model.profession;
 import darkforge.model.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import darkforge.mechanics.D6Table;
 
 public class Enforcer extends Explorer {
 
@@ -130,5 +131,16 @@ public class Enforcer extends Explorer {
         .filter(t -> t.getCategory() == TalentCategory.COMBAT)
         .map(Talent::getName)
         .collect(Collectors.toList());
+  }
+
+  /** Sample first names for Enforcer (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleFirstNames() {
+    return new D6Table<>(Map.of(1, "Aquilah", 2, "Verlof", 3, "Hazran", 4, "Sighra", 5, "Metilla", 6, "Garida"));
+  }
+
+  /** Sample surnames for Enforcer (Ch. 2, D6 table). */
+  public static D6Table<String> getSampleSurnames() {
+    return new D6Table<>(
+        Map.of(1, "Andromonos", 2, "Özkal", 3, "Hassmara", 4, "Kourkouti", 5, "Perkantrem", 6, "Goulima"));
   }
 }
