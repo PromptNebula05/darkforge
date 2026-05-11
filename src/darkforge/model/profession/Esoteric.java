@@ -87,7 +87,8 @@ public class Esoteric extends Explorer {
   }
 
   /** Sample surnames for Esoteric (Ch. 2, D6 table). */
-    public static D6Table<String> getSampleSurnames() {
-        return new D6Table<>(Map.of(1, "Espenter", 2, "Koulas", 3, "Fazrami", 4, "Marcoloroux", 5, "Yasman", 6, "Ipoletes"));
-    }
-}"Roll base dice equal to the talent level when suffering Blight; for each six rolled, ignore one point of Blight")),
+  public static D6Table<String> getSampleSurnames() {
+    return new D6Table<>(
+        Map.of(1, "Espenter", 2, "Koulas", 3, "Fazrami", 4, "Marcoloroux", 5, "Yasman", 6, "Ipoletes"));
+  }
+}
