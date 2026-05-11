@@ -5,7 +5,7 @@ import java.util.*;
 
 public class OddJobber extends Explorer {
 
-  private static final Attribute KEY_ATTRIBUTE = Attribute.PERCEPTION;
+  private static final Attribute KEY_ATTRIBUTE = Attribute.EMPATHY;
 
   public OddJobber(String name) {
     super(name, "Odd Jobber explorer");
@@ -24,43 +24,51 @@ public class OddJobber extends Explorer {
   @Override
   public List<Talent> getKeyTalents() {
     return List.of(
-        new Talent("Street Smart", "Urban survival", TalentCategory.STEALTH_MOBILITY, 3,
-            "You get +1 to streetwise rolls"),
-        new Talent("Scrounger", "Finding resources", TalentCategory.EQUIPMENT, 3,
-            "You can find useful items in unlikely places"),
-        new Talent("Quick Thinker", "Fast reactions", TalentCategory.INSIGHT, 3, "You get +1 to snap decisions"),
-        new Talent("Lucky", "Fortune favors", TalentCategory.RESILIENCE, 3, "You can re-roll one die per session"));
+        new Talent("Actor", "Bluffing and lying", TalentCategory.SOCIAL, 3,
+            "+1 base die per talent level when rolling to bluff or tell a lie to an NPC"),
+        new Talent("Charmer", "Making NPCs like you", TalentCategory.SOCIAL, 3,
+            "+1 base die per talent level when rolling for Empathy to make an NPC like you"),
+        new Talent("Cultural Savant", "Understanding customs", TalentCategory.KNOWLEDGE, 3,
+            "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon"),
+        new Talent("Streetwise", "Urban connections and rumors", TalentCategory.STEALTH_MOBILITY, 3,
+            "+1 base die per talent level for acquiring stolen goods, finding a contact, or hearing rumors in Ship City and the colonies"));
   }
 
   @Override
   public List<Specialty> getSpecialties() {
     return List.of(
-        new Specialty("Fixer", "Making connections",
-            new Talent("Networker", "Social connections", TalentCategory.SOCIAL, 3, "Bonus to finding contacts")),
-        new Specialty("Gambler", "Games of chance",
-            new Talent("Card Sharp", "Cheating at games", TalentCategory.STEALTH_MOBILITY, 3, "Bonus to gambling")),
-        new Specialty("Mechanic", "Fixing things",
-            new Talent("Jury Rigger", "Improvised repairs", TalentCategory.EQUIPMENT, 3, "Bonus to emergency repairs")),
-        new Specialty("Peddler", "Trading goods",
-            new Talent("Haggler", "Price negotiation", TalentCategory.SOCIAL, 3, "Bonus to trading")),
-        new Specialty("Scavenger", "Salvaging materials",
-            new Talent("Salvager", "Finding valuables", TalentCategory.EQUIPMENT, 3, "Bonus to scavenging")),
-        new Specialty("Street Performer", "Public entertainment", new Talent("Crowd Pleaser", "Attracting attention",
-            TalentCategory.SOCIAL, 3, "Bonus to public performance")));
+        new Specialty("Guild Clerk", "Sorting mail, taking notes, and handling tasks for a Guild master",
+            new Talent("Librarian", "Using libraries and info cubes", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level when using a library or info cubes to find information")),
+        new Specialty("Stair Peddler", "Selling goods on the steep stairs of the Chasm",
+            new Talent("Mentalist", "Reading people", TalentCategory.SOCIAL, 3,
+                "+1 base die per talent level to Empathy rolls for reading a subject and understanding if they are lying or hiding something")),
+        new Specialty("Ice Trader", "Trading ice bonds to Guilds and merchants",
+            new Talent("Barter", "Trading and buying", TalentCategory.SOCIAL, 3,
+                "+1 base die per talent level when rolling for Empathy to trade or buy something")),
+        new Specialty("Alley Cook", "Making stews and grilling skewers in a small street stall",
+            new Talent("Cook", "Cooking with a field kitchen", TalentCategory.SOCIAL, 3,
+                "+1 base die per talent level when cooking using a field kitchen")),
+        new Specialty("Coriolite Servant", "Serving a Coriolite noble and learning the ways of the Old Horizon",
+            new Talent("Cultural Savant", "Understanding customs", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon")),
+        new Specialty("Artifact Dealer", "Buying and selling artifacts from across the Charted Sphere",
+            new Talent("Artifact Specialist", "Comprehending artifacts", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level to comprehend artifacts")));
   }
 
   @Override
   public List<List<Equipment>> getStartingEquipmentSets() {
     return List.of(
-        List.of(new Equipment("Tool Kit", "General purpose tools", EquipmentWeight.REGULAR, 2),
-            new Equipment("Lockpick Set", "Security bypass tools", EquipmentWeight.TINY, 2),
-            new Equipment("Backpack", "Carry gear", EquipmentWeight.LIGHT)),
-        List.of(new Equipment("Fusillard Pistol", "Sidearm", EquipmentWeight.REGULAR, 2),
-            new Equipment("Grappling Hook", "Climbing aid", EquipmentWeight.LIGHT, 1),
-            new Equipment("Flashlight", "Illumination", EquipmentWeight.TINY, 1)),
-        List.of(new Equipment("Communicator", "Long-range comms", EquipmentWeight.TINY, 1),
-            new Equipment("Disguise Kit", "Identity tools", EquipmentWeight.LIGHT, 2),
-            new Equipment("Rations", "Emergency food", EquipmentWeight.LIGHT)));
+        List.of(new Equipment("Fancy Clothing", "Impressive attire", EquipmentWeight.LIGHT),
+            new Equipment("Waking Pills", "Stimulant pills to stay alert", EquipmentWeight.TINY),
+            new Equipment("Bottle of Shroom Brandy", "Fermented mushroom spirits", EquipmentWeight.TINY)),
+        List.of(new Equipment("Cooking Utensils", "Pots, pans, and tools for cooking", EquipmentWeight.REGULAR, 1),
+            new Equipment("Orchid Dust (5 doses)", "Psychoactive substance from the Blight", EquipmentWeight.TINY),
+            new Equipment("Large Backpack", "Oversized carry gear", EquipmentWeight.LIGHT)),
+        List.of(new Equipment("Accounting Ledger", "Financial record book", EquipmentWeight.TINY),
+            new Equipment("Flight Suit", "Standard flight attire", EquipmentWeight.LIGHT),
+            new Equipment("MediKit (Basic)", "Basic medical supplies", EquipmentWeight.LIGHT, 1)));
   }
 
   public int getAdaptabilityBonus() {

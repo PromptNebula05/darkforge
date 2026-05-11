@@ -24,43 +24,51 @@ public class Artist extends Explorer {
   @Override
   public List<Talent> getKeyTalents() {
     return List.of(
-        new Talent("Charming", "Natural charisma", TalentCategory.SOCIAL, 3,
-            "You can re-roll one die in social encounters"),
-        new Talent("Performer", "Stage presence", TalentCategory.SOCIAL, 3, "You get +1 to performance rolls"),
-        new Talent("Inspiring", "Morale booster", TalentCategory.SOCIAL, 3, "You can restore Hope to allies"),
-        new Talent("Empathic", "Reading emotions", TalentCategory.SOCIAL, 3, "You get +1 to reading people"));
+        new Talent("Acrobat", "Jumping, climbing, and running", TalentCategory.STEALTH_MOBILITY, 3,
+            "+1 base die per talent level to jumping, climbing, and running"),
+        new Talent("Charmer", "Making NPCs like you", TalentCategory.SOCIAL, 3,
+            "+1 base die per talent level when rolling for Empathy to make an NPC like you"),
+        new Talent("Cultural Savant", "Understanding customs", TalentCategory.KNOWLEDGE, 3,
+            "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon"),
+        new Talent("Renowned", "Pushing Empathy rolls", TalentCategory.SOCIAL, 1,
+            "You can push any roll based on Empathy twice, not just once like other characters"));
   }
 
   @Override
   public List<Specialty> getSpecialties() {
     return List.of(
-        new Specialty("Composer", "Musical creation",
-            new Talent("Musician", "Instrument mastery", TalentCategory.SOCIAL, 3, "Bonus to musical performance")),
-        new Specialty("Courtesan", "Social manipulation",
-            new Talent("Seducer", "Personal charm", TalentCategory.SOCIAL, 3, "Bonus to persuasion")),
-        new Specialty("Dancer", "Physical expression",
-            new Talent("Acrobat", "Physical grace", TalentCategory.STEALTH_MOBILITY, 3,
-                "Bonus to agility-based performance")),
-        new Specialty("Orator", "Public speaking",
-            new Talent("Rhetoric", "Persuasive speech", TalentCategory.SOCIAL, 3, "Bonus to public address")),
-        new Specialty("Painter", "Visual arts",
-            new Talent("Observer", "Keen eye for detail", TalentCategory.INSIGHT, 3, "Bonus to noticing details")),
-        new Specialty("Poet", "Written expression",
-            new Talent("Wordsmith", "Language artistry", TalentCategory.SOCIAL, 3, "Bonus to written communication")));
+        new Specialty("Hull Painter", "Bringing color to the giant husks of old spacefarers",
+            new Talent("Zero-G Training", "Zero gravity operations", TalentCategory.STEALTH_MOBILITY, 1,
+                "You suffer no negative effects when operating in zero gravity environments")),
+        new Specialty("Staircase Poet", "Reciting poetry on the steep stairs of the Chasm",
+            new Talent("Charmer", "Making NPCs like you", TalentCategory.SOCIAL, 3,
+                "+1 base die per talent level when rolling for Empathy to make an NPC like you")),
+        new Specialty("Maidy Row Balladeer", "Singing ballads and anthems for the people of Ship City",
+            new Talent("Musician", "Playing musical instruments", TalentCategory.SOCIAL, 3,
+                "+1 base die per talent level to Empathy when using a musical instrument")),
+        new Specialty("Alley Theater Actor", "Performing lead roles in small alley theaters",
+            new Talent("Disguise", "Avoiding recognition", TalentCategory.STEALTH_MOBILITY, 3,
+                "+1 base die per talent level to avoid being recognized, and to spot a disguise")),
+        new Specialty("Occasional Publisher", "Writing and publishing gossip pamphlets",
+            new Talent("Librarian", "Using libraries and info cubes", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level when using a library or info cubes to find information")),
+        new Specialty("Machine Artisan", "Crafting automata, lighting contraptions, and mechanical devices",
+            new Talent("Jury-Rig", "Crafting mechanical machinery", TalentCategory.EQUIPMENT, 3,
+                "+1 base die per talent level when rolling to craft or jury-rig mechanical machinery")));
   }
 
   @Override
   public List<List<Equipment>> getStartingEquipmentSets() {
     return List.of(
-        List.of(new Equipment("Musical Instrument", "Fine craftsmanship", EquipmentWeight.REGULAR, 1),
-            new Equipment("Fine Clothing", "Impressive attire", EquipmentWeight.LIGHT),
-            new Equipment("Recording Device", "Audio capture", EquipmentWeight.TINY, 1)),
-        List.of(new Equipment("Paint Set", "Artist supplies", EquipmentWeight.LIGHT, 1),
-            new Equipment("Sketchbook", "Drawing journal", EquipmentWeight.TINY, 1),
-            new Equipment("Fusillard Pistol", "Sidearm", EquipmentWeight.REGULAR, 2)),
-        List.of(new Equipment("Disguise Kit", "Identity tools", EquipmentWeight.LIGHT, 2),
-            new Equipment("Communicator", "Long-range comms", EquipmentWeight.TINY, 1),
-            new Equipment("Medkit", "Basic medical supplies", EquipmentWeight.LIGHT, 1)));
+        List.of(new Equipment("Music Instrument", "Fine craftsmanship instrument", EquipmentWeight.REGULAR, 1),
+            new Equipment("Notebook and Pen", "Writing supplies", EquipmentWeight.TINY),
+            new Equipment("Bottle of Grass Wine", "A bottle of local wine", EquipmentWeight.TINY)),
+        List.of(new Equipment("Exquisite Clothing", "Impressive and ornate attire", EquipmentWeight.LIGHT),
+            new Equipment("Rare Collection of Poems", "Valued literary collection", EquipmentWeight.TINY),
+            new Equipment("Make-Up", "Cosmetics and face paints", EquipmentWeight.TINY)),
+        List.of(new Equipment("Fine Tools", "Precision crafting tools", EquipmentWeight.LIGHT, 1),
+            new Equipment("Magnifying Glass", "Examination lens", EquipmentWeight.TINY, 1),
+            new Equipment("Set of Paints", "Assorted colors for painting", EquipmentWeight.TINY)));
   }
 
   public int getPerformanceBonus() {

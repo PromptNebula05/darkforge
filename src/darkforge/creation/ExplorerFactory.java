@@ -29,17 +29,44 @@ public class ExplorerFactory {
               "You can ignore one point of damage per session"),
           "Ice Miners Union", "Foreman Rashid", 25, 26));
 
+  /**
+   * Creates an Explorer with a default weapon talent (Sharpshooter) for
+   * Enforcers.
+   * For Enforcers who want a different weapon talent, use the overload that
+   * accepts weaponTalentName.
+   */
   public Explorer createExplorer(
       String professionName, String characterName,
       int originIndex, int specialtyIndex,
       EnumMap<Attribute, Integer> attributes, int[] talentPoints,
       String quirk, String keepsake, String appearance) {
+    return createExplorer(professionName, characterName, originIndex, specialtyIndex,
+        attributes, talentPoints, quirk, keepsake, appearance, null);
+  }
+
+  /**
+   * Creates an Explorer.
+   *
+   * @param weaponTalentName for Enforcers only: the name of the chosen weapon
+   *                         talent
+   *                         (e.g. "Sharpshooter", "Pistoleer"). Pass null for
+   *                         non-Enforcers
+   *                         or to use the default (Sharpshooter).
+   *                         See {@link Enforcer#getAvailableWeaponTalents()} for
+   *                         valid names.
+   */
+  public Explorer createExplorer(
+      String professionName, String characterName,
+      int originIndex, int specialtyIndex,
+      EnumMap<Attribute, Integer> attributes, int[] talentPoints,
+      String quirk, String keepsake, String appearance,
+      String weaponTalentName) {
 
     if (originIndex < 1 || originIndex > DEFAULT_ORIGINS.size())
       throw new IllegalArgumentException("Origin index must be 1-" + DEFAULT_ORIGINS.size() + ", got " + originIndex);
     Origin origin = DEFAULT_ORIGINS.get(originIndex - 1);
 
-    Explorer explorer = createProfession(professionName, characterName);
+    Explorer explorer = createProfession(professionName, characterName, weaponTalentName);
     explorer.setOrigin(origin);
 
     List<Specialty> specialties = explorer.getSpecialties();
@@ -85,10 +112,12 @@ public class ExplorerFactory {
     return explorer;
   }
 
-  private Explorer createProfession(String professionName, String characterName) {
+  private Explorer createProfession(String professionName, String characterName, String weaponTalentName) {
     return switch (professionName.toLowerCase().replace(" ", "")) {
       case "scholar" -> new Scholar(characterName);
-      case "enforcer" -> new Enforcer(characterName);
+      case "enforcer" -> (weaponTalentName != null)
+          ? new Enforcer(characterName, weaponTalentName)
+          : new Enforcer(characterName);
       case "artist" -> new Artist(characterName);
       case "esoteric" -> new Esoteric(characterName);
       case "oddjobber" -> new OddJobber(characterName);

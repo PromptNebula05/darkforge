@@ -24,48 +24,54 @@ public class Scholar extends Explorer {
   @Override
   public List<Talent> getKeyTalents() {
     return List.of(
-        new Talent("Smart", "Quick thinking", TalentCategory.KNOWLEDGE, 3, "You can re-roll one die when using LOGIC"),
-        new Talent("Investigator", "Finding clues", TalentCategory.KNOWLEDGE, 3, "You get +1 to investigation rolls"),
-        new Talent("Librarian", "Accessing archives", TalentCategory.KNOWLEDGE, 3,
-            "You can find information in any archive or database"),
-        new Talent("Linguist", "Language expert", TalentCategory.SOCIAL, 3,
-            "You can understand and speak additional languages"));
+        new Talent("Investigator", "Searching for clues", TalentCategory.KNOWLEDGE, 3,
+            "+1 base die per talent level when searching an area for clues"),
+        new Talent("Librarian", "Using libraries and info cubes", TalentCategory.KNOWLEDGE, 3,
+            "+1 base die per talent level when using a library or info cubes to find information"),
+        new Talent("Smart", "Pushing Logic rolls", TalentCategory.RESILIENCE, 1,
+            "You can push any roll based on Logic twice"),
+        new Talent("Teratology", "Understanding beasts", TalentCategory.KNOWLEDGE, 3,
+            "+1 base die per talent level to know and understand the beasts of the Great Dark"));
   }
 
   @Override
   public List<Specialty> getSpecialties() {
     return List.of(
-        new Specialty("Algebraist Apprentice", "Mathematics and computation",
-            new Talent("Astrometry", "Star navigation", TalentCategory.KNOWLEDGE, 3,
-                "Bonus to navigation calculations")),
-        new Specialty("Analyst", "Data interpretation",
-            new Talent("Data Mining", "Information extraction", TalentCategory.KNOWLEDGE, 3, "Bonus to data analysis")),
-        new Specialty("Archive Master", "Record keeping",
-            new Talent("Cataloguer", "Organization", TalentCategory.KNOWLEDGE, 3,
-                "Bonus to finding stored information")),
-        new Specialty("Excavation Leader", "Archaeological digs",
-            new Talent("Archaeology", "Ancient sites", TalentCategory.KNOWLEDGE, 3, "Bonus to excavation rolls")),
-        new Specialty("Negotiator", "Diplomatic resolution",
-            new Talent("Diplomat", "Conflict resolution", TalentCategory.SOCIAL, 3, "Bonus to negotiation")),
-        new Specialty("Quartermaster", "Resource management",
-            new Talent("Logistics", "Supply management", TalentCategory.KNOWLEDGE, 3, "Bonus to supply management")));
+        new Specialty("Guild Archivist", "Archiving, cataloging, and organizing Guild knowledge",
+            new Talent("Librarian", "Using libraries and info cubes", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level when using a library or info cubes to find information")),
+        new Specialty("Algebraist Apprentice", "Studying the old art of al-jabr and the threads of the universe",
+            new Talent("Astrometry", "Space phenomena and orbital mechanics", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level to understand space phenomena, orbital mechanics, and planetology")),
+        new Specialty("Slipstream Cartographer", "Mapping uncharted territories and star lanes",
+            new Talent("Cartographer", "Mapping and navigating", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level when mapping and navigating during treks")),
+        new Specialty("Diaspora Historian", "Studying the history of the Diaspora fleet and modern society",
+            new Talent("Historian", "Historical knowledge", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level to know historical facts about the Diaspora, the Lost Horizon, and the Old Horizon")),
+        new Specialty("Cave Botanist", "Studying plants, fungi, and the Blight in the Cave Gardens",
+            new Talent("Botanist", "Cultivating and understanding flora", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level for cultivating plants or fungi as well as understanding flora and ivy")),
+        new Specialty("Builder Archaeologist", "Examining Builder ruins, shards, and monuments",
+            new Talent("Archaeology", "Understanding ruins and monuments", TalentCategory.KNOWLEDGE, 3,
+                "+1 base die per talent level for understanding ruins and monuments")));
   }
 
   @Override
   public List<List<Equipment>> getStartingEquipmentSets() {
     return List.of(
         List.of(
-            new Equipment("Backpack", "Standard carry gear", EquipmentWeight.LIGHT),
-            new Equipment("Fusillard Pistol", "Standard sidearm", EquipmentWeight.REGULAR, 2),
-            new Equipment("Light Delving Suit", "Basic protective gear", EquipmentWeight.REGULAR, 1)),
+            new Equipment("Portable Lab", "Portable laboratory equipment", EquipmentWeight.REGULAR, 2),
+            new Equipment("MediKit (Basic)", "Basic medical supplies", EquipmentWeight.LIGHT, 1),
+            new Equipment("Old Paper Journal", "Worn journal for recording findings", EquipmentWeight.TINY)),
         List.of(
             new Equipment("Astrolabe", "Navigation instrument", EquipmentWeight.LIGHT, 2),
             new Equipment("Cartographer's Kit", "Mapping tools", EquipmentWeight.LIGHT, 1),
             new Equipment("Compass", "Directional tool", EquipmentWeight.TINY, 1)),
         List.of(
-            new Equipment("Portable Terminal", "Computing device", EquipmentWeight.LIGHT, 2),
-            new Equipment("Research Notes", "Collected findings", EquipmentWeight.TINY, 1),
-            new Equipment("Magnifying Lens", "Examination tool", EquipmentWeight.TINY, 1)));
+            new Equipment("Info Cube", "Data storage and retrieval device", EquipmentWeight.TINY, 1),
+            new Equipment("Fancy Clothing", "Impressive attire", EquipmentWeight.LIGHT),
+            new Equipment("Waking Pills", "Stimulant pills to stay alert", EquipmentWeight.TINY)));
   }
 
   public int getResearchBonus() {
