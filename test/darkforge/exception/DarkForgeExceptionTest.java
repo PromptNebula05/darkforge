@@ -61,10 +61,10 @@ class DarkForgeExceptionTest {
 
     @Test
     void shouldBeCheckedExceptionNotRuntime() {
-        TestException ex = new TestException("msg", "detail");
-        assertInstanceOf(Exception.class, ex);
-        assertFalse(ex instanceof RuntimeException,
-                "DarkForgeException should be checked (not RuntimeException)");
+        assertEquals(Exception.class,
+                DarkForgeException.class.getSuperclass(),
+                "DarkForgeException should extend "
+                        + "Exception directly (checked)");
     }
 
     @Test
