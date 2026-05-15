@@ -5,6 +5,12 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Collections;
 
+/**
+ * Thrown when an attribute distribution violates Coriolis constraints:
+ * total ≠ 24, any attribute < 2, key attribute > 6, non-key > 5.
+ * Collects ALL violations before throwing so the CLI can display
+ * every problem at once.
+ */
 public class InvalidAttributeDistributionException
         extends DarkForgeException {
 
@@ -16,10 +22,8 @@ public class InvalidAttributeDistributionException
             int expectedTotal, int actualTotal,
             Map<Attribute, String> violations) {
         super(
-                buildUserMessage(expectedTotal, actualTotal,
-                        violations),
-                buildTechnicalDetail(expectedTotal,
-                        actualTotal, violations)
+                buildUserMessage(expectedTotal, actualTotal, violations),
+                buildTechnicalDetail(expectedTotal, actualTotal, violations)
         );
         this.expectedTotal = expectedTotal;
         this.actualTotal = actualTotal;
@@ -42,7 +46,6 @@ public class InvalidAttributeDistributionException
                             + "distributed %d points. Please "
                             + "redistribute.", expected, actual);
         }
-        // Find first violation for user message
         Map.Entry<Attribute, String> first =
                 violations.entrySet().iterator().next();
         return String.format("%s: %s",

@@ -1,5 +1,15 @@
 package darkforge.exception;
 
+/**
+ * Abstract root of the DARKFORGE custom exception hierarchy.
+ * Extends Exception (checked) because every DARKFORGE failure
+ * is recoverable at the CLI — re-enter attributes, choose a
+ * different file, pick a valid talent.
+ *
+ * Dual message fields:
+ * - userMessage: player-facing, no jargon, displayed by CLI
+ * - technicalDetail: developer-facing, used by getMessage()
+ */
 public abstract class DarkForgeException extends Exception {
   private final String userMessage;
   private final String technicalDetail;
@@ -18,18 +28,10 @@ public abstract class DarkForgeException extends Exception {
     this.technicalDetail = technicalDetail;
   }
 
-  /**
-   * Player-facing message suitable for console display.
-   * No stack traces, no class names, no technical jargon.
-   */
-  public String getUserMessage() {
-    return userMessage;
-  }
+  /** Player-facing message suitable for console display. */
+  public String getUserMessage() { return userMessage; }
 
-  /**
-   * Developer-facing detail for logging/debugging.
-   * Includes field names, values, and constraint descriptions.
-   */
+  /** Developer-facing detail for logging/debugging. */
   public String getTechnicalDetail() {
     return technicalDetail;
   }

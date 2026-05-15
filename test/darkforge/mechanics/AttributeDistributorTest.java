@@ -1,5 +1,6 @@
 package darkforge.mechanics;
 
+import darkforge.exception.InvalidAttributeDistributionException;
 import darkforge.model.Attribute;
 import org.junit.jupiter.api.Test;
 
@@ -7,9 +8,16 @@ import java.util.EnumMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Updated for Iteration 2: validates refactored AttributeDistributor
+ * that throws InvalidAttributeDistributionException instead of
+ * IllegalArgumentException. Now also verifies structured violation data.
+ */
 class AttributeDistributorTest {
 
-  private EnumMap<Attribute, Integer> makeAttrs(int str, int agl, int log, int per, int ins, int emp) {
+  private EnumMap<Attribute, Integer> makeAttrs(
+          int str, int agl, int log,
+          int per, int ins, int emp) {
     EnumMap<Attribute, Integer> attrs = new EnumMap<>(Attribute.class);
     attrs.put(Attribute.STRENGTH, str);
     attrs.put(Attribute.AGILITY, agl);
@@ -21,41 +29,61 @@ class AttributeDistributorTest {
   }
 
   @Test
-  void shouldAcceptValidEvenDistribution() {
-    assertDoesNotThrow(() -> AttributeDistributor.validate(makeAttrs(4, 4, 4, 4, 4, 4), Attribute.LOGIC));
+  void shouldAcceptValidEvenDistribution()
+          throws InvalidAttributeDistributionException {
+    assertDoesNotThrow(() ->
+            AttributeDistributor.validate(
+                    makeAttrs(4, 4, 4, 4, 4, 4), Attribute.LOGIC));
   }
 
   @Test
-  void shouldAcceptKeyAttributeAtSix() {
-    assertDoesNotThrow(() -> AttributeDistributor.validate(makeAttrs(4, 3, 6, 3, 4, 4), Attribute.LOGIC));
+  void shouldAcceptKeyAttributeAtSix()
+          throws InvalidAttributeDistributionException {
+    assertDoesNotThrow(() ->
+            AttributeDistributor.validate(
+                    makeAttrs(4, 3, 6, 3, 4, 4), Attribute.LOGIC));
   }
 
   @Test
   void shouldRejectTotalNotTwentyFour() {
-    IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-        () -> AttributeDistributor.validate(makeAttrs(5, 5, 5, 5, 5, 5), Attribute.LOGIC));
-    assertTrue(ex.getMessage().contains("30"));
+    var ex = assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(
+                            makeAttrs(5, 5, 5, 5, 5, 5), Attribute.LOGIC));
+    assertEquals(24, ex.getExpectedTotal());
+    assertEquals(30, ex.getActualTotal());
+    assertTrue(ex.getUserMessage().contains("24"));
+    assertTrue(ex.getUserMessage().contains("30"));
   }
 
   @Test
   void shouldRejectAttributeBelowTwo() {
-    IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-        () -> AttributeDistributor.validate(makeAttrs(1, 5, 5, 5, 4, 4), Attribute.LOGIC));
-    assertTrue(ex.getMessage().contains("STR"));
+    var ex = assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(
+                            makeAttrs(1, 5, 5, 5, 4, 4), Attribute.LOGIC));
+    assertTrue(ex.getViolations().containsKey(Attribute.STRENGTH),
+            "Violations should include STRENGTH");
   }
 
   @Test
   void shouldRejectNonKeyAttributeAboveFive() {
-    IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-        () -> AttributeDistributor.validate(makeAttrs(2, 6, 5, 3, 4, 4), Attribute.LOGIC));
-    assertTrue(ex.getMessage().contains("AGL"));
+    var ex = assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(
+                            makeAttrs(2, 6, 5, 3, 4, 4), Attribute.LOGIC));
+    assertTrue(ex.getViolations().containsKey(Attribute.AGILITY),
+            "Violations should include AGILITY");
   }
 
   @Test
   void shouldRejectKeyAttributeAboveSix() {
-    IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-        () -> AttributeDistributor.validate(makeAttrs(2, 3, 7, 3, 4, 5), Attribute.LOGIC));
-    assertTrue(ex.getMessage().contains("LOG"));
+    var ex = assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(
+                            makeAttrs(2, 3, 7, 3, 4, 5), Attribute.LOGIC));
+    assertTrue(ex.getViolations().containsKey(Attribute.LOGIC),
+            "Violations should include key attribute LOGIC");
   }
 
   @Test
@@ -63,12 +91,48 @@ class AttributeDistributorTest {
     EnumMap<Attribute, Integer> partial = new EnumMap<>(Attribute.class);
     partial.put(Attribute.STRENGTH, 4);
     partial.put(Attribute.AGILITY, 4);
-    assertThrows(IllegalArgumentException.class, () -> AttributeDistributor.validate(partial, Attribute.LOGIC));
+    assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(partial, Attribute.LOGIC));
   }
 
   @Test
-  void shouldAcceptMinimumViableDistribution() {
-    assertThrows(IllegalArgumentException.class,
-        () -> AttributeDistributor.validate(makeAttrs(2, 2, 2, 2, 2, 14), Attribute.EMPATHY));
+  void shouldCollectMultipleViolations() {
+    var ex = assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(
+                            makeAttrs(1, 6, 5, 4, 4, 4), Attribute.LOGIC));
+    assertTrue(ex.getViolations().size() >= 2,
+            "Should collect both STRENGTH (<2) and AGILITY (>5 non-key)");
+  }
+
+  @Test
+  void shouldRejectExtremeValues() {
+    assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(
+                            makeAttrs(2, 2, 2, 2, 2, 14), Attribute.EMPATHY));
+  }
+
+  @Test
+  void userMessageShouldBeFriendlyForTotalMismatch() {
+    var ex = assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(
+                            makeAttrs(5, 5, 5, 5, 5, 5), Attribute.LOGIC));
+    assertTrue(ex.getUserMessage().contains("redistribute"),
+            "User message should suggest redistribution");
+    assertFalse(ex.getUserMessage().contains("AttributeDistributor"),
+            "User message should not contain class names");
+  }
+
+  @Test
+  void technicalDetailShouldContainClassName() {
+    var ex = assertThrows(
+            InvalidAttributeDistributionException.class, () ->
+                    AttributeDistributor.validate(
+                            makeAttrs(5, 5, 5, 5, 5, 5), Attribute.LOGIC));
+    assertTrue(ex.getMessage().contains("AttributeDistributor"),
+            "Technical detail should reference the class");
   }
 }
