@@ -8,11 +8,6 @@ import java.util.EnumMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Updated for Iteration 2: validates refactored AttributeDistributor
- * that throws InvalidAttributeDistributionException instead of
- * IllegalArgumentException. Now also verifies structured violation data.
- */
 class AttributeDistributorTest {
 
   private EnumMap<Attribute, Integer> makeAttrs(
