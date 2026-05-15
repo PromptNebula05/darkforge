@@ -4,7 +4,7 @@ import darkforge.model.*;
 import darkforge.model.profession.*;
 import darkforge.mechanics.*;
 import darkforge.creation.ExplorerFactory;
-import darkforge.display.CharacterSheetRenderer;
+import darkforge.display.CharacterSheetFormatter;
 
 import java.util.*;
 
@@ -149,7 +149,7 @@ public class Main {
 
     for (GameEntity entity : roster) {
       if (entity instanceof Explorer exp) {
-        CharacterSheetRenderer renderer = new CharacterSheetRenderer(exp);
+        CharacterSheetFormatter renderer = new CharacterSheetFormatter(exp);
         System.out.println(renderer.toFormattedString());
       }
     }
