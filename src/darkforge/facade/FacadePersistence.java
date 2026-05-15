@@ -63,10 +63,10 @@ public class FacadePersistence {
      * @throws IOException if the directory cannot
      *         be listed
      */
-    public List<Path> listSaves()
+    public List<Path> listSavedExplorers()
             throws IOException {
         return fileManager
-                .listSavedExplorers();
+                .listSaves();
     }
 
     /**
@@ -75,7 +75,7 @@ public class FacadePersistence {
      * @throws IOException if the file cannot be
      *         deleted
      */
-    public boolean deleteSave(Path filePath)
+    public boolean deleteExplorer(Path filePath)
             throws IOException {
         return fileManager.deleteExplorer(
                 filePath);

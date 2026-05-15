@@ -128,7 +128,7 @@ public class ExplorerFileManager {
      * @throws IOException if the directory cannot
      *         be listed
      */
-    public List<Path> listSavedExplorers()
+    public List<Path> listSaves()
             throws IOException {
         if (!Files.exists(saveDirectory)) {
             return List.of();
