@@ -172,8 +172,8 @@ public class ExplorerSerializer {
                         ? origin.getFreeTalent().getName()
                         : JSONObject.NULL);
         JSONArray range = new JSONArray();
-        range.put(origin.getD66Low());
-        range.put(origin.getD66High());
+        range.put(origin.getD66RangeLow());
+        range.put(origin.getD66RangeHigh());
         oObj.put("d66Range", range);
         return oObj;
     }
