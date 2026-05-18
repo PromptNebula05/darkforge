@@ -167,7 +167,7 @@ public class ConsoleMainMenu {
         try {
             List<Path> saves =
                     darkforge.persistenceAccess()
-                            .listSavedExplorers();
+                            .listSaves();
             if (saves.isEmpty()) {
                 System.out.println(
                         "No save files found.");
@@ -301,7 +301,7 @@ public class ConsoleMainMenu {
         try {
             List<Path> saves =
                     darkforge.persistenceAccess()
-                            .listSavedExplorers();
+                            .listSaves();
             if (saves.isEmpty()) {
                 System.out.println(
                         "No save files found.");

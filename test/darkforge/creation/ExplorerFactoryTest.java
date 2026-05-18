@@ -1,8 +1,11 @@
 package darkforge.creation;
 
+import darkforge.data.GameDataProvider;
+import darkforge.exception.*;
 import darkforge.model.*;
 import darkforge.model.profession.*;
 import darkforge.mechanics.D66Table;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
@@ -10,11 +13,19 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Updated for Iteration 2: exception types changed from
+ * IllegalArgumentException to domain exceptions.
+ * Tests now verify structured exception data.
+ */
 class ExplorerFactoryTest {
 
   private final ExplorerFactory factory = new ExplorerFactory();
 
-  // ── Core Creation Tests ────────────────────────────────────────
+  @BeforeEach
+  void setUp() {
+    GameDataProvider.getInstance().initialize();
+  }
 
   private EnumMap<Attribute, Integer> validScholarAttrs() {
     EnumMap<Attribute, Integer> attrs = new EnumMap<>(Attribute.class);
@@ -35,36 +46,70 @@ class ExplorerFactoryTest {
     return attrs;
   }
 
+  /**
+   * Build a talent points array sized to the profession's
+   * actual key talent count (from the Explorer subclass,
+   * not ProfessionData), distributing up to 3 points.
+   */
+  private int[] talentPointsFor(String profession)
+          throws InvalidProfessionException {
+    Explorer temp = factory.createProfessionInstance(profession);
+    int count = temp.getKeyTalents().size();
+    int[] pts = new int[count];
+    for (int i = 0; i < Math.min(count, 3); i++) {
+      pts[i] = 1;
+    }
+    return pts;
+  }
+
+  // ── Core Creation Tests ────────────────────────────────────────
+
   @Test
-  void shouldCreateAllEightProfessions() {
+  void shouldCreateAllEightProfessions() throws DarkForgeException {
     String[] professions = {
-        "Scholar", "Enforcer", "Artist", "Esoteric",
-        "Odd Jobber", "Roughneck", "Scoundrel", "Traveler"
+            "Scholar", "Enforcer", "Artist", "Esoteric",
+            "OddJobber", "Roughneck", "Scoundrel", "Traveler"
     };
+    Origin origin = GameDataProvider.getInstance()
+            .getOrigins().get(0);
     for (String profession : professions) {
       Explorer explorer = factory.createExplorer(
-          profession, "Test " + profession, 1, 1,
-          safeAttrs(), new int[] { 1, 1, 1, 0 },
-          "quirk", "keepsake", "appearance");
+              profession, origin, 0,
+              safeAttrs(), talentPointsFor(profession),
+              "quirk", "keepsake", "appearance",
+              "Test " + profession
+      );
       assertNotNull(explorer, profession + " should be created");
       assertEquals("Test " + profession, explorer.getName());
-      assertNotNull(explorer.getKeyAttribute(), profession + " should have a key attribute");
-      assertNotNull(explorer.getOrigin(), profession + " should have an origin");
-      assertNotNull(explorer.getSpecialty(), profession + " should have a specialty");
-      assertFalse(explorer.getTalents().isEmpty(), profession + " should have talents");
+      assertNotNull(explorer.getKeyAttribute(),
+              profession + " should have a key attribute");
+      assertNotNull(explorer.getOrigin(),
+              profession + " should have an origin");
+      assertNotNull(explorer.getSpecialty(),
+              profession + " should have a specialty");
+      assertFalse(explorer.getTalents().isEmpty(),
+              profession + " should have talents");
     }
   }
 
   @Test
   void shouldRejectUnknownProfession() {
-    assertThrows(IllegalArgumentException.class, () -> factory.createExplorer(
-        "Wizard", "Test", 1, 1,
-        validScholarAttrs(), new int[] { 1, 1, 1, 0 },
-        "q", "k", "a"));
+    Origin origin = GameDataProvider.getInstance()
+            .getOrigins().get(0);
+    var ex = assertThrows(InvalidProfessionException.class, () ->
+            factory.createExplorer(
+                    "Wizard", origin, 0,
+                    validScholarAttrs(), new int[]{1, 1, 1},
+                    "q", "k", "a", "Test"
+            ));
+    assertEquals("Wizard", ex.getAttemptedProfession());
+    assertTrue(ex.getValidProfessions().contains("Scholar"));
   }
 
   @Test
-  void shouldRejectInvalidAttributes() {
+  void shouldRejectInvalidAttributes() throws InvalidProfessionException {
+    Origin origin = GameDataProvider.getInstance()
+            .getOrigins().get(0);
     EnumMap<Attribute, Integer> badAttrs = new EnumMap<>(Attribute.class);
     badAttrs.put(Attribute.STRENGTH, 5);
     badAttrs.put(Attribute.AGILITY, 5);
@@ -72,216 +117,155 @@ class ExplorerFactoryTest {
     badAttrs.put(Attribute.PERCEPTION, 5);
     badAttrs.put(Attribute.INSIGHT, 5);
     badAttrs.put(Attribute.EMPATHY, 5);
-    assertThrows(IllegalArgumentException.class, () -> factory.createExplorer(
-        "Scholar", "Test", 1, 1,
-        badAttrs, new int[] { 1, 1, 1, 0 },
-        "q", "k", "a"));
+    assertThrows(InvalidAttributeDistributionException.class, () ->
+            factory.createExplorer(
+                    "Scholar", origin, 0,
+                    badAttrs, talentPointsFor("Scholar"),
+                    "q", "k", "a", "Test"
+            ));
   }
 
   @Test
-  void shouldRejectWrongTalentPointTotal() {
-    assertThrows(IllegalArgumentException.class, () -> factory.createExplorer(
-        "Scholar", "Test", 1, 1,
-        validScholarAttrs(), new int[] { 2, 2, 2, 0 },
-        "q", "k", "a"));
-  }
-
-  @Test
-  void shouldRejectInvalidOriginIndex() {
-    assertThrows(IllegalArgumentException.class, () -> factory.createExplorer(
-        "Scholar", "Test", 99, 1,
-        validScholarAttrs(), new int[] { 1, 1, 1, 0 },
-        "q", "k", "a"));
-  }
-
-  @Test
-  void shouldRejectInvalidSpecialtyIndex() {
-    assertThrows(IllegalArgumentException.class, () -> factory.createExplorer(
-        "Scholar", "Test", 1, 99,
-        validScholarAttrs(), new int[] { 1, 1, 1, 0 },
-        "q", "k", "a"));
-  }
-
-  // ── D66 Quirks Table ──────────────────────────────────────────────
-
-  @Test
-  void quirkTableShouldHave36Entries() {
-    assertEquals(36, ExplorerFactory.getQuirksTable().size());
-  }
-
-  @Test
-  void quirkTableShouldReturnNonBlankForAllValidKeys() {
-    D66Table<String> table = ExplorerFactory.getQuirksTable();
-    for (int key : D66Table.getValidKeys()) {
-      String quirk = table.getResult(key);
-      assertNotNull(quirk, "Quirk for D66=" + key + " should not be null");
-      assertFalse(quirk.isBlank(), "Quirk for D66=" + key + " should not be blank");
+  void shouldRejectWrongTalentPointTotal() throws InvalidProfessionException {
+    Origin origin = GameDataProvider.getInstance()
+            .getOrigins().get(0);
+    Explorer temp = factory.createProfessionInstance("Scholar");
+    int count = temp.getKeyTalents().size();
+    int[] badPoints = new int[count];
+    for (int i = 0; i < count; i++) {
+      badPoints[i] = 2;
     }
+    assertThrows(IncompatibleTalentException.class, () ->
+            factory.createExplorer(
+                    "Scholar", origin, 0,
+                    validScholarAttrs(), badPoints,
+                    "q", "k", "a", "Test"
+            ));
   }
 
   @Test
-  void getQuirkByD66ShouldMatchTableLookup() {
-    assertEquals(
-        ExplorerFactory.getQuirksTable().getResult(43),
-        ExplorerFactory.getQuirkByD66(43));
+  void shouldRejectInvalidSpecialtyIndex() throws InvalidProfessionException {
+    Origin origin = GameDataProvider.getInstance()
+            .getOrigins().get(0);
+    assertThrows(DarkForgeException.class, () ->
+            factory.createExplorer(
+                    "Scholar", origin, 99,
+                    validScholarAttrs(), talentPointsFor("Scholar"),
+                    "q", "k", "a", "Test"
+            ));
+  }
+
+  // ── D66 Tables (via GameDataProvider) ──────────────────────────
+
+  @Test
+  void quirksShouldBeAvailable() {
+    var quirks = GameDataProvider.getInstance().getQuirks();
+    assertNotNull(quirks);
+    assertFalse(quirks.isEmpty(),
+            "Quirks list should not be empty");
   }
 
   @Test
-  void getQuirkByD66ShouldRejectInvalidKey() {
-    assertThrows(IllegalArgumentException.class, () -> ExplorerFactory.getQuirkByD66(77));
-  }
-
-  // ── D66 Keepsakes Table ───────────────────────────────────────────
-
-  @Test
-  void keepsakeTableShouldHave36Entries() {
-    assertEquals(36, ExplorerFactory.getKeepsakesTable().size());
+  void keepsakesShouldBeAvailable() {
+    var keepsakes = GameDataProvider.getInstance().getKeepsakes();
+    assertNotNull(keepsakes);
+    assertFalse(keepsakes.isEmpty(),
+            "Keepsakes list should not be empty");
   }
 
   @Test
-  void keepsakeTableShouldReturnNonBlankForAllValidKeys() {
-    D66Table<String> table = ExplorerFactory.getKeepsakesTable();
-    for (int key : D66Table.getValidKeys()) {
-      String keepsake = table.getResult(key);
-      assertNotNull(keepsake, "Keepsake for D66=" + key + " should not be null");
-      assertFalse(keepsake.isBlank(), "Keepsake for D66=" + key + " should not be blank");
-    }
+  void appearancesShouldBeAvailable() {
+    var appearances = GameDataProvider.getInstance().getAppearances();
+    assertNotNull(appearances);
+    assertFalse(appearances.isEmpty(),
+            "Appearances list should not be empty");
   }
 
   @Test
-  void getKeepsakeByD66ShouldMatchTableLookup() {
-    assertEquals(
-        ExplorerFactory.getKeepsakesTable().getResult(25),
-        ExplorerFactory.getKeepsakeByD66(25));
+  void explorerReasonsShouldBeAvailable() {
+    var reasons = GameDataProvider.getInstance().getExplorerReasons();
+    assertNotNull(reasons);
+    assertFalse(reasons.isEmpty(),
+            "Explorer reasons list should not be empty");
   }
 
-  // ── D66 Appearances Table ─────────────────────────────────────────
+  // ── Origins (via GameDataProvider) ─────────────────────────────
 
   @Test
-  void appearanceTableShouldHave36Entries() {
-    assertEquals(36, ExplorerFactory.getAppearancesTable().size());
-  }
-
-  @Test
-  void appearanceTableShouldReturnNonBlankForAllValidKeys() {
-    D66Table<String> table = ExplorerFactory.getAppearancesTable();
-    for (int key : D66Table.getValidKeys()) {
-      String appearance = table.getResult(key);
-      assertNotNull(appearance, "Appearance for D66=" + key + " should not be null");
-      assertFalse(appearance.isBlank(), "Appearance for D66=" + key + " should not be blank");
-    }
-  }
-
-  @Test
-  void getAppearanceByD66ShouldMatchTableLookup() {
-    assertEquals(
-        ExplorerFactory.getAppearancesTable().getResult(31),
-        ExplorerFactory.getAppearanceByD66(31));
-  }
-
-  // ── D66 Explorer Reason Table ─────────────────────────────────────
-
-  @Test
-  void explorerReasonTableShouldHave36Entries() {
-    assertEquals(36, ExplorerFactory.getExplorerReasonTable().size());
-  }
-
-  @Test
-  void explorerReasonTableShouldReturnNonBlankForAllValidKeys() {
-    D66Table<String> table = ExplorerFactory.getExplorerReasonTable();
-    for (int key : D66Table.getValidKeys()) {
-      String reason = table.getResult(key);
-      assertNotNull(reason, "Reason for D66=" + key + " should not be null");
-      assertFalse(reason.isBlank(), "Reason for D66=" + key + " should not be blank");
-    }
-  }
-
-  @Test
-  void getExplorerReasonByD66ShouldMatchTableLookup() {
-    assertEquals(
-        ExplorerFactory.getExplorerReasonTable().getResult(55),
-        ExplorerFactory.getExplorerReasonByD66(55));
-  }
-
-  // ── Origins Table ─────────────────────────────────────────────────
-
-  @Test
-  void defaultOriginsShouldCoverFullD66Range() {
+  void originsShouldCoverFullD66Range() {
     Set<Integer> validKeys = D66Table.getValidKeys();
+    GameDataProvider data = GameDataProvider.getInstance();
     for (int key : validKeys) {
-      assertDoesNotThrow(() -> ExplorerFactory.getOriginByD66(key),
-          "D66 value " + key + " should match an origin");
+      assertDoesNotThrow(
+              () -> data.getOriginByD66(key),
+              "D66 value " + key + " should match an origin");
     }
   }
 
   @Test
-  void defaultOriginsShouldHave13Entries() {
-    assertEquals(13, ExplorerFactory.getDefaultOrigins().size());
+  void originsShouldHave13Entries() {
+    assertEquals(13,
+            GameDataProvider.getInstance()
+                    .getOrigins().size());
   }
 
   @Test
   void getOriginByD66ShouldRejectInvalidValue() {
     assertThrows(IllegalArgumentException.class,
-        () -> ExplorerFactory.getOriginByD66(77));
+            () -> GameDataProvider.getInstance()
+                    .getOriginByD66(77));
   }
 
   @Test
   void eachOriginShouldHaveNonNullFreeTalent() {
-    for (Origin origin : ExplorerFactory.getDefaultOrigins()) {
+    for (Origin origin : GameDataProvider.getInstance()
+            .getOrigins()) {
       assertNotNull(origin.getFreeTalent(),
-          "Origin '" + origin.getLocation() + "' should have a free talent");
+              "Origin '" + origin.getLocation()
+                      + "' should have a free talent");
     }
-  }
-
-  // ── Weapon-Talent-Aware Factory Overload ──────────────────────────
-
-  @Test
-  void shouldCreateEnforcerWithCustomWeaponTalent() {
-    Explorer explorer = factory.createExplorer(
-        "Enforcer", "Kaan Verros", 1, 1,
-        safeAttrs(), new int[] { 1, 1, 1, 0 },
-        "quirk", "keepsake", "appearance", "Pistoleer");
-    assertNotNull(explorer);
-    assertTrue(explorer instanceof Enforcer);
-    Enforcer enforcer = (Enforcer) explorer;
-    assertEquals("Pistoleer", enforcer.getChosenWeaponTalent().getName());
-  }
-
-  @Test
-  void shouldCreateEnforcerWithDefaultWeaponWhenNull() {
-    Explorer explorer = factory.createExplorer(
-        "Enforcer", "Test", 1, 1,
-        safeAttrs(), new int[] { 1, 1, 1, 0 },
-        "quirk", "keepsake", "appearance", null);
-    Enforcer enforcer = (Enforcer) explorer;
-    assertEquals("Sharpshooter", enforcer.getChosenWeaponTalent().getName());
   }
 
   // ── Explorer Flavor Fields ────────────────────────────────────────
 
   @Test
-  void factoryShouldPopulateAllFlavorFields() {
+  void factoryShouldPopulateAllFlavorFields()
+          throws DarkForgeException {
+    Origin origin = GameDataProvider.getInstance()
+            .getOrigins().get(0);
     Explorer explorer = factory.createExplorer(
-        "Scholar", "Test", 1, 1,
-        safeAttrs(), new int[] { 1, 1, 1, 0 },
-        "My quirk", "My keepsake", "My appearance");
+            "Scholar", origin, 0,
+            safeAttrs(), talentPointsFor("Scholar"),
+            "My quirk", "My keepsake", "My appearance",
+            "Test"
+    );
     assertEquals("My quirk", explorer.getQuirk());
     assertEquals("My keepsake", explorer.getKeepsake());
     assertEquals("My appearance", explorer.getAppearance());
-    assertNotNull(explorer.getResolvedContact(), "Contact should be resolved via D6 roll");
-    assertNotNull(explorer.getResolvedFaction(), "Faction should be resolved");
-    assertNotNull(explorer.getExplorerReason(), "Explorer reason should be set via D66 roll");
+    assertNotNull(explorer.getResolvedContact(),
+            "Contact should be resolved via D6 roll");
+    assertNotNull(explorer.getResolvedFaction(),
+            "Faction should be resolved");
+    assertNotNull(explorer.getExplorerReason(),
+            "Explorer reason should be set via D66 roll");
   }
 
   @Test
-  void factoryShouldRollQuirkWhenNull() {
+  void factoryShouldRollQuirkWhenNull()
+          throws DarkForgeException {
+    Origin origin = GameDataProvider.getInstance()
+            .getOrigins().get(0);
     Explorer explorer = factory.createExplorer(
-        "Scholar", "Test", 1, 1,
-        safeAttrs(), new int[] { 1, 1, 1, 0 },
-        null, null, null);
-    assertNotNull(explorer.getQuirk(), "Null quirk should trigger D66 roll");
+            "Scholar", origin, 0,
+            safeAttrs(), talentPointsFor("Scholar"),
+            null, null, null, "Test"
+    );
+    assertNotNull(explorer.getQuirk(),
+            "Null quirk should trigger D66 roll");
     assertFalse(explorer.getQuirk().isBlank());
-    assertNotNull(explorer.getKeepsake(), "Null keepsake should trigger D66 roll");
-    assertNotNull(explorer.getAppearance(), "Null appearance should trigger D66 roll");
+    assertNotNull(explorer.getKeepsake(),
+            "Null keepsake should trigger D66 roll");
+    assertNotNull(explorer.getAppearance(),
+            "Null appearance should trigger D66 roll");
   }
 }

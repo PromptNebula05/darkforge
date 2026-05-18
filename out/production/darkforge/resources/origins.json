@@ -1,0 +1,299 @@
+[
+  {
+    "d66Range": [11, 11],
+    "location": "The Decrepit Halls of an Orphanage",
+    "faction": "The Navigators Guild",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Second Cartographer Masmirand",
+      "2": "Second Cartographer Masmirand",
+      "3": "Thief Youkobos",
+      "4": "Thief Youkobos",
+      "5": "Algebraist Anapur",
+      "6": "Algebraist Anapur"
+    },
+    "freeTalent": {
+      "name": "Stealthy",
+      "description": "Staying hidden",
+      "category": "STEALTH_MOBILITY",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level for staying hidden. Cannot be used for ambushes."
+    }
+  },
+  {
+    "d66Range": [12, 14],
+    "location": "Among the Hulks and Wrecks of Hull Town",
+    "faction": "Variable",
+    "variableFaction": true,
+    "variableFactionTable": {
+      "1": "Machinists",
+      "2": "Gardeners",
+      "3": "Navigators",
+      "4": "Navigators",
+      "5": "The Black Toad",
+      "6": "Coriolites"
+    },
+    "contacts": {
+      "1": "Hull Guard Hima Qu",
+      "2": "Hull Guard Hima Qu",
+      "3": "Gardener Mellima Joucol",
+      "4": "Gardener Mellima Joucol",
+      "5": "Toad aspirant Bizo",
+      "6": "Toad aspirant Bizo"
+    },
+    "freeTalent": {
+      "name": "Exo-Specialist",
+      "description": "Exo suit operation",
+      "category": "VEHICLE_EXO",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level when handling an exo of some kind"
+    }
+  },
+  {
+    "d66Range": [15, 22],
+    "location": "Deep Inside the Factory City of the Turbine Halls",
+    "faction": "The Machinists Guild",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Driller Hasara Doukem",
+      "2": "Driller Hasara Doukem",
+      "3": "Loader Bor Berkem",
+      "4": "Loader Bor Berkem",
+      "5": "Third mechanic Yina Caph",
+      "6": "Third mechanic Yina Caph"
+    },
+    "freeTalent": {
+      "name": "Mechanic",
+      "description": "Repairing vehicles and devices",
+      "category": "EQUIPMENT",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level for repairing vehicles and other mechanical devices."
+    }
+  },
+  {
+    "d66Range": [23, 31],
+    "location": "In the Purple Meadows of the Cave Gardens",
+    "faction": "The Gardeners Guild",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Gardener Preci Loukou",
+      "2": "Gardener Preci Loukou",
+      "3": "Second botanist Zahre Uhat",
+      "4": "Second botanist Zahre Uhat",
+      "5": "Root cutter Yisam Recha",
+      "6": "Root cutter Yisam Recha"
+    },
+    "freeTalent": {
+      "name": "Botanist",
+      "description": "Cultivating and understanding flora",
+      "category": "KNOWLEDGE",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level for cultivating plants or fungi as well as understanding flora and ivy"
+    }
+  },
+  {
+    "d66Range": [32, 36],
+    "location": "In the Eternal Dusk of the Inner Sanctum",
+    "faction": "The Coriolites",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Seer Harima din-Hrama",
+      "2": "Seer Harima din-Hrama",
+      "3": "First servant Kir",
+      "4": "First servant Kir",
+      "5": "Coriolite guard Lucret Ventri",
+      "6": "Coriolite guard Lucret Ventri"
+    },
+    "freeTalent": {
+      "name": "Cultural Savant",
+      "description": "Understanding customs",
+      "category": "KNOWLEDGE",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon"
+    }
+  },
+  {
+    "d66Range": [41, 45],
+    "location": "In the Lighthouse on the Edge of the Dark",
+    "faction": "The Navigators Guild",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Lighthouse keeper Hamareous",
+      "2": "Lighthouse keeper Hamareous",
+      "3": "Ice trader Kamara Yves",
+      "4": "Ice trader Kamara Yves",
+      "5": "Rim zealot Eriman Desram",
+      "6": "Rim zealot Eriman Desram"
+    },
+    "freeTalent": {
+      "name": "Lookout",
+      "description": "Spotting threats",
+      "category": "STEALTH_MOBILITY",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level to rolls for spotting approaching threats"
+    }
+  },
+  {
+    "d66Range": [46, 53],
+    "location": "Among the Hulks of a Scavenger Herd",
+    "faction": "Wreckers",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Star prophet Yesima",
+      "2": "Star prophet Yesima",
+      "3": "Astro wallah Qumar D'nima",
+      "4": "Astro wallah Qumar D'nima",
+      "5": "Hull cutter Limiri Treidis",
+      "6": "Hull cutter Limiri Treidis"
+    },
+    "freeTalent": {
+      "name": "Zero-G Training",
+      "description": "Zero gravity operations",
+      "category": "STEALTH_MOBILITY",
+      "maxLevel": 1,
+      "effect": "You suffer no negative effects when operating in zero gravity environments"
+    }
+  },
+  {
+    "d66Range": [54, 55],
+    "location": "In the Depths of a Greatship",
+    "faction": "The Navigators Guild",
+    "variableFaction": false,
+    "contacts": {
+      "1": "First mate Kander Zinn",
+      "2": "First mate Kander Zinn",
+      "3": "Hull warden Mekomos Hagg",
+      "4": "Hull warden Mekomos Hagg",
+      "5": "Cargo specialist Kosto Wahma",
+      "6": "Cargo specialist Kosto Wahma"
+    },
+    "freeTalent": {
+      "name": "Shuttle Pilot",
+      "description": "Piloting shuttles",
+      "category": "VEHICLE_EXO",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level to Agility rolls for piloting a shuttle"
+    }
+  },
+  {
+    "d66Range": [56, 61],
+    "location": "In the Depths of a Mining Colony",
+    "faction": "Mining Combine",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Dust miner Xavi Bordu",
+      "2": "Dust miner Xavi Bordu",
+      "3": "Veteran driller Mavandra Xo",
+      "4": "Veteran driller Mavandra Xo",
+      "5": "Union organizer Lab Sindra",
+      "6": "Union organizer Lab Sindra"
+    },
+    "freeTalent": {
+      "name": "Miner",
+      "description": "Drilling and digging",
+      "category": "EQUIPMENT",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level to drill, dig, or secure an underground cave or tunnel"
+    }
+  },
+  {
+    "d66Range": [62, 63],
+    "location": "Under the Sunless Sky of the Far Colonies",
+    "faction": "Mining Combine",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Tug pilot Aritra Bey",
+      "2": "Tug pilot Aritra Bey",
+      "3": "Zapti officer Lei Kavani",
+      "4": "Zapti officer Lei Kavani",
+      "5": "Cantina owner Rada Johuna",
+      "6": "Cantina owner Rada Johuna"
+    },
+    "freeTalent": {
+      "name": "Endurance",
+      "description": "Resisting harsh conditions",
+      "category": "RESILIENCE",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level for resisting vacuum, suffocation, and cold"
+    }
+  },
+  {
+    "d66Range": [64, 64],
+    "location": "Among the Alleys and Shanties of Aluminum Bay",
+    "faction": "Variable",
+    "variableFaction": true,
+    "variableFactionTable": {
+      "1": "Machinists",
+      "2": "Gardeners",
+      "3": "Navigators",
+      "4": "Navigators",
+      "5": "The Black Toad",
+      "6": "Coriolites"
+    },
+    "contacts": {
+      "1": "Hull cutter Rey Mouri",
+      "2": "Hull cutter Rey Mouri",
+      "3": "Rigger Canti Gopa",
+      "4": "Rigger Canti Gopa",
+      "5": "Crane rat Mi Aram",
+      "6": "Crane rat Mi Aram"
+    },
+    "freeTalent": {
+      "name": "Actor",
+      "description": "Bluffing and lying",
+      "category": "SOCIAL",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level when rolling to bluff or tell a lie to an NPC"
+    }
+  },
+  {
+    "d66Range": [65, 65],
+    "location": "Under the Iron Sky of the Dome",
+    "faction": "Variable",
+    "variableFaction": true,
+    "variableFactionTable": {
+      "1": "Machinists",
+      "2": "Gardeners",
+      "3": "Navigators",
+      "4": "Navigators",
+      "5": "The Black Toad",
+      "6": "Coriolites"
+    },
+    "contacts": {
+      "1": "Cook Lissa Losoi",
+      "2": "Cook Lissa Losoi",
+      "3": "Alley actor Rizan Mandra",
+      "4": "Alley actor Rizan Mandra",
+      "5": "Publisher Orun Okan",
+      "6": "Publisher Orun Okan"
+    },
+    "freeTalent": {
+      "name": "Acrobat",
+      "description": "Jumping, climbing, and running",
+      "category": "STEALTH_MOBILITY",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level to jumping, climbing, and running"
+    }
+  },
+  {
+    "d66Range": [66, 66],
+    "location": "Somewhere in the Eternal Fog of the Haze",
+    "faction": "The Black Toad",
+    "variableFaction": false,
+    "contacts": {
+      "1": "Dust Runner Giina Coult",
+      "2": "Dust Runner Giina Coult",
+      "3": "Bone breaker Vasil Fash",
+      "4": "Bone breaker Vasil Fash",
+      "5": "Assassin Grachi Sourtan",
+      "6": "Assassin Grachi Sourtan"
+    },
+    "freeTalent": {
+      "name": "Sleight of Hand",
+      "description": "Tricks and pickpocketing",
+      "category": "STEALTH_MOBILITY",
+      "maxLevel": 3,
+      "effect": "+1 base die per talent level to rolls for playing tricks with your hands and pickpocketing"
+    }
+  }
+]

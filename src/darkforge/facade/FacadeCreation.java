@@ -22,6 +22,7 @@ public class FacadeCreation {
     private FacadeCreation() {
         this.data =
                 GameDataProvider.getInstance();
+        data.initialize();
         this.factory =
                 new ExplorerFactory(
                         new Random(), data);

@@ -1,16 +1,22 @@
 package darkforge.model;
 
+import darkforge.data.GameDataProvider;
+import darkforge.data.ProfessionData;
 import darkforge.display.Displayable;
 
 import java.util.*;
 
-public abstract class Explorer extends GameEntity implements Displayable {
+public abstract class Explorer extends GameEntity
+        implements Displayable {
 
-  private final EnumMap<Attribute, Integer> attributes;
+  private final EnumMap<Attribute, Integer>
+          attributes;
   private Origin origin;
   private Specialty specialty;
   private final List<Talent> talents;
-  private final LinkedHashMap<String, List<Equipment>> equipmentBySource = new LinkedHashMap<>();
+  private final LinkedHashMap<String,
+          List<Equipment>> equipmentBySource =
+          new LinkedHashMap<>();
   private String quirk;
   private String keepsake;
   private String appearance;
@@ -18,26 +24,52 @@ public abstract class Explorer extends GameEntity implements Displayable {
   private String resolvedFaction;
   private String explorerReason;
 
-  protected Explorer(String name, String description) {
+  protected Explorer(String name,
+                     String description) {
     super(name, description);
-    this.attributes = new EnumMap<>(Attribute.class);
+    this.attributes =
+            new EnumMap<>(Attribute.class);
     this.talents = new ArrayList<>();
   }
 
+  // =========================================
+  // Abstract methods
+  // =========================================
+
   public abstract Attribute getKeyAttribute();
-
   public abstract List<Talent> getKeyTalents();
-
-  public abstract List<List<Equipment>> getStartingEquipmentSets();
-
+  public abstract List<List<Equipment>>
+  getStartingEquipmentSets();
   public abstract String getProfessionName();
+  public abstract List<Specialty>
+  getSpecialties();
 
-  public abstract List<Specialty> getSpecialties();
+  // =========================================
+  // ProfessionData helper for subclasses
+  // =========================================
 
-  public void setAttributes(EnumMap<Attribute, Integer> attrs) {
+  protected ProfessionData loadProfessionData() {
+    String displayName = getProfessionName();
+    ProfessionData pd = GameDataProvider.getInstance()
+            .getProfession(displayName);
+    if (pd == null) {
+      pd = GameDataProvider.getInstance()
+              .getProfession(
+                      displayName.replace(" ", ""));
+    }
+    return pd;
+  }
+
+  // =========================================
+  // Attributes
+  // =========================================
+
+  public void setAttributes(
+          EnumMap<Attribute, Integer> attrs) {
     for (Attribute a : Attribute.values()) {
       if (!attrs.containsKey(a)) {
-        throw new IllegalArgumentException("Missing attribute: " + a);
+        throw new IllegalArgumentException(
+                "Missing attribute: " + a);
       }
     }
     this.attributes.putAll(attrs);
@@ -47,26 +79,35 @@ public abstract class Explorer extends GameEntity implements Displayable {
     return attributes.getOrDefault(attr, 0);
   }
 
-  public EnumMap<Attribute, Integer> getAttributes() {
+  public EnumMap<Attribute, Integer>
+  getAttributes() {
     return new EnumMap<>(attributes);
   }
 
+  // =========================================
+  // Derived stats
+  // =========================================
+
   public int getHealth() {
-    return getAttribute(Attribute.STRENGTH) + getAttribute(Attribute.AGILITY);
+    return getAttribute(Attribute.STRENGTH)
+            + getAttribute(Attribute.AGILITY);
   }
 
   public int getHope() {
-    return getAttribute(Attribute.LOGIC) + getAttribute(Attribute.EMPATHY);
+    return getAttribute(Attribute.LOGIC)
+            + getAttribute(Attribute.EMPATHY);
   }
 
   public int getHeart() {
-    return getAttribute(Attribute.INSIGHT) + getAttribute(Attribute.PERCEPTION);
+    return getAttribute(Attribute.INSIGHT)
+            + getAttribute(Attribute.PERCEPTION);
   }
 
-  public Origin getOrigin() {
-    return origin;
-  }
+  // =========================================
+  // Origin & Specialty
+  // =========================================
 
+  public Origin getOrigin() { return origin; }
   public void setOrigin(Origin origin) {
     this.origin = origin;
   }
@@ -74,18 +115,24 @@ public abstract class Explorer extends GameEntity implements Displayable {
   public Specialty getSpecialty() {
     return specialty;
   }
-
   public void setSpecialty(Specialty specialty) {
     this.specialty = specialty;
   }
 
+  // =========================================
+  // Talents
+  // =========================================
+
   public List<Talent> getTalents() {
-    return Collections.unmodifiableList(talents);
+    return Collections.unmodifiableList(
+            talents);
   }
 
   public boolean addTalent(Talent talent) {
     for (Talent existing : talents) {
-      if (existing.getName().equalsIgnoreCase(talent.getName())) {
+      if (existing.getName()
+              .equalsIgnoreCase(
+                      talent.getName())) {
         existing.increaseLevel();
         return false;
       }
@@ -94,34 +141,46 @@ public abstract class Explorer extends GameEntity implements Displayable {
     return true;
   }
 
-  /** Returns all equipment as a flat list (all sources combined). */
+  // =========================================
+  // Equipment
+  // =========================================
+
   public List<Equipment> getEquipment() {
     List<Equipment> all = new ArrayList<>();
-    for (List<Equipment> list : equipmentBySource.values())
+    for (List<Equipment> list :
+            equipmentBySource.values()) {
       all.addAll(list);
+    }
     return Collections.unmodifiableList(all);
   }
 
-  /** Returns equipment grouped by source (e.g., "Starting Gear"). */
-  public LinkedHashMap<String, List<Equipment>> getEquipmentBySource() {
-    return new LinkedHashMap<>(equipmentBySource);
+  public LinkedHashMap<String, List<Equipment>>
+  getEquipmentBySource() {
+    return new LinkedHashMap<>(
+            equipmentBySource);
   }
 
-  /** Sets equipment under the default "Starting Gear" source (replaces all). */
-  public void setEquipment(List<Equipment> equipment) {
+  public void setEquipment(
+          List<Equipment> equipment) {
     this.equipmentBySource.clear();
-    this.equipmentBySource.put("Starting Gear", new ArrayList<>(equipment));
+    this.equipmentBySource.put(
+            "Starting Gear",
+            new ArrayList<>(equipment));
   }
 
-  /** Adds equipment under a named source (e.g., "Starting Gear", "Acquired"). */
-  public void addEquipment(String source, List<Equipment> equipment) {
-    this.equipmentBySource.computeIfAbsent(source, k -> new ArrayList<>()).addAll(equipment);
+  public void addEquipment(String source,
+                           List<Equipment> equipment) {
+    this.equipmentBySource
+            .computeIfAbsent(source,
+                    k -> new ArrayList<>())
+            .addAll(equipment);
   }
 
-  public String getQuirk() {
-    return quirk;
-  }
+  // =========================================
+  // Personal details
+  // =========================================
 
+  public String getQuirk() { return quirk; }
   public void setQuirk(String quirk) {
     this.quirk = quirk;
   }
@@ -129,7 +188,6 @@ public abstract class Explorer extends GameEntity implements Displayable {
   public String getKeepsake() {
     return keepsake;
   }
-
   public void setKeepsake(String keepsake) {
     this.keepsake = keepsake;
   }
@@ -137,50 +195,48 @@ public abstract class Explorer extends GameEntity implements Displayable {
   public String getAppearance() {
     return appearance;
   }
-
   public void setAppearance(String appearance) {
     this.appearance = appearance;
   }
 
-  /**
-   * Returns the resolved contact name (set during Explorer creation via D6 roll).
-   */
   public String getResolvedContact() {
     return resolvedContact;
   }
-
-  public void setResolvedContact(String resolvedContact) {
+  public void setResolvedContact(
+          String resolvedContact) {
     this.resolvedContact = resolvedContact;
   }
 
-  /**
-   * Returns the resolved faction name (set during Explorer creation; may be from
-   * D6 roll).
-   */
   public String getResolvedFaction() {
     return resolvedFaction;
   }
-
-  public void setResolvedFaction(String resolvedFaction) {
+  public void setResolvedFaction(
+          String resolvedFaction) {
     this.resolvedFaction = resolvedFaction;
   }
 
-  /**
-   * Returns the reason this Explorer joined the Explorers Guild (Ch. 2 step 10).
-   */
   public String getExplorerReason() {
     return explorerReason;
   }
-
-  public void setExplorerReason(String explorerReason) {
+  public void setExplorerReason(
+          String explorerReason) {
     this.explorerReason = explorerReason;
   }
 
+  // =========================================
+  // Display (GameEntity + Displayable)
+  // =========================================
+
   @Override
   public String display() {
-    String spec = (specialty != null) ? " (" + specialty.getName() + ")" : "";
-    return String.format("%s — %s%s — Health %d / Hope %d / Heart %d",
-        name, getProfessionName(), spec, getHealth(), getHope(), getHeart());
+    String spec = (specialty != null)
+            ? " (" + specialty.getName() + ")"
+            : "";
+    return String.format(
+            "%s — %s%s — Health %d / Hope %d "
+                    + "/ Heart %d",
+            name, getProfessionName(), spec,
+            getHealth(), getHope(), getHeart());
   }
 
   @Override

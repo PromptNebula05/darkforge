@@ -35,10 +35,7 @@ public class ExplorerDeserializer {
         this.factory = new ExplorerFactory();
     }
 
-    public ExplorerDeserializer(
-            ExplorerFactory factory) {
-        this.factory = factory;
-    }
+
 
     /**
      * Deserialize a JSON string into a fully
@@ -77,14 +74,13 @@ public class ExplorerDeserializer {
         // --- Profession ---
         String professionName = requireString(
                 root, "profession", filePath);
-        Explorer explorer =
-                createProfessionInstance(
-                        professionName, filePath);
 
         // --- Name ---
         String name = requireString(
                 root, "name", filePath);
-        explorer.setName(name);
+        Explorer explorer =
+                createProfessionInstance(
+                        professionName, name, filePath);
 
         // --- Specialty ---
         if (root.has("specialty")
@@ -162,13 +158,13 @@ public class ExplorerDeserializer {
     // =========================================
 
     private Explorer createProfessionInstance(
-            String professionName,
+            String professionName, String name,
             String filePath)
             throws CharacterCorruptionException {
         try {
             return factory
                     .createProfessionInstance(
-                            professionName);
+                            professionName, name);
         } catch (InvalidProfessionException e) {
             throw new CharacterCorruptionException(
                     filePath,
@@ -369,13 +365,13 @@ public class ExplorerDeserializer {
                     "Loaded from save");
         }
 
-        // Construct Origin with fixed faction
-        Map<Integer, String> emptyContacts =
-                new HashMap<>();
+        // Construct Origin via deserialization
+        // constructor (no contacts needed —
+        // resolved contact stored on Explorer)
         Origin origin = new Origin(
                 location, freeTalent,
                 faction != null ? faction : "Unknown",
-                emptyContacts, d66Low, d66High);
+                d66Low, d66High);
         explorer.setOrigin(origin);
 
         // Set resolved details directly

@@ -108,13 +108,21 @@ public class ExplorerFactory {
   // --- Specialty resolution ---
 
   private Specialty resolveSpecialty(
-          Explorer explorer, int specialtyIndex) {
+          Explorer explorer, int specialtyIndex)
+          throws InvalidProfessionException {
     List<Specialty> specialties =
             explorer.getSpecialties();
     if (specialtyIndex < 0
             || specialtyIndex
             >= specialties.size()) {
-      specialtyIndex = 0;
+      throw new InvalidProfessionException(
+              explorer.getProfessionName()
+                      + " (specialty index "
+                      + specialtyIndex
+                      + " out of range 0-"
+                      + (specialties.size() - 1)
+                      + ")",
+              data.getValidProfessionNames());
     }
     return specialties.get(specialtyIndex);
   }
@@ -300,6 +308,13 @@ public class ExplorerFactory {
           throws InvalidProfessionException {
     return createProfession(
             professionName, "Unnamed");
+  }
+
+  public Explorer createProfessionInstance(
+          String professionName, String name)
+          throws InvalidProfessionException {
+    return createProfession(
+            professionName, name);
   }
 
   /**

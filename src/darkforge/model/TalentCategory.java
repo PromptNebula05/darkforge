@@ -9,7 +9,8 @@ public enum TalentCategory {
     EQUIPMENT("Equipment"),
     RECOVERY("Recovery"),
     STEALTH_MOBILITY("Stealth & Mobility"),
-    RESILIENCE("Resilience");
+    RESILIENCE("Resilience"),
+    GENERAL("General");
 
     private final String displayName;
 

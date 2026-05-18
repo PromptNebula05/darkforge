@@ -1,12 +1,13 @@
 package darkforge.model.profession;
 
+import darkforge.data.ProfessionData;
 import darkforge.model.*;
 import java.util.*;
-import darkforge.mechanics.D6Table;
 
 public class OddJobber extends Explorer {
 
-  private static final Attribute KEY_ATTRIBUTE = Attribute.EMPATHY;
+  private static final Attribute KEY_ATTRIBUTE =
+          Attribute.EMPATHY;
 
   public OddJobber(String name) {
     super(name, "Odd Jobber explorer");
@@ -24,65 +25,76 @@ public class OddJobber extends Explorer {
 
   @Override
   public List<Talent> getKeyTalents() {
-    return List.of(
-        new Talent("Actor", "Bluffing and lying", TalentCategory.SOCIAL, 3,
-            "+1 base die per talent level when rolling to bluff or tell a lie to an NPC"),
-        new Talent("Charmer", "Making NPCs like you", TalentCategory.SOCIAL, 3,
-            "+1 base die per talent level when rolling for Empathy to make an NPC like you"),
-        new Talent("Cultural Savant", "Understanding customs", TalentCategory.KNOWLEDGE, 3,
-            "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon"),
-        new Talent("Streetwise", "Urban connections and rumors", TalentCategory.STEALTH_MOBILITY, 3,
-            "+1 base die per talent level for acquiring stolen goods, finding a contact, or hearing rumors in Ship City and the colonies"));
+    ProfessionData pd = loadProfessionData();
+    List<Talent> talents = new ArrayList<>();
+    for (ProfessionData.TalentData td :
+            pd.getTalents()) {
+      talents.add(new Talent(
+              td.name(), td.description(),
+              TalentCategory.valueOf(
+                      td.category()),
+              td.maxLevel(), td.effect()));
+    }
+    return talents;
   }
 
   @Override
   public List<Specialty> getSpecialties() {
-    return List.of(
-        new Specialty("Guild Clerk", "Sorting mail, taking notes, and handling tasks for a Guild master",
-            new Talent("Librarian", "Using libraries and info cubes", TalentCategory.KNOWLEDGE, 3,
-                "+1 base die per talent level when using a library or info cubes to find information")),
-        new Specialty("Stair Peddler", "Selling goods on the steep stairs of the Chasm",
-            new Talent("Mentalist", "Reading people", TalentCategory.SOCIAL, 3,
-                "+1 base die per talent level to Empathy rolls for reading a subject and understanding if they are lying or hiding something")),
-        new Specialty("Ice Trader", "Trading ice bonds to Guilds and merchants",
-            new Talent("Barter", "Trading and buying", TalentCategory.SOCIAL, 3,
-                "+1 base die per talent level when rolling for Empathy to trade or buy something")),
-        new Specialty("Alley Cook", "Making stews and grilling skewers in a small street stall",
-            new Talent("Cook", "Cooking with a field kitchen", TalentCategory.SOCIAL, 3,
-                "+1 base die per talent level when cooking using a field kitchen")),
-        new Specialty("Coriolite Servant", "Serving a Coriolite noble and learning the ways of the Old Horizon",
-            new Talent("Cultural Savant", "Understanding customs", TalentCategory.KNOWLEDGE, 3,
-                "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon")),
-        new Specialty("Artifact Dealer", "Buying and selling artifacts from across the Charted Sphere",
-            new Talent("Artifact Specialist", "Comprehending artifacts", TalentCategory.KNOWLEDGE, 3,
-                "+1 base die per talent level to comprehend artifacts")));
+    ProfessionData pd = loadProfessionData();
+    List<Specialty> specs = new ArrayList<>();
+    for (ProfessionData.SpecialtyData sd :
+            pd.getSpecialties()) {
+      Talent freeTalent =
+              resolveSpecialtyTalent(
+                      sd.freeTalentName());
+      specs.add(new Specialty(
+              sd.name(), sd.description(),
+              freeTalent));
+    }
+    return specs;
+  }
+
+  private Talent resolveSpecialtyTalent(
+          String talentName) {
+    for (Talent t : getKeyTalents()) {
+      if (t.getName().equalsIgnoreCase(
+              talentName)) {
+        return t;
+      }
+    }
+    return new Talent(
+            talentName, "",
+            TalentCategory.GENERAL, 3,
+            "Specialty talent");
   }
 
   @Override
-  public List<List<Equipment>> getStartingEquipmentSets() {
-    return List.of(
-        List.of(new Equipment("Fancy Clothing", "Impressive attire", EquipmentWeight.LIGHT),
-            new Equipment("Waking Pills", "Stimulant pills to stay alert", EquipmentWeight.TINY),
-            new Equipment("Bottle of Shroom Brandy", "Fermented mushroom spirits", EquipmentWeight.TINY)),
-        List.of(new Equipment("Cooking Utensils", "Pots, pans, and tools for cooking", EquipmentWeight.REGULAR, 1),
-            new Equipment("Orchid Dust (5 doses)", "Psychoactive substance from the Blight", EquipmentWeight.TINY),
-            new Equipment("Large Backpack", "Oversized carry gear", EquipmentWeight.LIGHT)),
-        List.of(new Equipment("Accounting Ledger", "Financial record book", EquipmentWeight.TINY),
-            new Equipment("Flight Suit", "Standard flight attire", EquipmentWeight.LIGHT),
-            new Equipment("MediKit (Basic)", "Basic medical supplies", EquipmentWeight.LIGHT, 1)));
+  public List<List<Equipment>>
+  getStartingEquipmentSets() {
+    ProfessionData pd = loadProfessionData();
+    List<List<Equipment>> sets =
+            new ArrayList<>();
+    for (List<ProfessionData.EquipmentData>
+            setData :
+            pd.getStartingEquipmentSets()) {
+      List<Equipment> items =
+              new ArrayList<>();
+      for (ProfessionData.EquipmentData ed :
+              setData) {
+        items.add(new Equipment(
+                ed.name(), ed.description(),
+                EquipmentWeight.valueOf(
+                        ed.weight()),
+                ed.gearBonus()));
+      }
+      sets.add(items);
+    }
+    return sets;
   }
 
   public int getAdaptabilityBonus() {
-    return (int) getTalents().stream().map(Talent::getCategory).distinct().count();
-  }
-
-  /** Sample first names for Odd Jobber (Ch. 2, D6 table). */
-  public static D6Table<String> getSampleFirstNames() {
-    return new D6Table<>(Map.of(1, "Chandra", 2, "Dharr", 3, "Margou", 4, "Steem", 5, "Vasil", 6, "Xemene"));
-  }
-
-  /** Sample surnames for Odd Jobber (Ch. 2, D6 table). */
-  public static D6Table<String> getSampleSurnames() {
-    return new D6Table<>(Map.of(1, "Nemkassur", 2, "Kavour", 3, "N'rama", 4, "Soltev", 5, "Koulidis", 6, "Zhou"));
+    return (int) getTalents().stream()
+            .map(Talent::getCategory)
+            .distinct().count();
   }
 }

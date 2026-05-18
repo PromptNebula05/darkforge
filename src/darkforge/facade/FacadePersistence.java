@@ -63,10 +63,10 @@ public class FacadePersistence {
      * @throws IOException if the directory cannot
      *         be listed
      */
-    public List<Path> listSavedExplorers()
+    public List<Path> listSaves()
             throws IOException {
         return fileManager
-                .listSaves();
+                .listSavedExplorers();
     }
 
     /**
