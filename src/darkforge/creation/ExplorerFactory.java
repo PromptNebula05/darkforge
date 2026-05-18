@@ -108,21 +108,13 @@ public class ExplorerFactory {
   // --- Specialty resolution ---
 
   private Specialty resolveSpecialty(
-          Explorer explorer, int specialtyIndex)
-          throws InvalidProfessionException {
+          Explorer explorer, int specialtyIndex) {
     List<Specialty> specialties =
             explorer.getSpecialties();
     if (specialtyIndex < 0
             || specialtyIndex
             >= specialties.size()) {
-      throw new InvalidProfessionException(
-              explorer.getProfessionName()
-                      + " (specialty index "
-                      + specialtyIndex
-                      + " out of range 0-"
-                      + (specialties.size() - 1)
-                      + ")",
-              data.getValidProfessionNames());
+      specialtyIndex = 0;
     }
     return specialties.get(specialtyIndex);
   }
