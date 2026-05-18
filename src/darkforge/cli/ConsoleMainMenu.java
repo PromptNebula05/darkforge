@@ -69,7 +69,7 @@ public class ConsoleMainMenu {
                 case "4" -> handleViewAll();
                 case "5" -> handleSearch();
                 case "6" -> handleDelete();
-                case "0" -> {
+                case "0", "Q", "q" -> {
                     System.out.println(
                             "Farewell, Explorer.");
                     running = false;

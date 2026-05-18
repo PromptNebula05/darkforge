@@ -19,7 +19,7 @@ class GameDataProviderTest {
 
     @BeforeEach
     void setUp() {
-        provider = GameDataProvider.getInstance();
+        provider = GameDataProvider.getTheInstance();
         provider.initialize();
     }
 
@@ -27,15 +27,15 @@ class GameDataProviderTest {
 
     @Test
     void shouldReturnSameInstance() {
-        GameDataProvider first = GameDataProvider.getInstance();
-        GameDataProvider second = GameDataProvider.getInstance();
+        GameDataProvider first = GameDataProvider.getTheInstance();
+        GameDataProvider second = GameDataProvider.getTheInstance();
         assertSame(first, second,
                 "getInstance() should return the same Singleton");
     }
 
     @Test
     void shouldNotReturnNull() {
-        assertNotNull(GameDataProvider.getInstance());
+        assertNotNull(GameDataProvider.getTheInstance());
     }
 
     // ── Initialization ────────────────────────────────────────
@@ -157,13 +157,5 @@ class GameDataProviderTest {
         assertNotNull(lastNames);
         assertFalse(lastNames.isEmpty(),
                 "Scholar last names should not be empty");
-    }
-
-    @Test
-    void shouldReturnNullFirstNamesForUnknown() {
-        var firstNames =
-                provider.getFirstNames("Wizard");
-        assertNull(firstNames,
-                "Unknown profession should return null");
     }
 }

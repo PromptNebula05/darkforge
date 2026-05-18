@@ -71,6 +71,5 @@ public class ProfessionData {
             String name,
             String description,
             String weight,
-            int gearBonus,
-            String source) {}
+            int gearBonus) {}
 }

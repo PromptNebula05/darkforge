@@ -1,13 +1,16 @@
 package darkforge.facade;
 
-import darkforge.model.Explorer;
+import darkforge.data.GameDataProvider;
+import darkforge.model.*;
 import darkforge.persistence.ExplorerFileManager;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.EnumMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,15 +28,29 @@ class FacadePersistenceTest {
     private ExplorerFileManager fileManager;
     private Explorer testExplorer;
 
+    @BeforeAll
+    static void initGameData() {
+        GameDataProvider.getTheInstance().initialize();
+    }
+
     @BeforeEach
     void setUp() throws Exception {
         fileManager = new ExplorerFileManager(tempDir);
+
+        EnumMap<Attribute, Integer> attrs =
+                new EnumMap<>(Attribute.class);
+        for (Attribute a : Attribute.values()) {
+            attrs.put(a, 4);
+        }
+        Origin origin = GameDataProvider
+                .getTheInstance().getOrigins().get(0);
+
         testExplorer = FacadeDarkforge.getTheInstance()
                 .creationAccess().createExplorer(
-                        "Enforcer", "Kaan Verros", 1, 1,
-                        new int[]{4, 4, 4, 4, 4, 4},
-                        new int[]{1, 1, 1, 0},
-                        "quirk", "keepsake", "appearance"
+                        "Enforcer", origin, 0,
+                        attrs, new int[]{1, 1, 1, 0},
+                        "quirk", "keepsake", "appearance",
+                        "Kaan Verros"
                 );
     }
 

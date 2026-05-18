@@ -1,17 +1,17 @@
 package darkforge.facade;
 
-import darkforge.display
-        .CharacterSheetFormatter;
+import darkforge.display.CharacterSheetFormatter;
 import darkforge.model.Explorer;
 
 /**
- * Façade for the darkforge.display package.
- * Wraps CharacterSheetFormatter behind simple
- * formatting methods.
+ * Façade singleton for the darkforge.display
+ * package. Provides character sheet formatting,
+ * summary generation, and search highlighting.
  */
 public class FacadeDisplay {
     private static final FacadeDisplay INSTANCE =
             new FacadeDisplay();
+
     private final CharacterSheetFormatter
             formatter;
 
@@ -25,8 +25,8 @@ public class FacadeDisplay {
     }
 
     /**
-     * Format a full character sheet with
-     * box-drawing dividers.
+     * Format a full character sheet for an
+     * Explorer.
      */
     public String formatCharacterSheet(
             Explorer explorer) {
@@ -35,7 +35,8 @@ public class FacadeDisplay {
     }
 
     /**
-     * Format a single-line compact summary card.
+     * Format a single-line summary for an
+     * Explorer.
      */
     public String formatSummary(
             Explorer explorer) {
@@ -43,19 +44,8 @@ public class FacadeDisplay {
     }
 
     /**
-     * Highlight a search term in text with
-     * >>markers<< for console display.
-     */
-    public String formatWithHighlight(
-            String text, String term) {
-        return formatter.highlightTerm(
-                text, term);
-    }
-
-    /**
-     * Format a full character sheet for the
-     * given Explorer, then highlight the
-     * search term with >>markers<<.
+     * Format a character sheet with a search
+     * term highlighted using >>markers<<.
      */
     public String formatWithHighlight(
             Explorer explorer, String term) {

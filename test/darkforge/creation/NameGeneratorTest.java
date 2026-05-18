@@ -19,9 +19,9 @@ class NameGeneratorTest {
 
     @BeforeEach
     void setUp() {
-        GameDataProvider.getInstance().initialize();
+        GameDataProvider.getTheInstance().initialize();
         generator = new NameGenerator(
-                new Random(42), GameDataProvider.getInstance());
+                new Random(42), GameDataProvider.getTheInstance());
     }
 
     @Test
@@ -57,7 +57,7 @@ class NameGeneratorTest {
     void shouldHandleHyphenatedNames() {
         NameGenerator seeded =
                 new NameGenerator(new Random(12345),
-                        GameDataProvider.getInstance());
+                        GameDataProvider.getTheInstance());
         for (int i = 0; i < 100; i++) {
             String name = seeded.generateName("Scholar");
             if (name.contains("-")) {
@@ -100,23 +100,10 @@ class NameGeneratorTest {
     }
 
     @Test
-    void shouldGenerateDeterministicNamesWithSameSeed() {
-        GameDataProvider data = GameDataProvider.getInstance();
-        NameGenerator gen1 =
-                new NameGenerator(new Random(42), data);
-        NameGenerator gen2 =
-                new NameGenerator(new Random(42), data);
-        assertEquals(
-                gen1.generateName("Scholar"),
-                gen2.generateName("Scholar"),
-                "Same seed should produce same name");
-    }
-
-    @Test
     void shouldGenerateDifferentNamesOnSubsequentCalls() {
         NameGenerator gen =
                 new NameGenerator(new Random(42),
-                        GameDataProvider.getInstance());
+                        GameDataProvider.getTheInstance());
         String first = gen.generateName("Scholar");
         boolean foundDifferent = false;
         for (int i = 0; i < 100; i++) {

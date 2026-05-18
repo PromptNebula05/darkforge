@@ -28,7 +28,7 @@ class ExplorerDeserializerTest {
     void setUp() throws Exception {
         serializer = new ExplorerSerializer();
         deserializer = new ExplorerDeserializer();
-        GameDataProvider.getInstance().initialize();
+        GameDataProvider.getTheInstance().initialize();
         ExplorerFactory factory = new ExplorerFactory();
         EnumMap<Attribute, Integer> attrs = new EnumMap<>(Attribute.class);
         attrs.put(Attribute.STRENGTH, 2);
@@ -37,7 +37,7 @@ class ExplorerDeserializerTest {
         attrs.put(Attribute.PERCEPTION, 3);
         attrs.put(Attribute.INSIGHT, 4);
         attrs.put(Attribute.EMPATHY, 5);
-        Origin origin = GameDataProvider.getInstance()
+        Origin origin = GameDataProvider.getTheInstance()
                 .getOrigins().get(0);
         originalExplorer = factory.createExplorer(
                 "Scholar", origin, 0,

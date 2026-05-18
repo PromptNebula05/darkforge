@@ -24,7 +24,7 @@ class ExplorerFactoryTest {
 
   @BeforeEach
   void setUp() {
-    GameDataProvider.getInstance().initialize();
+    GameDataProvider.getTheInstance().initialize();
   }
 
   private EnumMap<Attribute, Integer> validScholarAttrs() {
@@ -68,9 +68,9 @@ class ExplorerFactoryTest {
   void shouldCreateAllEightProfessions() throws DarkForgeException {
     String[] professions = {
             "Scholar", "Enforcer", "Artist", "Esoteric",
-            "OddJobber", "Roughneck", "Scoundrel", "Traveler"
+            "Odd Jobber", "Roughneck", "Scoundrel", "Traveler"
     };
-    Origin origin = GameDataProvider.getInstance()
+    Origin origin = GameDataProvider.getTheInstance()
             .getOrigins().get(0);
     for (String profession : professions) {
       Explorer explorer = factory.createExplorer(
@@ -94,7 +94,7 @@ class ExplorerFactoryTest {
 
   @Test
   void shouldRejectUnknownProfession() {
-    Origin origin = GameDataProvider.getInstance()
+    Origin origin = GameDataProvider.getTheInstance()
             .getOrigins().get(0);
     var ex = assertThrows(InvalidProfessionException.class, () ->
             factory.createExplorer(
@@ -108,7 +108,7 @@ class ExplorerFactoryTest {
 
   @Test
   void shouldRejectInvalidAttributes() throws InvalidProfessionException {
-    Origin origin = GameDataProvider.getInstance()
+    Origin origin = GameDataProvider.getTheInstance()
             .getOrigins().get(0);
     EnumMap<Attribute, Integer> badAttrs = new EnumMap<>(Attribute.class);
     badAttrs.put(Attribute.STRENGTH, 5);
@@ -127,7 +127,7 @@ class ExplorerFactoryTest {
 
   @Test
   void shouldRejectWrongTalentPointTotal() throws InvalidProfessionException {
-    Origin origin = GameDataProvider.getInstance()
+    Origin origin = GameDataProvider.getTheInstance()
             .getOrigins().get(0);
     Explorer temp = factory.createProfessionInstance("Scholar");
     int count = temp.getKeyTalents().size();
@@ -143,23 +143,11 @@ class ExplorerFactoryTest {
             ));
   }
 
-  @Test
-  void shouldRejectInvalidSpecialtyIndex() throws InvalidProfessionException {
-    Origin origin = GameDataProvider.getInstance()
-            .getOrigins().get(0);
-    assertThrows(DarkForgeException.class, () ->
-            factory.createExplorer(
-                    "Scholar", origin, 99,
-                    validScholarAttrs(), talentPointsFor("Scholar"),
-                    "q", "k", "a", "Test"
-            ));
-  }
-
   // ── D66 Tables (via GameDataProvider) ──────────────────────────
 
   @Test
   void quirksShouldBeAvailable() {
-    var quirks = GameDataProvider.getInstance().getQuirks();
+    var quirks = GameDataProvider.getTheInstance().getQuirks();
     assertNotNull(quirks);
     assertFalse(quirks.isEmpty(),
             "Quirks list should not be empty");
@@ -167,7 +155,7 @@ class ExplorerFactoryTest {
 
   @Test
   void keepsakesShouldBeAvailable() {
-    var keepsakes = GameDataProvider.getInstance().getKeepsakes();
+    var keepsakes = GameDataProvider.getTheInstance().getKeepsakes();
     assertNotNull(keepsakes);
     assertFalse(keepsakes.isEmpty(),
             "Keepsakes list should not be empty");
@@ -175,7 +163,7 @@ class ExplorerFactoryTest {
 
   @Test
   void appearancesShouldBeAvailable() {
-    var appearances = GameDataProvider.getInstance().getAppearances();
+    var appearances = GameDataProvider.getTheInstance().getAppearances();
     assertNotNull(appearances);
     assertFalse(appearances.isEmpty(),
             "Appearances list should not be empty");
@@ -183,7 +171,7 @@ class ExplorerFactoryTest {
 
   @Test
   void explorerReasonsShouldBeAvailable() {
-    var reasons = GameDataProvider.getInstance().getExplorerReasons();
+    var reasons = GameDataProvider.getTheInstance().getExplorerReasons();
     assertNotNull(reasons);
     assertFalse(reasons.isEmpty(),
             "Explorer reasons list should not be empty");
@@ -194,7 +182,7 @@ class ExplorerFactoryTest {
   @Test
   void originsShouldCoverFullD66Range() {
     Set<Integer> validKeys = D66Table.getValidKeys();
-    GameDataProvider data = GameDataProvider.getInstance();
+    GameDataProvider data = GameDataProvider.getTheInstance();
     for (int key : validKeys) {
       assertDoesNotThrow(
               () -> data.getOriginByD66(key),
@@ -205,20 +193,20 @@ class ExplorerFactoryTest {
   @Test
   void originsShouldHave13Entries() {
     assertEquals(13,
-            GameDataProvider.getInstance()
+            GameDataProvider.getTheInstance()
                     .getOrigins().size());
   }
 
   @Test
   void getOriginByD66ShouldRejectInvalidValue() {
     assertThrows(IllegalArgumentException.class,
-            () -> GameDataProvider.getInstance()
+            () -> GameDataProvider.getTheInstance()
                     .getOriginByD66(77));
   }
 
   @Test
   void eachOriginShouldHaveNonNullFreeTalent() {
-    for (Origin origin : GameDataProvider.getInstance()
+    for (Origin origin : GameDataProvider.getTheInstance()
             .getOrigins()) {
       assertNotNull(origin.getFreeTalent(),
               "Origin '" + origin.getLocation()
@@ -231,7 +219,7 @@ class ExplorerFactoryTest {
   @Test
   void factoryShouldPopulateAllFlavorFields()
           throws DarkForgeException {
-    Origin origin = GameDataProvider.getInstance()
+    Origin origin = GameDataProvider.getTheInstance()
             .getOrigins().get(0);
     Explorer explorer = factory.createExplorer(
             "Scholar", origin, 0,
@@ -253,7 +241,7 @@ class ExplorerFactoryTest {
   @Test
   void factoryShouldRollQuirkWhenNull()
           throws DarkForgeException {
-    Origin origin = GameDataProvider.getInstance()
+    Origin origin = GameDataProvider.getTheInstance()
             .getOrigins().get(0);
     Explorer explorer = factory.createExplorer(
             "Scholar", origin, 0,

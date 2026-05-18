@@ -31,7 +31,7 @@ class ExplorerFileManagerTest {
     @BeforeEach
     void setUp() throws Exception {
         manager = new ExplorerFileManager(tempDir);
-        GameDataProvider.getInstance().initialize();
+        GameDataProvider.getTheInstance().initialize();
         ExplorerFactory factory = new ExplorerFactory();
         EnumMap<Attribute, Integer> attrs = new EnumMap<>(Attribute.class);
         attrs.put(Attribute.STRENGTH, 2);
@@ -40,7 +40,7 @@ class ExplorerFileManagerTest {
         attrs.put(Attribute.PERCEPTION, 3);
         attrs.put(Attribute.INSIGHT, 4);
         attrs.put(Attribute.EMPATHY, 5);
-        Origin origin = GameDataProvider.getInstance()
+        Origin origin = GameDataProvider.getTheInstance()
                 .getOrigins().get(0);
         testExplorer = factory.createExplorer(
                 "Scholar", origin, 0,
@@ -75,7 +75,7 @@ class ExplorerFileManagerTest {
         EnumMap<Attribute, Integer> attrs2 = new EnumMap<>(Attribute.class);
         for (Attribute a : Attribute.values()) attrs2.put(a, 4);
         ExplorerFactory factory = new ExplorerFactory();
-        Origin origin2 = GameDataProvider.getInstance()
+        Origin origin2 = GameDataProvider.getTheInstance()
                 .getOrigins().get(0);
         Explorer second = factory.createExplorer(
                 "Enforcer", origin2, 0,

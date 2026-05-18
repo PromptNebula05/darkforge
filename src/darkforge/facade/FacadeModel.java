@@ -6,9 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Façade for the darkforge.model package.
- * Provides convenient access to enums, constants,
- * and factory methods for model data classes.
+ * Façade singleton for the darkforge.model package.
+ * Provides access to profession listings, attribute
+ * enums, and talent category enums.
  */
 public class FacadeModel {
     private static final FacadeModel INSTANCE =
@@ -21,23 +21,17 @@ public class FacadeModel {
     }
 
     /**
-     * Return all valid profession names from
-     * game data.
+     * Returns all 8 valid profession names as
+     * loaded from professions.json via
+     * GameDataProvider.
      */
     public List<String> getAvailableProfessions() {
-        return GameDataProvider.getInstance()
+        return GameDataProvider.getTheInstance()
                 .getValidProfessionNames();
     }
 
     /**
-     * Return all Attribute enum values.
-     */
-    public List<Attribute> getAttributeList() {
-        return List.of(Attribute.values());
-    }
-
-    /**
-     * Return all attribute display names.
+     * Returns all 6 attribute enum names.
      */
     public List<String> getAttributeNames() {
         return Arrays.stream(Attribute.values())
@@ -46,8 +40,15 @@ public class FacadeModel {
     }
 
     /**
+     * Returns all TalentCategory enum constants.
+     */
+    public TalentCategory[] getTalentCategories() {
+        return TalentCategory.values();
+    }
+
+    /**
      * Look up an Attribute by its enum name.
-     * Returns null if the name is not recognized.
+     * Returns null if no match.
      */
     public Attribute getAttributeByName(
             String name) {
@@ -56,36 +57,5 @@ public class FacadeModel {
         } catch (IllegalArgumentException e) {
             return null;
         }
-    }
-
-    /**
-     * Return all TalentCategory enum values
-     * as an array.
-     */
-    public TalentCategory[]
-    getTalentCategories() {
-        return TalentCategory.values();
-    }
-
-    /**
-     * Create a new Talent instance.
-     */
-    public Talent createTalent(
-            String name, String description,
-            TalentCategory category,
-            int maxLevel, String effect) {
-        return new Talent(name, description,
-                category, maxLevel, effect);
-    }
-
-    /**
-     * Create a new Equipment instance.
-     */
-    public Equipment createEquipment(
-            String name, String description,
-            EquipmentWeight weight,
-            int gearBonus) {
-        return new Equipment(name, description,
-                weight, gearBonus);
     }
 }

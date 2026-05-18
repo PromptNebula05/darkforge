@@ -109,7 +109,7 @@ class ConsoleMainMenuTest {
                     new ConsoleMainMenu(
                             scannerFrom(input));
             assertDoesNotThrow(menu::run,
-                    "Should exit cleanly on Q");
+                    "Should exit cleanly on 0, Q, or q");
         } finally {
             restoreOutput();
         }
@@ -155,7 +155,7 @@ class ConsoleMainMenuTest {
     @Test
     void shouldHandleLoadWhenNoSavesExist() {
         // Input: choose Load (2), then go back
-        String input = "2\nQ\n";
+        String input = "3\nQ\n";
         ByteArrayOutputStream out = captureOutput();
         try {
             ConsoleMainMenu menu =

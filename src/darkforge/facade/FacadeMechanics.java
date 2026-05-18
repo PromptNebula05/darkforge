@@ -7,62 +7,42 @@ import darkforge.model.Attribute;
 import java.util.*;
 
 /**
- * Façade for the darkforge.mechanics package.
- * Wraps dice rolling, attribute validation,
- * and D66 table parsing behind simple methods.
+ * Façade singleton for the darkforge.mechanics
+ * package. Provides dice rolling, attribute
+ * validation, and D66 table parsing.
  */
 public class FacadeMechanics {
     private static final FacadeMechanics INSTANCE =
             new FacadeMechanics();
-    private final Random rng = new Random();
 
-    private FacadeMechanics() {}
+    private final Random rng;
 
-    public static FacadeMechanics
-    getTheInstance() {
+    private FacadeMechanics() {
+        this.rng = new Random();
+    }
+
+    public static FacadeMechanics getTheInstance() {
         return INSTANCE;
     }
 
     /**
-     * Create and roll a dice pool with base dice
-     * and gear dice. Returns an int[] of
-     * individual die results.
-     *
-     * @param baseDice number of base dice (>= 0)
-     * @param gearDice number of gear dice (>= 0)
-     * @return int[] of individual die results
-     * @throws IllegalArgumentException if either
-     *         argument is negative
+     * Roll a dice pool with base dice and gear
+     * dice.
+     * @return array of individual die results
      */
-    public int[] rollDicePool(int baseDice,
-                              int gearDice) {
-        if (baseDice < 0) {
-            throw new IllegalArgumentException(
-                    "Base dice cannot be negative: "
-                            + baseDice);
-        }
-        if (gearDice < 0) {
-            throw new IllegalArgumentException(
-                    "Gear dice cannot be negative: "
-                            + gearDice);
-        }
-        int total = baseDice + gearDice;
-        DicePool pool =
-                new DicePool(baseDice, gearDice);
-        pool.roll();
-        int[] results = new int[total];
-        for (int i = 0; i < total; i++) {
-            results[i] = rng.nextInt(6) + 1;
-        }
-        return results;
+    public int[] rollDicePool(int baseDice, int gearDice) {
+        DicePool pool = new DicePool(baseDice, gearDice, rng);
+        pool.roll(); // triggers the roll internally (returns int successes — not what we want)
+        int[] baseResults = pool.getLastBaseResults();
+        int[] gearResults = pool.getLastGearResults();
+        int[] combined = new int[baseResults.length + gearResults.length];
+        System.arraycopy(baseResults, 0, combined, 0, baseResults.length);
+        System.arraycopy(gearResults, 0, combined, baseResults.length, gearResults.length);
+        return combined;
     }
 
     /**
-     * Roll a D66 value (two D6 dice combined:
-     * tens digit * 10 + ones digit).
-     *
-     * @return int in valid D66 range (11-66,
-     *         both digits 1-6)
+     * Roll a D66 value (both digits 1-6).
      */
     public int rollD66() {
         int tens = rng.nextInt(6) + 1;
@@ -71,21 +51,8 @@ public class FacadeMechanics {
     }
 
     /**
-     * Roll on a D66 table and return the result.
-     */
-    public <T> T rollD66Table(
-            D66Table<T> table) {
-        table.roll();
-        return table.getResult(
-                table.getLastRollValue());
-    }
-
-    /**
      * Validate an attribute distribution against
-     * Coriolis constraints.
-     *
-     * @throws InvalidAttributeDistributionException
-     *         if any constraint is violated
+     * Coriolis rules. Throws if invalid.
      */
     public void validateAttributes(
             EnumMap<Attribute, Integer> attributes,

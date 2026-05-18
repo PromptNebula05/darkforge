@@ -105,6 +105,9 @@ public class Enforcer extends Explorer {
     talents.add(chosenWeaponTalent);
     for (ProfessionData.TalentData td :
             pd.getTalents()) {
+      if ("Weapon Talent".equals(td.name())) {
+        continue;
+      }
       talents.add(new Talent(
               td.name(), td.description(),
               TalentCategory.valueOf(

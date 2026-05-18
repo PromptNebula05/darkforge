@@ -1,79 +1,88 @@
 [
   {
-    "name": "Scholar",
-    "keyAttribute": "LOGIC",
+    "name": "Artist",
+    "keyAttribute": "EMPATHY",
     "specialties": [
-      { "name": "Algebraist Apprentice", "description": "Mathematical analysis and stellar navigation", "freeTalentName": "Smart" },
-      { "name": "Medicurg", "description": "Medical practice and trauma surgery", "freeTalentName": "Field Medicurg" },
-      { "name": "Scientist", "description": "Research, experimentation, and academic study", "freeTalentName": "Analytical" }
+      { "name": "Hull Painter", "description": "Bringing color to the giant husks of old spacefarers", "freeTalentName": "Zero-G Training" },
+      { "name": "Staircase Poet", "description": "Reciting poetry on the steep stairs of the Chasm", "freeTalentName": "Charmer" },
+      { "name": "Maidy Row Balladeer", "description": "Singing ballads and anthems for the people of Ship City", "freeTalentName": "Musician" },
+      { "name": "Alley Theater Actor", "description": "Performing lead roles in small alley theaters", "freeTalentName": "Disguise" },
+      { "name": "Occasional Publisher", "description": "Writing and publishing gossip pamphlets", "freeTalentName": "Librarian" },
+      { "name": "Machine Artisan", "description": "Crafting automata, lighting contraptions, and mechanical devices", "freeTalentName": "Jury-Rig" }
     ],
     "talents": [
-      { "name": "Smart", "category": "RESILIENCE", "maxLevel": 3, "description": "Re-roll logic checks", "effect": "+1 base die per talent level on LOGIC-based checks" },
-      { "name": "Investigator", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Crime solving", "effect": "+1 base die per talent level when investigating a mystery" },
-      { "name": "Librarian", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Research expertise", "effect": "+1 base die per talent level when researching in archives" }
+      { "name": "Acrobat", "category": "STEALTH_MOBILITY", "maxLevel": 3, "description": "Jumping, climbing, and running", "effect": "+1 base die per talent level to jumping, climbing, and running" },
+      { "name": "Charmer", "category": "SOCIAL", "maxLevel": 3, "description": "Making NPCs like you", "effect": "+1 base die per talent level when rolling for Empathy to make an NPC like you" },
+      { "name": "Cultural Savant", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Understanding customs", "effect": "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon" },
+      { "name": "Renowned", "category": "SOCIAL", "maxLevel": 1, "description": "Pushing Empathy rolls", "effect": "You can push any roll based on Empathy twice, not just once like other characters" }
     ],
     "startingEquipmentSets": [
       [
-        { "name": "Tabula", "description": "Portable computing device", "weight": "LIGHT", "gearBonus": 1, "source": "Guild" },
-        { "name": "Communicator", "description": "Standard comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Guild" },
-        { "name": "Language Unit", "description": "Translation software", "weight": "LIGHT", "gearBonus": 1, "source": "Guild" }
+        { "name": "Music Instrument", "description": "Fine craftsmanship instrument", "weight": "REGULAR", "gearBonus": 1 },
+        { "name": "Notebook and Pen", "description": "Writing supplies", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Bottle of Grass Wine", "description": "A bottle of local wine", "weight": "TINY", "gearBonus": 0 }
       ],
       [
-        { "name": "Medkit", "description": "Medical supplies", "weight": "LIGHT", "gearBonus": 1, "source": "Guild" },
-        { "name": "Laboratory Kit", "description": "Portable analysis tools", "weight": "REGULAR", "gearBonus": 2, "source": "Guild" },
-        { "name": "Communicator", "description": "Standard comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Guild" }
+        { "name": "Exquisite Clothing", "description": "Impressive and ornate attire", "weight": "LIGHT", "gearBonus": 0 },
+        { "name": "Rare Collection of Poems", "description": "Valued literary collection", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Make-Up", "description": "Cosmetics and face paints", "weight": "TINY", "gearBonus": 0 }
+      ],
+      [
+        { "name": "Fine Tools", "description": "Precision crafting tools", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Magnifying Glass", "description": "Examination lens", "weight": "TINY", "gearBonus": 1 },
+        { "name": "Set of Paints", "description": "Assorted colors for painting", "weight": "TINY", "gearBonus": 0 }
       ]
     ]
   },
   {
     "name": "Enforcer",
-    "keyAttribute": "STRENGTH",
+    "keyAttribute": "AGILITY",
     "specialties": [
-      { "name": "Legionnaire", "description": "Military combat and squad tactics", "freeTalentName": "Tough" },
-      { "name": "Bodyguard", "description": "Personal protection and threat assessment", "freeTalentName": "Watchful" },
-      { "name": "Officer", "description": "Command, leadership, and strategic planning", "freeTalentName": "Commanding" }
+      { "name": "Zapti Constable", "description": "Patrolling boroughs and enforcing Guild law", "freeTalentName": "Interrogator" },
+      { "name": "Guild Militia", "description": "Protecting, surveilling, and retrieving for the Guilds", "freeTalentName": "Lookout" },
+      { "name": "Fusillard Protector", "description": "Shielding clients from attacks with fusillard and armor", "freeTalentName": "Bodyguard" },
+      { "name": "Guild Investigator", "description": "Solving complex crimes for the Guilds and private patrons", "freeTalentName": "Investigator" },
+      { "name": "Coriolite Guard", "description": "Guarding Coriolite families with martial skill and presentation", "freeTalentName": "Polearms" },
+      { "name": "Bounty Hunter", "description": "Tracking and capturing bounties across Jumuah", "freeTalentName": "Streetwise" }
     ],
     "talents": [
-      { "name": "Tough", "category": "RESILIENCE", "maxLevel": 3, "description": "Resist damage", "effect": "+1 base die per talent level on STRENGTH checks to resist damage" },
-      { "name": "Intimidating", "category": "SOCIAL", "maxLevel": 3, "description": "Coerce through presence", "effect": "+1 base die per talent level when intimidating NPCs" },
-      { "name": "Combat Veteran", "category": "COMBAT", "maxLevel": 3, "description": "Experienced fighter", "effect": "+1 base die per talent level in close combat" }
+      {
+        "name": "Weapon Talent",
+        "category": "COMBAT",
+        "maxLevel": 3,
+        "description": "Choose any one weapon talent",
+        "effect": "The Enforcer selects one weapon talent from the available options",
+        "type": "weapon_talent_choice",
+        "weaponTalentOptions": [
+          { "name": "Blade Fighter", "description": "Bladed weapon combat", "effect": "+1 base die per talent level to close combat rolls when fighting with blade weapons, i.e. swords, knives, axes and spears" },
+          { "name": "Bowman", "description": "Bow and crossbow accuracy", "effect": "+1 base die per talent level when firing a bow or crossbow" },
+          { "name": "Demolitions Expert", "description": "Explosive weapons", "effect": "+1 base die per talent level when using explosive weapons, including hand grenades and improvised explosives" },
+          { "name": "Heavy Weapons", "description": "Heavy mounted weapons", "effect": "+1 base die per talent level when firing heavy weapons such as rocket launchers, flamers, and vehicle mounted weapons" },
+          { "name": "Pistoleer", "description": "Pistol accuracy", "effect": "+1 base die per talent level when firing a pistol" },
+          { "name": "Polearms", "description": "Blunt weapon combat", "effect": "+1 base die per talent level to close combat rolls when using blunt weapons" },
+          { "name": "Pugilist", "description": "Unarmed combat", "effect": "+1 base die per talent level to close combat rolls when fighting unarmed" },
+          { "name": "Sharpshooter", "description": "Rifle and carbine accuracy", "effect": "+1 base die per talent level when firing a long barreled gun, such as a rifle or a carbine" }
+        ]
+      },
+      { "name": "Commander", "category": "RECOVERY", "maxLevel": 3, "description": "Helping broken allies", "effect": "+1 base die per talent level when trying to help a person broken by despair" },
+      { "name": "Evasive", "category": "COMBAT", "maxLevel": 3, "description": "Dodging ranged attacks", "effect": "+1 base die per talent level to Agility rolls for dodging ranged attacks" },
+      { "name": "Medic", "category": "RECOVERY", "maxLevel": 3, "description": "Treating the wounded", "effect": "+1 base die per talent level when trying to help someone broken by damage. Medical equipment give you gear dice." }
     ],
     "startingEquipmentSets": [
       [
-        { "name": "Vulcan Pistol", "description": "Heavy sidearm", "weight": "REGULAR", "gearBonus": 2, "source": "Guild" },
-        { "name": "Body Armor", "description": "Light ballistic protection", "weight": "REGULAR", "gearBonus": 2, "source": "Guild" },
-        { "name": "Communicator", "description": "Standard comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Guild" }
+        { "name": "Fusillard Pistol", "description": "Standard sidearm", "weight": "REGULAR", "gearBonus": 2 },
+        { "name": "MediKit (Basic)", "description": "Basic medical supplies", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Small Shield", "description": "Defensive shield", "weight": "REGULAR", "gearBonus": 1 }
       ],
       [
-        { "name": "Stun Weapon", "description": "Non-lethal pacification", "weight": "LIGHT", "gearBonus": 1, "source": "Guild" },
-        { "name": "Handcuffs", "description": "Restraint device", "weight": "LIGHT", "gearBonus": 0, "source": "Guild" },
-        { "name": "Vulcan Cricket", "description": "Compact sidearm", "weight": "LIGHT", "gearBonus": 1, "source": "Guild" }
-      ]
-    ]
-  },
-  {
-    "name": "Artist",
-    "keyAttribute": "EMPATHY",
-    "specialties": [
-      { "name": "Courtesan", "description": "Social manipulation and high society", "freeTalentName": "Seductive" },
-      { "name": "Musician", "description": "Musical performance and composition", "freeTalentName": "Performer" },
-      { "name": "Poet", "description": "Literary arts and storytelling", "freeTalentName": "Inspiring" }
-    ],
-    "talents": [
-      { "name": "Seductive", "category": "SOCIAL", "maxLevel": 3, "description": "Charm and persuade", "effect": "+1 base die per talent level when charming NPCs" },
-      { "name": "Inspiring", "category": "SOCIAL", "maxLevel": 3, "description": "Rally and motivate", "effect": "+1 base die per talent level when inspiring allies" },
-      { "name": "Performer", "category": "SOCIAL", "maxLevel": 3, "description": "Artistic performance", "effect": "+1 base die per talent level on EMPATHY checks during performances" }
-    ],
-    "startingEquipmentSets": [
-      [
-        { "name": "Musical Instrument", "description": "Fine handcrafted instrument", "weight": "REGULAR", "gearBonus": 1, "source": "Personal" },
-        { "name": "Fine Clothing", "description": "Elegant attire", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" },
-        { "name": "Communicator", "description": "Standard comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Personal" }
+        { "name": "Coiler Rifle", "description": "Electromagnetic rifle", "weight": "REGULAR", "gearBonus": 3 },
+        { "name": "Vision Scope", "description": "Magnified optic sight", "weight": "TINY", "gearBonus": 1 },
+        { "name": "Camouflage Net", "description": "Concealment cover", "weight": "LIGHT", "gearBonus": 0 }
       ],
       [
-        { "name": "Makeup Kit", "description": "Theatrical cosmetics", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" },
-        { "name": "Recording Device", "description": "Audio capture unit", "weight": "LIGHT", "gearBonus": 0, "source": "Personal" },
-        { "name": "Fine Clothing", "description": "Elegant attire", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" }
+        { "name": "Fusillard Carbine", "description": "Short-barreled fusillard", "weight": "REGULAR", "gearBonus": 2 },
+        { "name": "Reinforced Exo-Helmet", "description": "Hardened head protection", "weight": "REGULAR", "gearBonus": 1 },
+        { "name": "Stun Grenade", "description": "Non-lethal ordinance", "weight": "TINY", "gearBonus": 0 }
       ]
     ]
   },
@@ -81,51 +90,69 @@
     "name": "Esoteric",
     "keyAttribute": "INSIGHT",
     "specialties": [
-      { "name": "Mystic", "description": "Channeling mystical forces and rituals", "freeTalentName": "Mystic Intuition" },
-      { "name": "Seer", "description": "Divination and prophecy", "freeTalentName": "Third Eye" },
-      { "name": "Prophet", "description": "Spiritual leadership and visions", "freeTalentName": "Visionary" }
+      { "name": "Spice Engineer", "description": "Experimenting with orchid dust and ingredients in a makeshift laboratory", "freeTalentName": "Laboratorist" },
+      { "name": "Bird Warden", "description": "Caring for Birds, ornithiums, and other critters", "freeTalentName": "Bird Handler" },
+      { "name": "Coriolite Seer", "description": "Reading fate with tea leaves, old bones, and dice", "freeTalentName": "Intuition" },
+      { "name": "Revolutionary Prophet", "description": "Using fiery rhetoric to lead the people toward liberation", "freeTalentName": "Agitator" },
+      { "name": "Toad Dreamer", "description": "Chasing epiphanies and truth through orchid dust dreams", "freeTalentName": "Hardened" },
+      { "name": "Rim Zealot", "description": "Preaching expansion of the colonies beyond Jumuah", "freeTalentName": "Mentalist" }
     ],
     "talents": [
-      { "name": "Mystic Intuition", "category": "INSIGHT", "maxLevel": 3, "description": "Sense mystical forces", "effect": "+1 base die per talent level on INSIGHT checks for mystical phenomena" },
-      { "name": "Third Eye", "category": "INSIGHT", "maxLevel": 3, "description": "Perceive hidden truths", "effect": "+1 base die per talent level when perceiving hidden intentions" },
-      { "name": "Premonition", "category": "INSIGHT", "maxLevel": 3, "description": "Sense danger", "effect": "+1 base die per talent level on initiative and surprise checks" }
+      { "name": "Actor", "category": "SOCIAL", "maxLevel": 3, "description": "Bluffing and lying", "effect": "+1 base die per talent level when rolling to bluff or tell a lie to an NPC" },
+      { "name": "Botanist", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Cultivating and understanding flora", "effect": "+1 base die per talent level for cultivating plants or fungi as well as understanding flora and ivy" },
+      { "name": "Cultural Savant", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Understanding customs", "effect": "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon" },
+      { "name": "Librarian", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Using libraries and info cubes", "effect": "+1 base die per talent level when using a library or info cubes to find information" }
     ],
     "startingEquipmentSets": [
       [
-        { "name": "Prayer Beads", "description": "Ritual focus object", "weight": "LIGHT", "gearBonus": 1, "source": "Temple" },
-        { "name": "Incense Kit", "description": "Aromatic ritual supplies", "weight": "LIGHT", "gearBonus": 0, "source": "Temple" },
-        { "name": "Holy Text", "description": "Sacred writings of the Icons", "weight": "LIGHT", "gearBonus": 1, "source": "Temple" }
+        { "name": "Smelling Spice (5 doses)", "description": "Aromatic spice with mystical properties", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Pipe", "description": "Smoking pipe", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Antidote", "description": "Counteragent for poisons", "weight": "TINY", "gearBonus": 0 }
       ],
       [
-        { "name": "Ritual Knife", "description": "Ceremonial blade", "weight": "LIGHT", "gearBonus": 0, "source": "Temple" },
-        { "name": "Star Chart", "description": "Mystical navigation aid", "weight": "LIGHT", "gearBonus": 1, "source": "Temple" },
-        { "name": "Meditation Mat", "description": "Portable meditation surface", "weight": "LIGHT", "gearBonus": 0, "source": "Temple" }
+        { "name": "Bird Candy", "description": "Treats for attracting and calming Birds", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Star Chart", "description": "Map of celestial bodies", "weight": "TINY", "gearBonus": 1 },
+        { "name": "Deck of Cards", "description": "Divination or gaming cards", "weight": "TINY", "gearBonus": 0 }
+      ],
+      [
+        { "name": "Revolutionary Pamphlets", "description": "Fiery propaganda writings", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Fusillard Cricket", "description": "Small concealable fusillard", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Flask with Makh Spirits", "description": "Strong liquor from the Turbine Halls", "weight": "TINY", "gearBonus": 0 }
       ]
     ]
   },
   {
-    "name": "OddJobber",
-    "keyAttribute": "AGILITY",
+    "name": "Odd Jobber",
+    "keyAttribute": "EMPATHY",
     "specialties": [
-      { "name": "Mechanic", "description": "Repair and maintenance of machinery", "freeTalentName": "Jury-Rigger" },
-      { "name": "Fixer", "description": "Problem-solving and connections", "freeTalentName": "Street Smart" },
-      { "name": "Trader", "description": "Commerce and negotiation", "freeTalentName": "Haggler" }
+      { "name": "Guild Clerk", "description": "Sorting mail, taking notes, and handling tasks for a Guild master", "freeTalentName": "Librarian" },
+      { "name": "Stair Peddler", "description": "Selling goods on the steep stairs of the Chasm", "freeTalentName": "Mentalist" },
+      { "name": "Ice Trader", "description": "Trading ice bonds to Guilds and merchants", "freeTalentName": "Barter" },
+      { "name": "Alley Cook", "description": "Making stews and grilling skewers in a small street stall", "freeTalentName": "Cook" },
+      { "name": "Coriolite Servant", "description": "Serving a Coriolite noble and learning the ways of the Old Horizon", "freeTalentName": "Cultural Savant" },
+      { "name": "Artifact Dealer", "description": "Buying and selling artifacts from across the Charted Sphere", "freeTalentName": "Artifact Specialist" }
     ],
     "talents": [
-      { "name": "Jack of All Trades", "category": "EQUIPMENT", "maxLevel": 3, "description": "Versatile skills", "effect": "+1 base die per talent level on untrained skill checks" },
-      { "name": "Jury-Rigger", "category": "EQUIPMENT", "maxLevel": 3, "description": "Improvised repairs", "effect": "+1 base die per talent level when repairing with improvised tools" },
-      { "name": "Street Smart", "category": "SOCIAL", "maxLevel": 3, "description": "Urban survival", "effect": "+1 base die per talent level when navigating underworld contacts" }
+      { "name": "Actor", "category": "SOCIAL", "maxLevel": 3, "description": "Bluffing and lying", "effect": "+1 base die per talent level when rolling to bluff or tell a lie to an NPC" },
+      { "name": "Charmer", "category": "SOCIAL", "maxLevel": 3, "description": "Making NPCs like you", "effect": "+1 base die per talent level when rolling for Empathy to make an NPC like you" },
+      { "name": "Cultural Savant", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Understanding customs", "effect": "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon" },
+      { "name": "Streetwise", "category": "STEALTH_MOBILITY", "maxLevel": 3, "description": "Urban connections and rumors", "effect": "+1 base die per talent level for acquiring stolen goods, finding a contact, or hearing rumors in Ship City and the colonies" }
     ],
     "startingEquipmentSets": [
       [
-        { "name": "Tool Kit", "description": "Basic mechanical tools", "weight": "REGULAR", "gearBonus": 2, "source": "Personal" },
-        { "name": "Spare Parts", "description": "Assorted salvaged components", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" },
-        { "name": "Communicator", "description": "Standard comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Personal" }
+        { "name": "Fancy Clothing", "description": "Impressive attire", "weight": "LIGHT", "gearBonus": 0 },
+        { "name": "Waking Pills", "description": "Stimulant pills to stay alert", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Bottle of Shroom Brandy", "description": "Fermented mushroom spirits", "weight": "TINY", "gearBonus": 0 }
       ],
       [
-        { "name": "Multitool", "description": "Compact multi-function tool", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" },
-        { "name": "Trade Goods", "description": "Assorted barter items", "weight": "REGULAR", "gearBonus": 0, "source": "Personal" },
-        { "name": "Communicator", "description": "Standard comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Personal" }
+        { "name": "Cooking Utensils", "description": "Pots, pans, and tools for cooking", "weight": "REGULAR", "gearBonus": 1 },
+        { "name": "Orchid Dust (5 doses)", "description": "Psychoactive substance from the Blight", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Large Backpack", "description": "Oversized carry gear", "weight": "LIGHT", "gearBonus": 0 }
+      ],
+      [
+        { "name": "Accounting Ledger", "description": "Financial record book", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Flight Suit", "description": "Standard flight attire", "weight": "LIGHT", "gearBonus": 0 },
+        { "name": "MediKit (Basic)", "description": "Basic medical supplies", "weight": "LIGHT", "gearBonus": 1 }
       ]
     ]
   },
@@ -133,51 +160,104 @@
     "name": "Roughneck",
     "keyAttribute": "STRENGTH",
     "specialties": [
-      { "name": "Dock Worker", "description": "Heavy labor and cargo handling", "freeTalentName": "Tough as Nails" },
-      { "name": "Prospector", "description": "Mining and geological survey", "freeTalentName": "Heavy Lifter" },
-      { "name": "Wrecker", "description": "Demolition and salvage operations", "freeTalentName": "Demolitions" }
+      { "name": "Hull Guard", "description": "Keeping watch on ship hulls, alert to turbulence and radiation", "freeTalentName": "Lookout" },
+      { "name": "Wreck Diver", "description": "Spotting entry points and securing treasures from old wrecks", "freeTalentName": "Exo-Specialist" },
+      { "name": "Vacuum Welder", "description": "Freelance welding in dangerous zero-gravity environments", "freeTalentName": "Zero-G Training" },
+      { "name": "Deep Miner", "description": "Digging, burrowing, and blasting in deep asteroid mines", "freeTalentName": "Miner" },
+      { "name": "Crane Rat", "description": "Climbing, jumping, and securing cargo in harbors and the Bay", "freeTalentName": "Acrobat" },
+      { "name": "Machine Tender", "description": "Disassembling and reassembling machines, circuits, and gizmos", "freeTalentName": "Mechanic" }
     ],
     "talents": [
-      { "name": "Tough as Nails", "category": "RESILIENCE", "maxLevel": 3, "description": "Shrug off pain", "effect": "+1 base die per talent level when resisting critical injuries" },
-      { "name": "Heavy Lifter", "category": "RESILIENCE", "maxLevel": 3, "description": "Carry heavy loads", "effect": "Carry +2 heavy items per talent level without encumbrance penalty" },
-      { "name": "Demolitions", "category": "COMBAT", "maxLevel": 3, "description": "Explosive expertise", "effect": "+1 base die per talent level when using explosives or breaching" }
+      { "name": "Endurance", "category": "RESILIENCE", "maxLevel": 3, "description": "Resisting harsh conditions", "effect": "+1 base die per talent level for resisting vacuum, suffocation, and cold" },
+      { "name": "Force", "category": "RESILIENCE", "maxLevel": 3, "description": "Feats of strength", "effect": "+1 base die per talent level to lift, push, or break something heavy or solid" },
+      { "name": "Jury-Rig", "category": "EQUIPMENT", "maxLevel": 3, "description": "Crafting mechanical machinery", "effect": "+1 base die per talent level when rolling to craft or jury-rig mechanical machinery" },
+      { "name": "Scan Operator", "category": "EQUIPMENT", "maxLevel": 3, "description": "Scanning for threats", "effect": "+1 base die per talent level to scan an area for its configuration, Blight, or other threats" }
     ],
     "startingEquipmentSets": [
       [
-        { "name": "Power Tool", "description": "Industrial-grade cutter", "weight": "HEAVY", "gearBonus": 2, "source": "Guild" },
-        { "name": "Protective Gear", "description": "Industrial safety suit", "weight": "REGULAR", "gearBonus": 1, "source": "Guild" },
-        { "name": "Communicator", "description": "Standard comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Guild" }
+        { "name": "Exo Suit", "description": "Powered exoskeleton suit", "weight": "HEAVY", "gearBonus": 2 },
+        { "name": "Welding Torch", "description": "High-temperature cutting and welding tool", "weight": "REGULAR", "gearBonus": 1 },
+        { "name": "Fine Tools", "description": "Precision tools for delicate work", "weight": "LIGHT", "gearBonus": 1 }
       ],
       [
-        { "name": "Explosives Kit", "description": "Controlled demolition charges", "weight": "REGULAR", "gearBonus": 2, "source": "Guild" },
-        { "name": "Work Suit", "description": "Reinforced coveralls", "weight": "REGULAR", "gearBonus": 1, "source": "Guild" },
-        { "name": "Crowbar", "description": "Heavy pry bar", "weight": "REGULAR", "gearBonus": 1, "source": "Personal" }
+        { "name": "Slim Suit", "description": "Lightweight vacuum suit", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Adhesive Gloves", "description": "Gloves that grip any surface", "weight": "TINY", "gearBonus": 1 },
+        { "name": "Vacuum Sealer", "description": "Emergency hull patch tool", "weight": "LIGHT", "gearBonus": 1 }
+      ],
+      [
+        { "name": "Heavy Tools", "description": "Industrial-grade tools", "weight": "REGULAR", "gearBonus": 2 },
+        { "name": "Pickaxe", "description": "Mining and breaking tool", "weight": "REGULAR", "gearBonus": 1 },
+        { "name": "Breach Charge", "description": "Explosive charge for breaching walls", "weight": "LIGHT", "gearBonus": 0 }
+      ]
+    ]
+  },
+  {
+    "name": "Scholar",
+    "keyAttribute": "LOGIC",
+    "specialties": [
+      { "name": "Guild Archivist", "description": "Archiving, cataloging, and organizing Guild knowledge", "freeTalentName": "Librarian" },
+      { "name": "Algebraist Apprentice", "description": "Studying the old art of al-jabr and the threads of the universe", "freeTalentName": "Astrometry" },
+      { "name": "Slipstream Cartographer", "description": "Mapping uncharted territories and star lanes", "freeTalentName": "Cartographer" },
+      { "name": "Diaspora Historian", "description": "Studying the history of the Diaspora fleet and modern society", "freeTalentName": "Historian" },
+      { "name": "Cave Botanist", "description": "Studying plants, fungi, and the Blight in the Cave Gardens", "freeTalentName": "Botanist" },
+      { "name": "Builder Archaeologist", "description": "Examining Builder ruins, shards, and monuments", "freeTalentName": "Archaeology" }
+    ],
+    "talents": [
+      { "name": "Investigator", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Searching for clues", "effect": "+1 base die per talent level when searching an area for clues" },
+      { "name": "Librarian", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Using libraries and info cubes", "effect": "+1 base die per talent level when using a library or info cubes to find information" },
+      { "name": "Smart", "category": "RESILIENCE", "maxLevel": 1, "description": "Pushing Logic rolls", "effect": "You can push any roll based on Logic twice" },
+      { "name": "Teratology", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Understanding beasts", "effect": "+1 base die per talent level to know and understand the beasts of the Great Dark" }
+    ],
+    "startingEquipmentSets": [
+      [
+        { "name": "Portable Lab", "description": "Portable laboratory equipment", "weight": "REGULAR", "gearBonus": 2 },
+        { "name": "MediKit (Basic)", "description": "Basic medical supplies", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Old Paper Journal", "description": "Worn journal for recording findings", "weight": "TINY", "gearBonus": 0 }
+      ],
+      [
+        { "name": "Astrolabe", "description": "Navigation instrument", "weight": "LIGHT", "gearBonus": 2 },
+        { "name": "Cartographer's Kit", "description": "Mapping tools", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Compass", "description": "Directional tool", "weight": "TINY", "gearBonus": 1 }
+      ],
+      [
+        { "name": "Info Cube", "description": "Data storage and retrieval device", "weight": "TINY", "gearBonus": 1 },
+        { "name": "Fancy Clothing", "description": "Impressive attire", "weight": "LIGHT", "gearBonus": 0 },
+        { "name": "Waking Pills", "description": "Stimulant pills to stay alert", "weight": "TINY", "gearBonus": 0 }
       ]
     ]
   },
   {
     "name": "Scoundrel",
-    "keyAttribute": "AGILITY",
+    "keyAttribute": "PERCEPTION",
     "specialties": [
-      { "name": "Smuggler", "description": "Illicit transport and contraband", "freeTalentName": "Slippery" },
-      { "name": "Assassin", "description": "Targeted elimination and stealth", "freeTalentName": "Backstab" },
-      { "name": "Fence", "description": "Black market trading and contacts", "freeTalentName": "Quick Draw" }
+      { "name": "Dust Runner", "description": "Running orchid dust for the Toads all over the Rock", "freeTalentName": "Streetwise" },
+      { "name": "Tech Smuggler", "description": "Smuggling shards and Old Horizon tech past Guild quarantine", "freeTalentName": "Electro-Specialist" },
+      { "name": "Guild Spy", "description": "Gathering intelligence and working in the shadows for a Guild", "freeTalentName": "Stealthy" },
+      { "name": "Alley Thug", "description": "Odd jobs as bouncer, enforcer, and debt collector", "freeTalentName": "Thug" },
+      { "name": "Hull Cutter", "description": "Stripping gear from vessels to sell on the black market", "freeTalentName": "Mechanic" },
+      { "name": "Con Artist", "description": "Fooling the gullible with a range of characters and performances", "freeTalentName": "Actor" }
     ],
     "talents": [
-      { "name": "Slippery", "category": "STEALTH_MOBILITY", "maxLevel": 3, "description": "Escape restraints", "effect": "+1 base die per talent level when escaping restraints or pursuit" },
-      { "name": "Backstab", "category": "COMBAT", "maxLevel": 3, "description": "Ambush attacks", "effect": "+1 base die per talent level on attacks from stealth or surprise" },
-      { "name": "Quick Draw", "category": "COMBAT", "maxLevel": 3, "description": "Fast weapon draw", "effect": "+1 base die per talent level on initiative when drawing a weapon" }
+      { "name": "Acrobat", "category": "STEALTH_MOBILITY", "maxLevel": 3, "description": "Jumping, climbing, and running", "effect": "+1 base die per talent level to jumping, climbing, and running" },
+      { "name": "Charmer", "category": "SOCIAL", "maxLevel": 3, "description": "Making NPCs like you", "effect": "+1 base die per talent level when rolling for Empathy to make an NPC like you" },
+      { "name": "Lookout", "category": "STEALTH_MOBILITY", "maxLevel": 3, "description": "Spotting threats", "effect": "+1 base die per talent level to rolls for spotting approaching threats" },
+      { "name": "Stealthy", "category": "STEALTH_MOBILITY", "maxLevel": 3, "description": "Staying hidden", "effect": "+1 base die per talent level for staying hidden. Cannot be used for ambushes." }
     ],
     "startingEquipmentSets": [
       [
-        { "name": "Vulcan Cricket", "description": "Compact concealed sidearm", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" },
-        { "name": "Lockpicks", "description": "Electronic bypass tools", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" },
-        { "name": "Dark Clothing", "description": "Stealth-appropriate attire", "weight": "LIGHT", "gearBonus": 0, "source": "Personal" }
+        { "name": "Fusillard Cricket", "description": "Small concealable fusillard", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Fake Guild ID", "description": "Forged identification documents", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Proximity Sweeper", "description": "Detects nearby signals and devices", "weight": "TINY", "gearBonus": 1 }
       ],
       [
-        { "name": "Disguise Kit", "description": "Identity concealment tools", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" },
-        { "name": "Concealed Blade", "description": "Hidden melee weapon", "weight": "LIGHT", "gearBonus": 1, "source": "Personal" },
-        { "name": "Communicator", "description": "Encrypted comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Personal" }
+        { "name": "Heavy Tools", "description": "Industrial-grade tools", "weight": "REGULAR", "gearBonus": 2 },
+        { "name": "Lockpicks", "description": "Lock-picking tools", "weight": "TINY", "gearBonus": 1 },
+        { "name": "Flamer", "description": "Incendiary weapon", "weight": "REGULAR", "gearBonus": 2 }
+      ],
+      [
+        { "name": "Chemical Kit", "description": "Chemistry supplies and reagents", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Orchid Dust (5 doses)", "description": "Psychoactive substance from the Blight", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Breathing Mask", "description": "Filtration mask for hazardous environments", "weight": "TINY", "gearBonus": 0 }
       ]
     ]
   },
@@ -185,25 +265,34 @@
     "name": "Traveler",
     "keyAttribute": "PERCEPTION",
     "specialties": [
-      { "name": "Navigator", "description": "Stellar navigation and route plotting", "freeTalentName": "Sharp Eyes" },
-      { "name": "Cartographer", "description": "Mapping unknown territories", "freeTalentName": "Pathfinder" },
-      { "name": "Scout", "description": "Reconnaissance and wilderness survival", "freeTalentName": "Survival Expert" }
+      { "name": "Tugship Pilot", "description": "Navigating the miasma and steering ships into dock", "freeTalentName": "Shuttle Pilot" },
+      { "name": "Hull Warden", "description": "Detecting leaks and faulty piping in the holds of ships", "freeTalentName": "Investigator" },
+      { "name": "Guild Surveyor", "description": "Scouring the system for hidden treasures with scanners", "freeTalentName": "Scan Operator" },
+      { "name": "Kite Handler", "description": "Operating kites, the near-intelligent contraptions of the Machinists", "freeTalentName": "Kite Operator" },
+      { "name": "Lighthouse Keeper", "description": "Servicing radio buoys and keeping the space lanes safe", "freeTalentName": "Endurance" },
+      { "name": "Asteroid Hauler", "description": "Herding boulders across the vast expanse of space", "freeTalentName": "Exo-Specialist" }
     ],
     "talents": [
-      { "name": "Sharp Eyes", "category": "STEALTH_MOBILITY", "maxLevel": 3, "description": "Spot details", "effect": "+1 base die per talent level on PERCEPTION checks to spot hidden details" },
-      { "name": "Pathfinder", "category": "KNOWLEDGE", "maxLevel": 3, "description": "Navigate terrain", "effect": "+1 base die per talent level when navigating unfamiliar terrain" },
-      { "name": "Survival Expert", "category": "RESILIENCE", "maxLevel": 3, "description": "Wilderness survival", "effect": "+1 base die per talent level on survival checks in hostile environments" }
+      { "name": "Driver", "category": "VEHICLE_EXO", "maxLevel": 3, "description": "Driving ground vehicles", "effect": "+1 base die per talent level for driving any kind of ground vehicle" },
+      { "name": "Mechanic", "category": "EQUIPMENT", "maxLevel": 3, "description": "Repairing vehicles and devices", "effect": "+1 base die per talent level for repairing vehicles and other mechanical devices. You also get +1 die per talent level to close combat rolls when fighting with any kind of tools, such as drills, hammers, and cutting torches." },
+      { "name": "Exo-Specialist", "category": "VEHICLE_EXO", "maxLevel": 3, "description": "Exo suit operation", "effect": "+1 base die per talent level when handling an exo of some kind" },
+      { "name": "Zero-G Training", "category": "STEALTH_MOBILITY", "maxLevel": 1, "description": "Zero gravity operations", "effect": "You suffer no negative effects when operating in zero gravity environments" }
     ],
     "startingEquipmentSets": [
       [
-        { "name": "Binoculars", "description": "Long-range optical scanner", "weight": "LIGHT", "gearBonus": 1, "source": "Guild" },
-        { "name": "Navigation Tools", "description": "Star charts and compass", "weight": "LIGHT", "gearBonus": 1, "source": "Guild" },
-        { "name": "Communicator", "description": "Standard comm unit", "weight": "LIGHT", "gearBonus": 0, "source": "Guild" }
+        { "name": "Flight Suit", "description": "Standard flight attire", "weight": "LIGHT", "gearBonus": 0 },
+        { "name": "Short Story Collection", "description": "Leisure reading material", "weight": "TINY", "gearBonus": 0 },
+        { "name": "MediKit", "description": "Medical supplies", "weight": "LIGHT", "gearBonus": 1 }
       ],
       [
-        { "name": "Survival Kit", "description": "Emergency supplies and tools", "weight": "REGULAR", "gearBonus": 2, "source": "Guild" },
-        { "name": "Star Map", "description": "Detailed sector charts", "weight": "LIGHT", "gearBonus": 1, "source": "Guild" },
-        { "name": "Rope and Grapple", "description": "Climbing and rappelling gear", "weight": "REGULAR", "gearBonus": 1, "source": "Personal" }
+        { "name": "Fine Tools", "description": "Precision tools for delicate work", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Waking Pills", "description": "Stimulant pills to stay alert", "weight": "TINY", "gearBonus": 0 },
+        { "name": "Recon Kite", "description": "Small reconnaissance kite", "weight": "LIGHT", "gearBonus": 2 }
+      ],
+      [
+        { "name": "Portable Sensor Display", "description": "Handheld scanning display", "weight": "LIGHT", "gearBonus": 2 },
+        { "name": "Multi-Wrench", "description": "Adjustable repair wrench", "weight": "LIGHT", "gearBonus": 1 },
+        { "name": "Astro-Compass", "description": "Celestial navigation instrument", "weight": "TINY", "gearBonus": 1 }
       ]
     ]
   }

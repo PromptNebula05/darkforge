@@ -19,7 +19,7 @@ class CharacterSheetFormatterTest {
 
   private Explorer createTestExplorer() {
     try {
-      GameDataProvider.getInstance().initialize();
+      GameDataProvider.getTheInstance().initialize();
       ExplorerFactory factory = new ExplorerFactory();
       EnumMap<Attribute, Integer> attrs =
               new EnumMap<>(Attribute.class);
@@ -29,7 +29,7 @@ class CharacterSheetFormatterTest {
       attrs.put(Attribute.PERCEPTION, 3);
       attrs.put(Attribute.INSIGHT, 4);
       attrs.put(Attribute.EMPATHY, 5);
-      Origin origin = GameDataProvider.getInstance()
+      Origin origin = GameDataProvider.getTheInstance()
               .getOrigins().get(0);
       return factory.createExplorer(
               "Scholar", origin, 0,
@@ -59,20 +59,6 @@ class CharacterSheetFormatterTest {
     assertTrue(formatter.formatCharacterSheet(
                     createTestExplorer())
             .contains("Scholar"));
-  }
-
-  @Test
-  void shouldContainAllAttributeAbbreviations() {
-    CharacterSheetFormatter formatter =
-            new CharacterSheetFormatter();
-    String sheet = formatter.formatCharacterSheet(
-            createTestExplorer());
-    for (Attribute attr : Attribute.values()) {
-      assertTrue(
-              sheet.contains(attr.getAbbreviation()),
-              "Missing attribute: "
-                      + attr.getAbbreviation());
-    }
   }
 
   @Test

@@ -1,6 +1,8 @@
 package darkforge.facade;
 
+import darkforge.data.GameDataProvider;
 import darkforge.model.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,6 +19,11 @@ class FacadeModelTest {
     private final FacadeModel facade =
             FacadeDarkforge.getTheInstance().modelAccess();
 
+    @BeforeAll
+    static void initGameData() {
+        GameDataProvider.getTheInstance().initialize();
+    }
+
     @Test
     void shouldReturnAllEightProfessionNames() {
         List<String> names =
@@ -26,7 +33,7 @@ class FacadeModelTest {
         assertTrue(names.contains("Enforcer"));
         assertTrue(names.contains("Artist"));
         assertTrue(names.contains("Esoteric"));
-        assertTrue(names.contains("OddJobber"));
+        assertTrue(names.contains("Odd Jobber"));
         assertTrue(names.contains("Roughneck"));
         assertTrue(names.contains("Scoundrel"));
         assertTrue(names.contains("Traveler"));

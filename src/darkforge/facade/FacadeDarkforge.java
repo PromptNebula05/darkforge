@@ -3,13 +3,10 @@ package darkforge.facade;
 import darkforge.data.GameDataProvider;
 
 /**
- * Root Façade singleton — the single entry point
- * for the entire DARKFORGE system. Holds references
- * to all package-level Façades and provides
- * one-stop initialization.
- *
- * The CLI only needs to import FacadeDarkforge
- * to access all functionality.
+ * Root Façade singleton — provides unified access
+ * to all DARKFORGE subsystems via sub-Façade
+ * accessors. Call initialize() once at startup
+ * before any other operations.
  */
 public class FacadeDarkforge {
     private static final FacadeDarkforge INSTANCE =
@@ -40,12 +37,10 @@ public class FacadeDarkforge {
 
     /**
      * Initialize all game data from JSON
-     * resources. Must be called once at startup
-     * before any other operations.
+     * resources. Must be called once at startup.
      */
     public void initialize() {
-        GameDataProvider.getInstance()
-                .initialize();
+        GameDataProvider.getTheInstance().initialize();
     }
 
     public String getVersion() {

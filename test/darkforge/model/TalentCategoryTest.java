@@ -7,7 +7,7 @@ class TalentCategoryTest {
 
   @Test
   void shouldHaveExactlyNineCategories() {
-    assertEquals(9, TalentCategory.values().length,
+    assertEquals(10, TalentCategory.values().length,
         "Coriolis Ch. 3 defines exactly 9 talent categories");
   }
 

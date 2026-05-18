@@ -1,8 +1,12 @@
 package darkforge.facade;
 
-import darkforge.model.Explorer;
+import darkforge.data.GameDataProvider;
+import darkforge.model.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.EnumMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,17 +20,31 @@ class FacadeDisplayTest {
     private FacadeDisplay facade;
     private Explorer testExplorer;
 
+    @BeforeAll
+    static void initGameData() {
+        GameDataProvider.getTheInstance().initialize();
+    }
+
     @BeforeEach
     void setUp() throws Exception {
         FacadeDarkforge root =
                 FacadeDarkforge.getTheInstance();
         facade = root.displayAccess();
+
+        EnumMap<Attribute, Integer> attrs =
+                new EnumMap<>(Attribute.class);
+        for (Attribute a : Attribute.values()) {
+            attrs.put(a, 4);
+        }
+        Origin origin = GameDataProvider
+                .getTheInstance().getOrigins().get(0);
+
         testExplorer = root.creationAccess()
                 .createExplorer(
-                        "Scholar", "Test Scholar", 1, 1,
-                        new int[]{4, 4, 4, 4, 4, 4},
-                        new int[]{1, 1, 1, 0},
-                        "quirk", "keepsake", "appearance"
+                        "Scholar", origin, 0,
+                        attrs, new int[]{1, 1, 1, 0},
+                        "quirk", "keepsake", "appearance",
+                        "Test Scholar"
                 );
     }
 
@@ -54,8 +72,8 @@ class FacadeDisplayTest {
                 facade.formatWithHighlight(
                         testExplorer, "Scholar");
         assertTrue(
-                highlighted.contains(">>") &&
-                        highlighted.contains("<<"),
+                highlighted.contains(">>")
+                        && highlighted.contains("<<"),
                 "Should contain search-highlight markers");
     }
 
@@ -70,8 +88,8 @@ class FacadeDisplayTest {
         String sheet =
                 facade.formatCharacterSheet(
                         testExplorer);
-        assertTrue(sheet.contains("STR")
-                        || sheet.contains("STRENGTH"),
+        assertTrue(sheet.contains(
+                        Attribute.STRENGTH.getDisplayName()),
                 "Sheet should contain attribute labels");
     }
 }

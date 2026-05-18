@@ -22,7 +22,7 @@ public class ExplorerFactory {
 
   public ExplorerFactory() {
     this(new Random(),
-            GameDataProvider.getInstance());
+            GameDataProvider.getTheInstance());
   }
 
   public ExplorerFactory(Random rng,

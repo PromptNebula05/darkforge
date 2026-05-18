@@ -1,8 +1,11 @@
 package darkforge.facade;
 
-import darkforge.model.Explorer;
+import darkforge.data.GameDataProvider;
+import darkforge.model.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.EnumMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,13 +21,32 @@ class FacadeCreationTest {
             FacadeDarkforge.getTheInstance()
                     .creationAccess();
 
+    @BeforeAll
+    static void initGameData() {
+        GameDataProvider.getTheInstance().initialize();
+    }
+
+    private EnumMap<Attribute, Integer> safeAttrs() {
+        EnumMap<Attribute, Integer> attrs =
+                new EnumMap<>(Attribute.class);
+        for (Attribute a : Attribute.values()) {
+            attrs.put(a, 4);
+        }
+        return attrs;
+    }
+
+    private Origin defaultOrigin() {
+        return GameDataProvider.getTheInstance()
+                .getOrigins().get(0);
+    }
+
     @Test
     void shouldCreateExplorerViaFacade() throws Exception {
         Explorer explorer = facade.createExplorer(
-                "Scholar", "Test Scholar", 1, 1,
-                new int[]{4, 4, 4, 4, 4, 4},
-                new int[]{1, 1, 1, 0},
-                "quirk", "keepsake", "appearance"
+                "Scholar", defaultOrigin(), 0,
+                safeAttrs(), new int[]{1, 1, 1, 0},
+                "quirk", "keepsake", "appearance",
+                "Test Scholar"
         );
         assertNotNull(explorer);
         assertEquals("Test Scholar", explorer.getName());
@@ -34,10 +56,9 @@ class FacadeCreationTest {
     void shouldRejectUnknownProfessionViaFacade() {
         assertThrows(Exception.class, () ->
                 facade.createExplorer(
-                        "Wizard", "Test", 1, 1,
-                        new int[]{4, 4, 4, 4, 4, 4},
-                        new int[]{1, 1, 1, 0},
-                        "q", "k", "a"
+                        "Wizard", defaultOrigin(), 0,
+                        safeAttrs(), new int[]{1, 1, 1, 0},
+                        "q", "k", "a", "Test"
                 ));
     }
 
@@ -52,10 +73,10 @@ class FacadeCreationTest {
     @Test
     void shouldSearchByNameViaFacade() throws Exception {
         Explorer explorer = facade.createExplorer(
-                "Scholar", "Cantara Loutreides", 1, 1,
-                new int[]{4, 4, 4, 4, 4, 4},
-                new int[]{1, 1, 1, 0},
-                "quirk", "keepsake", "appearance"
+                "Scholar", defaultOrigin(), 0,
+                safeAttrs(), new int[]{1, 1, 1, 0},
+                "quirk", "keepsake", "appearance",
+                "Cantara Loutreides"
         );
         var results = facade.searchByName(
                 List.of(explorer), "Cantara");

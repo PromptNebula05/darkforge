@@ -50,10 +50,10 @@ public abstract class Explorer extends GameEntity
 
   protected ProfessionData loadProfessionData() {
     String displayName = getProfessionName();
-    ProfessionData pd = GameDataProvider.getInstance()
+    ProfessionData pd = GameDataProvider.getTheInstance()
             .getProfession(displayName);
     if (pd == null) {
-      pd = GameDataProvider.getInstance()
+      pd = GameDataProvider.getTheInstance()
               .getProfession(
                       displayName.replace(" ", ""));
     }

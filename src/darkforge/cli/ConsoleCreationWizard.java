@@ -212,7 +212,7 @@ public class ConsoleCreationWizard {
                         darkforge.mechanicsAccess()
                                 .rollD66();
                 Origin rolled =
-                        GameDataProvider.getInstance()
+                        GameDataProvider.getTheInstance()
                                 .getOriginByD66(d66Roll);
                 System.out.printf(
                         "Rolled D66: %d → %s%n",
@@ -255,7 +255,7 @@ public class ConsoleCreationWizard {
     private int promptSpecialty(
             String profession) {
         ProfessionData pd =
-                GameDataProvider.getInstance()
+                GameDataProvider.getTheInstance()
                         .getProfession(profession);
         List<ProfessionData.SpecialtyData> specs =
                 pd.getSpecialties();
@@ -391,7 +391,7 @@ public class ConsoleCreationWizard {
     private int[] promptTalentPoints(
             String profession) {
         ProfessionData pd =
-                GameDataProvider.getInstance()
+                GameDataProvider.getTheInstance()
                         .getProfession(profession);
         List<ProfessionData.TalentData> talents =
                 pd.getTalents();
@@ -509,7 +509,7 @@ public class ConsoleCreationWizard {
     private Attribute getKeyAttribute(
             String profession) {
         ProfessionData pd =
-                GameDataProvider.getInstance()
+                GameDataProvider.getTheInstance()
                         .getProfession(profession);
         return pd.getKeyAttribute();
     }

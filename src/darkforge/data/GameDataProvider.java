@@ -37,7 +37,7 @@ public class GameDataProvider {
 
     private GameDataProvider() {}
 
-    public static GameDataProvider getInstance() {
+    public static GameDataProvider getTheInstance() {
         return INSTANCE;
     }
 
@@ -330,8 +330,7 @@ public class GameDataProvider {
                                 e.getString(
                                         "description"),
                                 e.getString("weight"),
-                                e.getInt("gearBonus"),
-                                e.getString("source")));
+                                e.getInt("gearBonus")));
             }
             equipSets.add(items);
         }

@@ -6,31 +6,35 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for FacadeDarkforge singleton root facade.
- * Verifies Singleton pattern via getInstance() and
- * sub-facade accessor wiring.
+ * Verifies Singleton pattern via getTheInstance()
+ * and sub-facade accessor wiring.
  */
 class FacadeDarkforgeTest {
 
     @Test
     void shouldReturnNonNullInstance() {
-        assertNotNull(FacadeDarkforge.getTheInstance());
+        assertNotNull(
+                FacadeDarkforge.getTheInstance());
     }
 
     @Test
     void shouldReturnSameInstanceOnMultipleCalls() {
-        FacadeDarkforge first = FacadeDarkforge.getTheInstance();
-        FacadeDarkforge second = FacadeDarkforge.getTheInstance();
+        FacadeDarkforge first =
+                FacadeDarkforge.getTheInstance();
+        FacadeDarkforge second =
+                FacadeDarkforge.getTheInstance();
         assertSame(first, second,
-                "getInstance() should always return the "
-                        + "same Singleton");
+                "getTheInstance() should always "
+                        + "return the same Singleton");
     }
 
     @Test
     void shouldProvideModelAccess() {
         assertNotNull(
-                FacadeDarkforge.getTheInstance().modelAccess(),
-                "modelAccess() should return a non-null "
-                        + "FacadeModel");
+                FacadeDarkforge.getTheInstance()
+                        .modelAccess(),
+                "modelAccess() should return a "
+                        + "non-null FacadeModel");
     }
 
     @Test
@@ -38,8 +42,8 @@ class FacadeDarkforgeTest {
         assertNotNull(
                 FacadeDarkforge.getTheInstance()
                         .mechanicsAccess(),
-                "mechanicsAccess() should return a non-null "
-                        + "FacadeMechanics");
+                "mechanicsAccess() should return a "
+                        + "non-null FacadeMechanics");
     }
 
     @Test
@@ -47,8 +51,8 @@ class FacadeDarkforgeTest {
         assertNotNull(
                 FacadeDarkforge.getTheInstance()
                         .creationAccess(),
-                "creationAccess() should return a non-null "
-                        + "FacadeCreation");
+                "creationAccess() should return a "
+                        + "non-null FacadeCreation");
     }
 
     @Test
@@ -56,8 +60,8 @@ class FacadeDarkforgeTest {
         assertNotNull(
                 FacadeDarkforge.getTheInstance()
                         .displayAccess(),
-                "displayAccess() should return a non-null "
-                        + "FacadeDisplay");
+                "displayAccess() should return a "
+                        + "non-null FacadeDisplay");
     }
 
     @Test
@@ -65,8 +69,8 @@ class FacadeDarkforgeTest {
         assertNotNull(
                 FacadeDarkforge.getTheInstance()
                         .persistenceAccess(),
-                "persistenceAccess() should return a non-null "
-                        + "FacadePersistence");
+                "persistenceAccess() should return "
+                        + "a non-null FacadePersistence");
     }
 
     @Test
@@ -76,25 +80,27 @@ class FacadeDarkforgeTest {
         assertSame(
                 facade.modelAccess(),
                 facade.modelAccess(),
-                "modelAccess() should return same instance");
+                "modelAccess() should return "
+                        + "same instance");
         assertSame(
                 facade.mechanicsAccess(),
                 facade.mechanicsAccess(),
-                "mechanicsAccess() should return same "
-                        + "instance");
+                "mechanicsAccess() should return "
+                        + "same instance");
         assertSame(
                 facade.creationAccess(),
                 facade.creationAccess(),
-                "creationAccess() should return same "
-                        + "instance");
+                "creationAccess() should return "
+                        + "same instance");
         assertSame(
                 facade.displayAccess(),
                 facade.displayAccess(),
-                "displayAccess() should return same instance");
+                "displayAccess() should return "
+                        + "same instance");
         assertSame(
                 facade.persistenceAccess(),
                 facade.persistenceAccess(),
-                "persistenceAccess() should return same "
-                        + "instance");
+                "persistenceAccess() should return "
+                        + "same instance");
     }
 }
