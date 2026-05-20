@@ -1,0 +1,148 @@
+{
+  "powers": [
+    {
+      "name": "Attack",
+      "description": "The Bird pokes its head forward opening its beak making a screech.",
+      "effect": "Base damage 3, crit threshold 6, Long range.",
+      "energyCost": 1,
+      "isBasic": true,
+      "nativeTypes": []
+    },
+    {
+      "name": "Defend",
+      "description": "The Bird spreads its wings, shielding the Explorer it defends.",
+      "effect": "Used as a reaction to protect an Explorer from an attack, like a block or dodge.",
+      "energyCost": 1,
+      "isBasic": true,
+      "nativeTypes": []
+    },
+    {
+      "name": "Clear Blight",
+      "description": "The Bird spreads its wings wide horizontally in front of it as if covering an area protectively.",
+      "effect": "Clears all Blight from one zone for one shift. Duration increased by one shift per extra ✦.",
+      "energyCost": 1,
+      "isBasic": true,
+      "nativeTypes": []
+    },
+    {
+      "name": "Blight Scan",
+      "description": "Upon returning, the Bird pokes at the scanner and Garuda device with its beak.",
+      "effect": "The Bird flies ahead (up to four zones) and scans for Blight to be read by the Garuda device.",
+      "energyCost": 0,
+      "isBasic": true,
+      "nativeTypes": []
+    },
+    {
+      "name": "Soak Blight",
+      "description": "The Bird starts to glow in lightning blue and turquoise colors as fractures spread across its body as it soaks and contains the Blight.",
+      "effect": "Used as a reaction to absorb all the Blight from a Blight surge before it can affect any Explorer.",
+      "energyCost": 1,
+      "isBasic": true,
+      "nativeTypes": []
+    },
+    {
+      "name": "Glow",
+      "description": "The Bird's body starts to glow in bright yellow-white light.",
+      "effect": "Emits a glowing light providing illumination for one shift in the Bird's zone and all adjacent zones (Medium range).",
+      "energyCost": 1,
+      "isBasic": true,
+      "nativeTypes": []
+    },
+    {
+      "name": "Raptor's Call",
+      "description": "The Bird screeches with a short high sound, directing a semi-visible fluctuation in the air coinciding with the Explorer's attack.",
+      "effect": "One attack performed by an Explorer later in the round inflicts an automatic critical injury if it hits, regardless of cover and armor.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": ["WARD"]
+    },
+    {
+      "name": "Energy Bridge",
+      "description": "A beam of dark energy of the Bird's primary color emanates from its open beak.",
+      "effect": "Projects a bridge of solid energy up to 5 meters, carrying up to 200 kg. Each extra ✦ extends by 5m or adds 200 kg. Lasts one stretch.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": ["WARD"]
+    },
+    {
+      "name": "Farsight",
+      "description": "The Bird stretches its head straight up, glowing faintly before it takes flight.",
+      "effect": "The Bird's companion can see what the Bird sees, up to a distance in zones equal to twice the number of ✦ rolled.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": ["GUIDE"]
+    },
+    {
+      "name": "Illusionary Veil",
+      "description": "The Bird sits perfectly still on the Explorer, becoming blurry as the power takes effect.",
+      "effect": "Hides one Explorer from sight, even from scanners. Each extra ✦ hides one more Explorer in the zone. Lasts one stretch.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": ["GUIDE"]
+    },
+    {
+      "name": "Enshroud",
+      "description": "The Bird crosses its wings as it activates the field, glowing for a second in the Bird's primary color as it enshrouds the Explorer.",
+      "effect": "Envelops an Explorer in a protective field, fully protecting them from the Blight for one stretch. Can be used as a reaction against a Blight attack.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": ["SPECTER"]
+    },
+    {
+      "name": "Soul Delve",
+      "description": "The Bird glows in a warm orange, illuminating the Explorer it merges with.",
+      "effect": "The Bird merges with an Explorer's mind, giving them rest and rekindling their hope. The Explorer regains all lost Hope, even if broken by despair.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": ["SPECTER"]
+    },
+    {
+      "name": "Fetch",
+      "description": "The Bird spreads its wings wide before landing.",
+      "effect": "The Bird flies away and fetches a clearly visible regular object at up to Extreme range.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": []
+    },
+    {
+      "name": "Dimensional Flitting",
+      "description": "The Bird points its wings upwards and small seemingly electrical discharges spread from the wingtips creating a spherical rift.",
+      "effect": "Opens a portal to a location where the Bird has been in the past day. Max distance in zones equals twice the ✦ rolled. Portal lasts one round; any object human-sized or smaller can pass through.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": []
+    },
+    {
+      "name": "Flicker Field",
+      "description": "The Bird's chest swells as the field of its primary color creates a shield in front of the Explorers.",
+      "effect": "Fully protects one Explorer against all incoming ranged attacks until end of round. Each extra ✦ protects one more Explorer in the zone.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": []
+    },
+    {
+      "name": "Glyph Warden",
+      "description": "The Glyph in question dims or becomes blurry for a moment as the Bird blocks its effect.",
+      "effect": "As a reaction, blocks the effect of a Glyph affecting an Explorer. Each extra ✦ protects one more Explorer in the zone.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": []
+    },
+    {
+      "name": "Phoenix Engine",
+      "description": "Bright flames briefly enshroud the Bird. When the flames disappear the Bird is left covered with white ash that falls to the ground.",
+      "effect": "If broken or dead (killed within the last shift), the Bird comes back to life and regains all its Health. Exception: can be used when the Bird is broken.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": []
+    },
+    {
+      "name": "Delve Dream",
+      "description": "The Bird's chest seems to glow yellow white as it imbues the vision to the Explorer.",
+      "effect": "Sends a dreamlike vision about the current delve. The Explorers can delve three zones before triggering an event, regardless of the delving roll result.",
+      "energyCost": 1,
+      "isBasic": false,
+      "nativeTypes": []
+    }
+  ]
+}
