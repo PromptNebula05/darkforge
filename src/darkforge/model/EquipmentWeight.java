@@ -1,28 +1,43 @@
 package darkforge.model;
 
 /**
- * Weight categories for equipment in Coriolis.
- * Affects carrying capacity calculations.
+ * Weight categories for equipment in Coriolis (Ch. 6).
+ * Refactored in Iteration 3: int carryUnits → double weightValue
+ * to support EquipmentInventory encumbrance math.
  */
 public enum EquipmentWeight {
-  TINY("Tiny", 0),
-  LIGHT("Light", 1),
-  REGULAR("Regular", 2),
-  HEAVY("Heavy", 4);
+
+  TINY("Tiny", 0.0),
+  LIGHT("Light", 0.5),
+  REGULAR("Regular", 1.0),
+  HEAVY("Heavy", 2.0);
+
+  // =========================================
+  // Fields
+  // =========================================
 
   private final String displayName;
-  private final int carryUnits;
+  private final double weightValue;
 
-  EquipmentWeight(String displayName, int carryUnits) {
+  // =========================================
+  // Constructor
+  // =========================================
+
+  EquipmentWeight(String displayName,
+                  double weightValue) {
     this.displayName = displayName;
-    this.carryUnits = carryUnits;
+    this.weightValue = weightValue;
   }
+
+  // =========================================
+  // Getters
+  // =========================================
 
   public String getDisplayName() {
     return displayName;
   }
 
-  public int getCarryUnits() {
-    return carryUnits;
+  public double getWeightValue() {
+    return weightValue;
   }
 }

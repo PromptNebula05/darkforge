@@ -3,38 +3,46 @@ package darkforge.model;
 /**
  * A piece of equipment in Coriolis.
  * Equipment has weight and a gear bonus that adds dice to rolls.
- *
- * <p>
- * Extends GameEntity because equipment has a name ("Fusillard Pistol")
- * and a description.
- * </p>
+ * Extends GameEntity because equipment has a name and description.
  */
 public class Equipment extends GameEntity {
+
   private final EquipmentWeight weight;
   private final int gearBonus;
+  private final boolean weapon;
 
-  /**
-   * Constructs Equipment.
-   *
-   * @param name        the item name
-   * @param description the item description
-   * @param weight      the weight category
-   * @param gearBonus   bonus dice added to rolls when using this item (>= 0)
-   * @throws IllegalArgumentException if gearBonus is negative
-   */
-  public Equipment(String name, String description, EquipmentWeight weight, int gearBonus) {
+  // =========================================
+  // Constructors
+  // =========================================
+
+  public Equipment(String name, String description,
+                   EquipmentWeight weight, int gearBonus,
+                   boolean weapon) {
     super(name, description);
     if (gearBonus < 0) {
-      throw new IllegalArgumentException("Gear bonus cannot be negative, got " + gearBonus);
+      throw new IllegalArgumentException(
+              "Gear bonus cannot be negative, got " + gearBonus);
     }
     this.weight = weight;
     this.gearBonus = gearBonus;
+    this.weapon = weapon;
   }
 
-  /** Convenience constructor with gearBonus = 0. */
-  public Equipment(String name, String description, EquipmentWeight weight) {
-    this(name, description, weight, 0);
+  // Non-weapon convenience constructor (backwards-compatible)
+  public Equipment(String name, String description,
+                   EquipmentWeight weight, int gearBonus) {
+    this(name, description, weight, gearBonus, false);
   }
+
+  // Non-weapon, zero gear bonus convenience constructor
+  public Equipment(String name, String description,
+                   EquipmentWeight weight) {
+    this(name, description, weight, 0, false);
+  }
+
+  // =========================================
+  // Getters
+  // =========================================
 
   public EquipmentWeight getWeight() {
     return weight;
@@ -44,9 +52,20 @@ public class Equipment extends GameEntity {
     return gearBonus;
   }
 
+  public boolean isWeapon() {
+    return weapon;
+  }
+
+  // =========================================
+  // Display
+  // =========================================
+
   @Override
   public String display() {
-    String bonus = (gearBonus > 0) ? " (Gear +" + gearBonus + ")" : "";
-    return String.format("%s [%s]%s", name, weight.getDisplayName(), bonus);
+    String bonus = (gearBonus > 0)
+            ? " (Gear +" + gearBonus + ")" : "";
+    String tag = weapon ? " ⚔" : "";
+    return String.format("%s [%s]%s%s",
+            name, weight.getDisplayName(), bonus, tag);
   }
 }
