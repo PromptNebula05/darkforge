@@ -150,6 +150,22 @@ public class Inventory<T extends GameEntity>
     }
 
     // =========================================
+    // Static factory
+    // =========================================
+
+    // Creates inventory with capacity =
+    // explorer.getAttribute(STR) + 4
+    // (Coriolis carry limit, Ch. 6).
+    public static EquipmentInventory
+    forExplorer(
+            darkforge.model.Explorer explorer) {
+        int cap = explorer.getAttribute(
+                darkforge.model.Attribute.STRENGTH) + 4;
+        return new EquipmentInventory(
+                explorer.getName(), cap);
+    }
+
+    // =========================================
     // Getters
     // =========================================
 
