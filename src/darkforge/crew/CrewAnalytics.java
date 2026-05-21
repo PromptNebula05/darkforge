@@ -1,0 +1,202 @@
+package darkforge.crew;
+
+import darkforge.model.Attribute;
+import darkforge.model.Explorer;
+import darkforge.model.Talent;
+import darkforge.model.TalentCategory;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * Analytics utility for Crew composition from
+ * Coriolis: The Great Dark (Ch. 2, Ch. 12).
+ *
+ * Collections demonstrated:
+ *   EnumMap<Attribute, Double>       — averages
+ *   EnumMap<TalentCategory, Integer> — coverage
+ *   stream().flatMap()               — flatten
+ *   stream().mapToInt().average()    — averaging
+ *   Comparator.comparingInt()        — sorting
+ *   HashSet<Explorer>                — tracking
+ */
+public class CrewAnalytics {
+
+    private final Crew crew;
+
+    public CrewAnalytics(Crew crew) {
+        this.crew = crew;
+    }
+
+    // =========================================
+    // Attribute averages
+    // =========================================
+
+    /**
+     * Average of each attribute across all
+     * crew members. Returns 0.0 for all
+     * attributes if crew is empty.
+     */
+    public EnumMap<Attribute, Double>
+    getAttributeAverages() {
+        EnumMap<Attribute, Double> averages =
+                new EnumMap<>(Attribute.class);
+        List<Explorer> members =
+                crew.getMembers();
+
+        for (Attribute attr
+                : Attribute.values()) {
+            if (members.isEmpty()) {
+                averages.put(attr, 0.0);
+            } else {
+                double avg = members.stream()
+                        .mapToInt(e ->
+                                e.getAttribute(attr))
+                        .average()
+                        .orElse(0.0);
+                averages.put(attr, avg);
+            }
+        }
+        return averages;
+    }
+
+    // =========================================
+    // Talent coverage
+    // =========================================
+
+    /**
+     * Count of talents per category across
+     * all crew members, flattened.
+     */
+    public EnumMap<TalentCategory, Integer>
+    getTalentCoverage() {
+        EnumMap<TalentCategory, Integer>
+                coverage = new EnumMap<>(
+                TalentCategory.class);
+
+        for (TalentCategory cat
+                : TalentCategory.values()) {
+            coverage.put(cat, 0);
+        }
+
+        List<Talent> allTalents =
+                crew.getMembers().stream()
+                        .flatMap(e ->
+                                e.getTalents().getAll()
+                                        .stream())
+                        .collect(Collectors.toList());
+
+        for (Talent talent : allTalents) {
+            coverage.merge(
+                    talent.getCategory(),
+                    1, Integer::sum);
+        }
+
+        return coverage;
+    }
+
+    /**
+     * Categories with zero talents across
+     * the entire crew.
+     */
+    public List<TalentCategory>
+    getWeakCategories() {
+        EnumMap<TalentCategory, Integer>
+                coverage = getTalentCoverage();
+        return Arrays.stream(
+                        TalentCategory.values())
+                .filter(cat ->
+                        coverage.getOrDefault(
+                                cat, 0) == 0)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Categories with the most talent
+     * coverage across the crew.
+     */
+    public List<TalentCategory>
+    getStrongCategories() {
+        EnumMap<TalentCategory, Integer>
+                coverage = getTalentCoverage();
+        int max = coverage.values().stream()
+                .mapToInt(Integer::intValue)
+                .max().orElse(0);
+        if (max == 0) return List.of();
+        return Arrays.stream(
+                        TalentCategory.values())
+                .filter(cat ->
+                        coverage.getOrDefault(
+                                cat, 0) == max)
+                .collect(Collectors.toList());
+    }
+
+    // =========================================
+    // Optimal role assignment
+    // =========================================
+
+    /**
+     * Greedy best-fit assignment: iterate
+     * mandatory roles by priority, assign
+     * the highest-fitness unassigned member.
+     * Then assign optional roles if members
+     * remain.
+     */
+    public Map<CrewRole, Explorer>
+    getOptimalRoleAssignment() {
+        Map<CrewRole, Explorer> assignment =
+                new EnumMap<>(CrewRole.class);
+        Set<Explorer> assigned =
+                new HashSet<>();
+        List<Explorer> members =
+                new ArrayList<>(crew.getMembers());
+
+        // Mandatory roles first
+        for (CrewRole role
+                : CrewRole.values()) {
+            if (role.isOptional()) continue;
+            assignBestFit(role, members,
+                    assigned, assignment);
+        }
+
+        // Optional roles with remaining
+        for (CrewRole role
+                : CrewRole.values()) {
+            if (!role.isOptional()) continue;
+            assignBestFit(role, members,
+                    assigned, assignment);
+        }
+
+        return assignment;
+    }
+
+    private void assignBestFit(
+            CrewRole role,
+            List<Explorer> members,
+            Set<Explorer> assigned,
+            Map<CrewRole, Explorer> assignment) {
+        members.stream()
+                .filter(e -> !assigned.contains(e))
+                .max(Comparator.comparingInt(
+                        (Explorer e) ->
+                                role.getRoleFitness(e)))
+                .ifPresent(best -> {
+                    assignment.put(role, best);
+                    assigned.add(best);
+                });
+    }
+
+    // =========================================
+    // Summary
+    // =========================================
+
+    /**
+     * Total talent count across all members.
+     */
+    public int getTotalTalentCount() {
+        return crew.getMembers().stream()
+                .mapToInt(e ->
+                        e.getTalents().size())
+                .sum();
+    }
+}
