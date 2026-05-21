@@ -1,0 +1,18 @@
+{
+  "crewNamePrefixes": {
+    "1": "EXPLORER_NAME",
+    "2": "Moska's",
+    "3": "The Deep",
+    "4": "The Crimson",
+    "5": "The Tattered",
+    "6": "The Scarred"
+  },
+  "crewNameSuffixes": {
+    "1": "Raiders",
+    "2": "Chosen",
+    "3": "Few",
+    "4": "Seekers",
+    "5": "Drifters",
+    "6": "Rascals"
+  }
+}

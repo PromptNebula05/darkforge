@@ -1,0 +1,583 @@
+[
+  {
+    "name": "Blade Fighter",
+    "description": "Fighting with blade weapons",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to close combat rolls when fighting with blade weapons"
+  },
+  {
+    "name": "Bodyguard",
+    "description": "Diving in to protect allies from attacks",
+    "category": "COMBAT",
+    "maxLevel": 1,
+    "effect": "If someone within Short range is hit by an attack, roll for Agility to take the hit instead. Can push the roll."
+  },
+  {
+    "name": "Bowman",
+    "description": "Firing bows and crossbows",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when firing a bow or crossbow"
+  },
+  {
+    "name": "Defender",
+    "description": "Blocking close combat attacks",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when blocking close combat attacks"
+  },
+  {
+    "name": "Demolitions Expert",
+    "description": "Using explosive weapons",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when using explosive weapons, including hand grenades and improvised explosives"
+  },
+  {
+    "name": "Dirty Fighter",
+    "description": "Brutal unarmed combat",
+    "category": "COMBAT",
+    "maxLevel": 1,
+    "effect": "Your unarmed close combat attacks have a base damage rating of 2"
+  },
+  {
+    "name": "Evasive",
+    "description": "Dodging ranged attacks",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to Agility rolls for dodging ranged attacks"
+  },
+  {
+    "name": "Executioner",
+    "description": "Delivering devastating critical hits",
+    "category": "COMBAT",
+    "maxLevel": 1,
+    "effect": "Roll an extra die when inflicting a critical hit on a target and choose the result you prefer"
+  },
+  {
+    "name": "Fast Reflexes",
+    "description": "Quick initiative in combat",
+    "category": "COMBAT",
+    "maxLevel": 1,
+    "effect": "Draw an additional initiative card at the start of combat; choose the card you want to use"
+  },
+  {
+    "name": "Heavy Weapons",
+    "description": "Firing heavy weapons",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when firing heavy weapons such as rocket launchers, flamers, and vehicle mounted weapons"
+  },
+  {
+    "name": "Pistoleer",
+    "description": "Firing pistols",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when firing a pistol"
+  },
+  {
+    "name": "Polearms",
+    "description": "Fighting with blunt weapons",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to close combat rolls when using blunt weapons"
+  },
+  {
+    "name": "Pugilist",
+    "description": "Unarmed fighting",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to close combat rolls when fighting unarmed"
+  },
+  {
+    "name": "Sharpshooter",
+    "description": "Firing long barreled guns",
+    "category": "COMBAT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when firing a long barreled gun, such as a rifle or a carbine"
+  },
+  {
+    "name": "Actor",
+    "description": "Bluffing and lying",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when rolling to bluff or tell a lie to an NPC"
+  },
+  {
+    "name": "Agitator",
+    "description": "Swaying groups of people",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when rolling for Empathy to speak to a group of NPCs to sway or convince them"
+  },
+  {
+    "name": "Barter",
+    "description": "Trading and buying",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when rolling for Empathy to trade or buy something"
+  },
+  {
+    "name": "Charmer",
+    "description": "Making people like you",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when rolling for Empathy to make an NPC like you"
+  },
+  {
+    "name": "Cook",
+    "description": "Cooking with a field kitchen",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when cooking using a field kitchen"
+  },
+  {
+    "name": "Interrogator",
+    "description": "Extracting information",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to rolls for extracting information from someone"
+  },
+  {
+    "name": "Malicious",
+    "description": "Inflicting despair through threats",
+    "category": "SOCIAL",
+    "maxLevel": 1,
+    "effect": "Inflict one point of despair for each six when threatening an NPC"
+  },
+  {
+    "name": "Mentalist",
+    "description": "Reading people and detecting lies",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to Empathy rolls for reading a subject and understanding if they are lying or hiding something"
+  },
+  {
+    "name": "Musician",
+    "description": "Playing musical instruments",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to Empathy when using a musical instrument"
+  },
+  {
+    "name": "Renowned",
+    "description": "Famous reputation",
+    "category": "SOCIAL",
+    "maxLevel": 1,
+    "effect": "You can push any roll based on Empathy twice, not just once"
+  },
+  {
+    "name": "Thug",
+    "description": "Physical intimidation",
+    "category": "SOCIAL",
+    "maxLevel": 3,
+    "effect": "Roll for Strength instead of Empathy when threatening someone, +1 base die per talent level"
+  },
+  {
+    "name": "Driver",
+    "description": "Driving ground vehicles",
+    "category": "VEHICLE_EXO",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for driving any kind of ground vehicle"
+  },
+  {
+    "name": "Exo-Specialist",
+    "description": "Handling exo suits",
+    "category": "VEHICLE_EXO",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when handling an exo of some kind"
+  },
+  {
+    "name": "Greatship Pilot",
+    "description": "Piloting large spaceships",
+    "category": "VEHICLE_EXO",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to rolls for piloting large spaceships"
+  },
+  {
+    "name": "Kite Operator",
+    "description": "Controlling kites",
+    "category": "VEHICLE_EXO",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to rolls when controlling a kite"
+  },
+  {
+    "name": "Shuttle Pilot",
+    "description": "Piloting shuttles",
+    "category": "VEHICLE_EXO",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to Agility rolls for piloting a shuttle"
+  },
+  {
+    "name": "Archaeology",
+    "description": "Understanding ruins and monuments",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for understanding ruins and monuments"
+  },
+  {
+    "name": "Artifact Specialist",
+    "description": "Comprehending artifacts",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to comprehend artifacts"
+  },
+  {
+    "name": "Astrometry",
+    "description": "Space phenomena and planetology",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to understand space phenomena, orbital mechanics, and planetology"
+  },
+  {
+    "name": "Botanist",
+    "description": "Cultivating plants and understanding flora",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for cultivating plants or fungi as well as understanding flora and ivy"
+  },
+  {
+    "name": "Cartographer",
+    "description": "Mapping and navigating",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when mapping and navigating during treks"
+  },
+  {
+    "name": "Cultural Savant",
+    "description": "Understanding customs and cultural habits",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to understand customs and cultural habits in the Lost Horizon"
+  },
+  {
+    "name": "Data Djinn",
+    "description": "Interacting with computers and terminals",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when interacting with computers and terminals"
+  },
+  {
+    "name": "Glyph Scholar",
+    "description": "Comprehending glyphs and old texts",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to comprehend glyphs or decrypt old texts"
+  },
+  {
+    "name": "Historian",
+    "description": "Historical facts about the Diaspora",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to know historical facts about the Diaspora, the Lost Horizon, and the Old Horizon"
+  },
+  {
+    "name": "Investigator",
+    "description": "Searching for clues",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when searching an area for clues"
+  },
+  {
+    "name": "Laboratorist",
+    "description": "Making concoctions and understanding chemistry",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for making concoctions and understanding chemical reactions"
+  },
+  {
+    "name": "Librarian",
+    "description": "Finding information in libraries",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when using a library or info cubes to find information"
+  },
+  {
+    "name": "Quartermastery",
+    "description": "Setting up camp and recovery",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when setting up camp and recovery rolls in camps"
+  },
+  {
+    "name": "Ruin Delver",
+    "description": "Leading the way through ruins",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when leading the way through a ruin or vault"
+  },
+  {
+    "name": "Teratology",
+    "description": "Knowledge of beasts",
+    "category": "KNOWLEDGE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to know and understand the beasts of the Great Dark"
+  },
+  {
+    "name": "Bird Handler",
+    "description": "Handling a Bird",
+    "category": "INSIGHT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for handling a Bird"
+  },
+  {
+    "name": "Intuition",
+    "description": "Gut instinct and guidance",
+    "category": "INSIGHT",
+    "maxLevel": 1,
+    "effect": "Once per session, ask the GM for vague but useful guidance"
+  },
+  {
+    "name": "Electro-Specialist",
+    "description": "Manipulating and repairing electronics",
+    "category": "EQUIPMENT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for manipulating and repairing electronic devices, including computers"
+  },
+  {
+    "name": "Jury-Rig",
+    "description": "Crafting and jury-rigging machinery",
+    "category": "EQUIPMENT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when rolling to craft or jury-rig mechanical machinery"
+  },
+  {
+    "name": "Mechanic",
+    "description": "Repairing vehicles and mechanical devices",
+    "category": "EQUIPMENT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for repairing vehicles and mechanical devices; also +1 per level to close combat with tools"
+  },
+  {
+    "name": "Miner",
+    "description": "Drilling and digging",
+    "category": "EQUIPMENT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to drill, dig, or secure an underground cave or tunnel"
+  },
+  {
+    "name": "Permit",
+    "description": "Licensed to carry restricted items",
+    "category": "EQUIPMENT",
+    "maxLevel": 1,
+    "effect": "You have the proper permits to buy restricted items and carry firearms in Ship City"
+  },
+  {
+    "name": "Scan Operator",
+    "description": "Scanning areas for threats",
+    "category": "EQUIPMENT",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to scan an area for its configuration, Blight, or other threats"
+  },
+  {
+    "name": "Commander",
+    "description": "Helping people broken by despair",
+    "category": "RECOVERY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when trying to help a person broken by despair"
+  },
+  {
+    "name": "Field Surgeon",
+    "description": "Stabilizing critical injuries",
+    "category": "RECOVERY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when trying to stabilize a critical injury"
+  },
+  {
+    "name": "Lone Wolf",
+    "description": "Self-recovery from despair",
+    "category": "RECOVERY",
+    "maxLevel": 1,
+    "effect": "You can help yourself when broken by despair; roll for Insight, cannot push the roll"
+  },
+  {
+    "name": "Medic",
+    "description": "Helping people broken by damage",
+    "category": "RECOVERY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level when trying to help someone broken by damage"
+  },
+  {
+    "name": "Nine Lives",
+    "description": "Lucky with critical injuries",
+    "category": "RECOVERY",
+    "maxLevel": 1,
+    "effect": "After a D66 roll for a critical injury, choose which die is the tens number and which is the ones number"
+  },
+  {
+    "name": "Nurse",
+    "description": "Patient care and healing",
+    "category": "RECOVERY",
+    "maxLevel": 1,
+    "effect": "If you spend a shift caring for a patient, they heal 2 points of damage instead of 1; care for patients up to your Logic score"
+  },
+  {
+    "name": "Survivor",
+    "description": "Surviving lethal injuries",
+    "category": "RECOVERY",
+    "maxLevel": 1,
+    "effect": "Roll for Strength when getting a lethal critical injury; on success, stabilized after one shift instead of dead"
+  },
+  {
+    "name": "Acrobat",
+    "description": "Jumping, climbing, and running",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to jumping, climbing, and running"
+  },
+  {
+    "name": "Assassin",
+    "description": "Performing sneak attacks",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to perform a sneak attack"
+  },
+  {
+    "name": "Burglar",
+    "description": "Breaking and picking locks",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for breaking or picking locks"
+  },
+  {
+    "name": "Disguise",
+    "description": "Avoiding recognition and spotting disguises",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to avoid being recognized, and to spot a disguise"
+  },
+  {
+    "name": "Hunter",
+    "description": "Hunting creatures and beasts",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for hunting creatures, beasts, and critters"
+  },
+  {
+    "name": "Lookout",
+    "description": "Spotting approaching threats",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to rolls for spotting approaching threats"
+  },
+  {
+    "name": "Sixth Sense",
+    "description": "Cannot be taken by surprise",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 1,
+    "effect": "You cannot be taken by surprise; sneak attackers get no bonus against you, you draw initiative normally when ambushed"
+  },
+  {
+    "name": "Sleight of Hand",
+    "description": "Tricks and pickpocketing",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to rolls for playing tricks with your hands and pickpocketing"
+  },
+  {
+    "name": "Stealthy",
+    "description": "Staying hidden",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for staying hidden; cannot be used for ambushes"
+  },
+  {
+    "name": "Streetwise",
+    "description": "Finding contacts and hearing rumors",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for acquiring stolen goods, finding a contact, or hearing rumors in Ship City and the colonies"
+  },
+  {
+    "name": "Tracker",
+    "description": "Finding and following tracks",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to find and follow tracks through the wilderness or in delves"
+  },
+  {
+    "name": "Zero-G Training",
+    "description": "Operating in zero gravity",
+    "category": "STEALTH_MOBILITY",
+    "maxLevel": 1,
+    "effect": "You suffer no negative effects when operating in zero gravity environments"
+  },
+  {
+    "name": "Blight Resistant",
+    "description": "Increased Heart score",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "Maximum Heart score increased by 1 per talent level"
+  },
+  {
+    "name": "Endurance",
+    "description": "Resisting vacuum, suffocation, and cold",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for resisting vacuum, suffocation, and cold"
+  },
+  {
+    "name": "Force",
+    "description": "Lifting, pushing, and breaking",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to lift, push, or break something heavy or solid"
+  },
+  {
+    "name": "Hardened",
+    "description": "Resisting Blight",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "Roll base dice equal to talent level when suffering Blight; for each six rolled, ignore one point of Blight"
+  },
+  {
+    "name": "Hopeful",
+    "description": "Increased Hope score",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "Maximum Hope score increased by 1 per talent level"
+  },
+  {
+    "name": "Pack Mule",
+    "description": "Increased carry limit",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "Carry limit increases by two more items per level in this talent"
+  },
+  {
+    "name": "Reckless",
+    "description": "Risk-taking with Agility",
+    "category": "RESILIENCE",
+    "maxLevel": 1,
+    "effect": "You can push any roll based on Agility twice"
+  },
+  {
+    "name": "Resilient",
+    "description": "Resisting hunger, thirst, and disease",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level for resisting hunger, thirst, and disease"
+  },
+  {
+    "name": "Smart",
+    "description": "Clever problem-solving",
+    "category": "RESILIENCE",
+    "maxLevel": 1,
+    "effect": "You can push any roll based on Logic twice"
+  },
+  {
+    "name": "Stamina",
+    "description": "Self-administered first aid",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "+1 base die per talent level to perform first aid on yourself"
+  },
+  {
+    "name": "Tough",
+    "description": "Increased Health score",
+    "category": "RESILIENCE",
+    "maxLevel": 3,
+    "effect": "Maximum Health score increased by 1 per talent level"
+  }
+]

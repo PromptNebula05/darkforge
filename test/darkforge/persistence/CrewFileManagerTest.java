@@ -60,17 +60,17 @@ class CrewFileManagerTest {
                     new EnumMap<>(
                             Attribute.class);
             attrs.put(
-                    Attribute.STRENGTH, 3);
+                    Attribute.STRENGTH,4);
             attrs.put(
                     Attribute.AGILITY, 4);
             attrs.put(
-                    Attribute.LOGIC, 3);
+                    Attribute.LOGIC, 4);
             attrs.put(
-                    Attribute.PERCEPTION, 3);
+                    Attribute.PERCEPTION, 4);
             attrs.put(
                     Attribute.INSIGHT, 4);
             attrs.put(
-                    Attribute.EMPATHY, 3);
+                    Attribute.EMPATHY, 4);
             members[i] =
                     factory.createExplorer(
                             "Scholar", origin, 0,

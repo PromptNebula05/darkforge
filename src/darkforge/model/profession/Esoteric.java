@@ -94,7 +94,7 @@ public class Esoteric extends Explorer {
   }
 
   public List<String> getMysticalTalents() {
-    return getTalents().stream()
+    return getTalents().getAll().stream()
             .filter(t -> t.getCategory()
                     == TalentCategory.INSIGHT)
             .map(Talent::getName)

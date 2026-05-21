@@ -172,7 +172,7 @@ public class Enforcer extends Explorer {
   }
 
   public List<String> getWeaponTalents() {
-    return getTalents().stream()
+    return getTalents().getAll().stream()
             .filter(t -> t.getCategory()
                     == TalentCategory.COMBAT)
             .map(Talent::getName)
