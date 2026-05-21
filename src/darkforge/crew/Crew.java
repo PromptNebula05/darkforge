@@ -217,6 +217,11 @@ public class Crew implements Displayable {
         crewPoints += points;
     }
 
+    public Set<String> getLearnedManeuvers() {
+        return Collections
+                .unmodifiableSet(learnedManeuvers);
+    }
+
     // =========================================
     // Displayable
     // =========================================
