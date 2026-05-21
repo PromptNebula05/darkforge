@@ -1,6 +1,9 @@
 package darkforge.data;
 
+import darkforge.crew.BirdType;
+import darkforge.crew.GarudaPower;
 import darkforge.model.Origin;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests for GameDataProvider singleton.
  * Verifies initialization, D66 table loading,
- * origin lookups, and profession name retrieval.
+ * origin lookups, profession name retrieval,
+ * and garuda power registry loading.
  */
 class GameDataProviderTest {
 
@@ -23,66 +27,88 @@ class GameDataProviderTest {
         provider.initialize();
     }
 
-    // ── Singleton ─────────────────────────────────────────────
+    // =========================================
+    // Singleton
+    // =========================================
 
     @Test
     void shouldReturnSameInstance() {
-        GameDataProvider first = GameDataProvider.getTheInstance();
-        GameDataProvider second = GameDataProvider.getTheInstance();
+        GameDataProvider first =
+                GameDataProvider.getTheInstance();
+        GameDataProvider second =
+                GameDataProvider.getTheInstance();
         assertSame(first, second,
-                "getInstance() should return the same Singleton");
+                "getInstance() should return"
+                        + " the same Singleton");
     }
 
     @Test
     void shouldNotReturnNull() {
-        assertNotNull(GameDataProvider.getTheInstance());
+        assertNotNull(
+                GameDataProvider.getTheInstance());
     }
 
-    // ── Initialization ────────────────────────────────────────
+    // =========================================
+    // Initialization
+    // =========================================
 
     @Test
     void shouldInitializeWithoutException() {
-        assertDoesNotThrow(() -> provider.initialize(),
-                "Repeated initialization should be safe");
+        assertDoesNotThrow(
+                () -> provider.initialize(),
+                "Repeated initialization"
+                        + " should be safe");
     }
 
-    // ── Origins ───────────────────────────────────────────────
+    // =========================================
+    // Origins
+    // =========================================
 
     @Test
     void shouldReturn13Origins() {
-        List<Origin> origins = provider.getOrigins();
+        List<Origin> origins =
+                provider.getOrigins();
         assertEquals(13, origins.size());
     }
 
     @Test
     void originsShouldHaveLocations() {
-        for (Origin origin : provider.getOrigins()) {
-            assertNotNull(origin.getLocation(),
-                    "Each origin should have a location");
-            assertFalse(origin.getLocation().isBlank());
+        for (Origin origin
+                : provider.getOrigins()) {
+            assertNotNull(
+                    origin.getLocation(),
+                    "Each origin should have"
+                            + " a location");
+            assertFalse(
+                    origin.getLocation().isBlank());
         }
     }
 
     @Test
     void shouldLookUpOriginByD66() {
-        Origin origin = provider.getOriginByD66(11);
+        Origin origin =
+                provider.getOriginByD66(11);
         assertNotNull(origin);
         assertNotNull(origin.getLocation());
     }
 
     @Test
     void shouldRejectInvalidD66ForOrigin() {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> provider.getOriginByD66(77));
     }
 
     @Test
     void shouldRejectZeroD66ForOrigin() {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> provider.getOriginByD66(0));
     }
 
-    // ── D66 Flavor Tables ─────────────────────────────────────
+    // =========================================
+    // D66 Flavor Tables
+    // =========================================
 
     @Test
     void shouldReturnNonEmptyQuirks() {
@@ -102,7 +128,8 @@ class GameDataProviderTest {
 
     @Test
     void shouldReturnNonEmptyAppearances() {
-        var appearances = provider.getAppearances();
+        var appearances =
+                provider.getAppearances();
         assertNotNull(appearances);
         assertFalse(appearances.isEmpty(),
                 "Appearances should not be empty");
@@ -110,17 +137,22 @@ class GameDataProviderTest {
 
     @Test
     void shouldReturnNonEmptyExplorerReasons() {
-        var reasons = provider.getExplorerReasons();
+        var reasons =
+                provider.getExplorerReasons();
         assertNotNull(reasons);
         assertFalse(reasons.isEmpty(),
-                "Explorer reasons should not be empty");
+                "Explorer reasons should not"
+                        + " be empty");
     }
 
-    // ── Profession Names ──────────────────────────────────────
+    // =========================================
+    // Profession Names
+    // =========================================
 
     @Test
     void shouldReturnEightValidProfessionNames() {
-        var names = provider.getValidProfessionNames();
+        var names =
+                provider.getValidProfessionNames();
         assertNotNull(names);
         assertEquals(8, names.size());
     }
@@ -139,7 +171,9 @@ class GameDataProviderTest {
                         .contains("Enforcer"));
     }
 
-    // ── Name Tables ───────────────────────────────────────────
+    // =========================================
+    // Name Tables
+    // =========================================
 
     @Test
     void shouldReturnFirstNamesForScholar() {
@@ -147,7 +181,8 @@ class GameDataProviderTest {
                 provider.getFirstNames("Scholar");
         assertNotNull(firstNames);
         assertFalse(firstNames.isEmpty(),
-                "Scholar first names should not be empty");
+                "Scholar first names should"
+                        + " not be empty");
     }
 
     @Test
@@ -156,6 +191,101 @@ class GameDataProviderTest {
                 provider.getLastNames("Scholar");
         assertNotNull(lastNames);
         assertFalse(lastNames.isEmpty(),
-                "Scholar last names should not be empty");
+                "Scholar last names should"
+                        + " not be empty");
+    }
+
+    // =========================================
+    // Garuda Power Registry (NEW)
+    // =========================================
+
+    @Test
+    void registryShouldNotBeNull() {
+        assertNotNull(
+                provider.getGarudaPowerRegistry(),
+                "GarudaPowerRegistry should be"
+                        + " loaded after initialize()");
+    }
+
+    @Test
+    void registryShouldContain18Powers() {
+        assertEquals(18,
+                provider.getGarudaPowerRegistry()
+                        .size());
+    }
+
+    @Test
+    void registryShouldHave6BasicPowers() {
+        assertEquals(6,
+                provider.getGarudaPowerRegistry()
+                        .getBasicPowers().size());
+    }
+
+    @Test
+    void registryShouldHave12AdvancedPowers() {
+        assertEquals(12,
+                provider.getGarudaPowerRegistry()
+                        .getAllAdvancedPowers().size());
+    }
+
+    @Test
+    void registryLookupByNameReturnsAttack() {
+        GarudaPower attack =
+                provider.getGarudaPowerRegistry()
+                        .getPowerByName("Attack");
+        assertNotNull(attack);
+        assertTrue(attack.isBasic());
+    }
+
+    @Test
+    void registryLookupByNameReturnsFarsight() {
+        GarudaPower farsight =
+                provider.getGarudaPowerRegistry()
+                        .getPowerByName("Farsight");
+        assertNotNull(farsight);
+        assertFalse(farsight.isBasic());
+        assertTrue(farsight.getNativeTypes()
+                .contains(BirdType.GUIDE));
+    }
+
+    @Test
+    void eachTypeGets8AdvancedPowers() {
+        GarudaPowerRegistry registry =
+                provider.getGarudaPowerRegistry();
+        for (BirdType type : BirdType.values()) {
+            assertEquals(8,
+                    registry
+                            .getAdvancedPowersFor(type)
+                            .size(),
+                    type + " should have 8"
+                            + " advanced powers");
+        }
+    }
+
+    @Test
+    void allPowersHaveNonNegativeEnergyCost() {
+        for (GarudaPower power
+                : provider
+                .getGarudaPowerRegistry()
+                .getAllPowers()) {
+            assertTrue(
+                    power.getEnergyCost() >= 0,
+                    power.getName()
+                            + " has negative energy"
+                            + " cost");
+        }
+    }
+
+    @Test
+    void allPowersHaveNonNullNativeTypes() {
+        for (GarudaPower power
+                : provider
+                .getGarudaPowerRegistry()
+                .getAllPowers()) {
+            assertNotNull(
+                    power.getNativeTypes(),
+                    power.getName()
+                            + " has null nativeTypes");
+        }
     }
 }

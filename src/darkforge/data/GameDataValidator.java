@@ -1,8 +1,11 @@
 package darkforge.data;
 
+import darkforge.crew.BirdType;
+import darkforge.crew.GarudaPower;
 import darkforge.exception
         .GameDataLoadException;
 import darkforge.model.TalentCategory;
+
 import java.util.*;
 
 /**
@@ -35,6 +38,7 @@ public class GameDataValidator {
                 "explorer-reasons.json");
         validateProfessions(data);
         validateNameTables(data);
+        validateGarudaPowers(data);
     }
 
     private static void validateOrigins(
@@ -164,6 +168,96 @@ public class GameDataValidator {
                                 + "-last.json",
                         "No last names for "
                                 + prof);
+            }
+        }
+    }
+
+    // =========================================
+    // Garuda powers validation
+    // =========================================
+
+    private static void validateGarudaPowers(
+            GameDataProvider data) {
+        GarudaPowerRegistry registry =
+                data.getGarudaPowerRegistry();
+        if (registry == null) {
+            throw new GameDataLoadException(
+                    "garuda-powers.json",
+                    "GarudaPowerRegistry is null");
+        }
+
+        // Must have exactly 18 powers
+        if (registry.size() != 18) {
+            throw new GameDataLoadException(
+                    "garuda-powers.json",
+                    "Expected 18 powers, found "
+                            + registry.size());
+        }
+
+        // Must have exactly 6 basic
+        if (registry.getBasicPowers().size()
+                != 6) {
+            throw new GameDataLoadException(
+                    "garuda-powers.json",
+                    "Expected 6 basic powers, found "
+                            + registry.getBasicPowers()
+                            .size());
+        }
+
+        // Must have exactly 12 advanced
+        if (registry.getAllAdvancedPowers().size()
+                != 12) {
+            throw new GameDataLoadException(
+                    "garuda-powers.json",
+                    "Expected 12 advanced powers,"
+                            + " found "
+                            + registry
+                            .getAllAdvancedPowers()
+                            .size());
+        }
+
+        // Validate each power
+        for (GarudaPower power
+                : registry.getAllPowers()) {
+            if (power.getEnergyCost() < 0) {
+                throw new GameDataLoadException(
+                        "garuda-powers.json",
+                        power.getName()
+                                + " has negative energy"
+                                + " cost: "
+                                + power.getEnergyCost());
+            }
+            if (power.getNativeTypes() == null) {
+                throw new GameDataLoadException(
+                        "garuda-powers.json",
+                        power.getName()
+                                + " has null nativeTypes");
+            }
+            for (BirdType type
+                    : power.getNativeTypes()) {
+                if (type == null) {
+                    throw new
+                            GameDataLoadException(
+                            "garuda-powers.json",
+                            power.getName()
+                                    + " has null"
+                                    + " BirdType");
+                }
+            }
+        }
+
+        // Each type gets 8 advanced powers
+        for (BirdType type
+                : BirdType.values()) {
+            int count = registry
+                    .getAdvancedPowersFor(type)
+                    .size();
+            if (count != 8) {
+                throw new GameDataLoadException(
+                        "garuda-powers.json",
+                        type + " should have 8"
+                                + " advanced powers,"
+                                + " found " + count);
             }
         }
     }

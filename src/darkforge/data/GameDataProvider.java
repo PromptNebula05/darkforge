@@ -1,8 +1,11 @@
 package darkforge.data;
 
+import darkforge.crew.BirdType;
+import darkforge.crew.GarudaPower;
 import darkforge.exception.GameDataLoadException;
 import darkforge.model.*;
 import org.json.*;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -19,6 +22,7 @@ import java.util.*;
  * unmodifiable views.
  */
 public class GameDataProvider {
+
     private static final GameDataProvider INSTANCE =
             new GameDataProvider();
 
@@ -33,6 +37,7 @@ public class GameDataProvider {
             firstNameTables;
     private Map<String, Map<Integer, String>>
             lastNameTables;
+    private GarudaPowerRegistry garudaPowerRegistry;
     private boolean loaded = false;
 
     private GameDataProvider() {}
@@ -76,9 +81,11 @@ public class GameDataProvider {
                             + key + "-last.json"));
         }
 
+        // Garuda powers registry
+        garudaPowerRegistry = loadGarudaPowers();
+
         // Run startup validation
         GameDataValidator.validate(this);
-
         loaded = true;
     }
 
@@ -122,7 +129,6 @@ public class GameDataProvider {
                 .unmodifiableMap(explorerReasons);
     }
 
-    /** Data-driven from professions.json keys. */
     public List<String> getValidProfessionNames() {
         return List.copyOf(professions.keySet());
     }
@@ -146,6 +152,11 @@ public class GameDataProvider {
                 lastNameTables.getOrDefault(
                         profession.toLowerCase(),
                         Map.of()));
+    }
+
+    public GarudaPowerRegistry
+    getGarudaPowerRegistry() {
+        return garudaPowerRegistry;
     }
 
     // =========================================
@@ -337,5 +348,53 @@ public class GameDataProvider {
 
         return new ProfessionData(name, keyAttr,
                 specs, talents, equipSets);
+    }
+
+    // =========================================
+    // Garuda powers loader
+    // =========================================
+
+    private GarudaPowerRegistry
+    loadGarudaPowers() {
+        JSONArray arr = new JSONArray(
+                loadResource("garuda-powers.json"));
+        List<GarudaPower> powers =
+                new ArrayList<>();
+
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject p = arr.getJSONObject(i);
+            String name =
+                    p.getString("name");
+            String description =
+                    p.getString("description");
+            String effect =
+                    p.getString("effect");
+            boolean isBasic =
+                    p.getBoolean("basic");
+            int energyCost =
+                    p.getInt("energyCost");
+
+            Set<BirdType> nativeTypes =
+                    new HashSet<>();
+            JSONArray typesArr =
+                    p.optJSONArray("nativeTypes");
+            if (typesArr != null) {
+                for (int j = 0;
+                     j < typesArr.length();
+                     j++) {
+                    nativeTypes.add(
+                            BirdType.valueOf(
+                                    typesArr
+                                            .getString(j)));
+                }
+            }
+
+            powers.add(new GarudaPower(
+                    name, description, effect,
+                    isBasic, nativeTypes,
+                    energyCost));
+        }
+
+        return new GarudaPowerRegistry(powers);
     }
 }
