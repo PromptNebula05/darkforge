@@ -11,67 +11,63 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * Singleton that loads, validates, and caches all
- * static game data from JSON resource files at
- * startup. Replaces hardcoded data in
- * ExplorerFactory with runtime-loaded,
- * externalized JSON.
- *
- * Call initialize() once at startup before any
- * game operations. All public getters return
- * unmodifiable views.
+ * Singleton that loads and caches all static game
+ * data from JSON resource files at startup.
  */
 public class GameDataProvider {
 
-    private static final GameDataProvider INSTANCE =
-            new GameDataProvider();
+    private static final GameDataProvider
+            INSTANCE = new GameDataProvider();
 
-    // --- Fields ---
+    // =========================================
+    // Fields
+    // =========================================
+
     private List<Origin> origins;
     private Map<Integer, String> quirks;
     private Map<Integer, String> keepsakes;
     private Map<Integer, String> appearances;
     private Map<Integer, String> explorerReasons;
-    private Map<String, ProfessionData> professions;
+    private Map<String, ProfessionData>
+            professions;
     private Map<String, Map<Integer, String>>
             firstNameTables;
     private Map<String, Map<Integer, String>>
             lastNameTables;
-    private GarudaPowerRegistry garudaPowerRegistry;
+    private GarudaPowerRegistry
+            garudaPowerRegistry;
+    private TalentRegistry talentRegistry;
     private boolean loaded = false;
 
     private GameDataProvider() {}
 
-    public static GameDataProvider getTheInstance() {
+    public static GameDataProvider
+    getTheInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Load all game data from JSON resources and
-     * validate. Call once at startup. Throws
-     * GameDataLoadException if any file is missing,
-     * malformed, or fails validation.
-     */
+    // =========================================
+    // Initialization
+    // =========================================
+
     public synchronized void initialize() {
         if (loaded) return;
 
-        // Core D66 tables
         origins = loadOrigins();
         quirks = loadD66Map("quirks.json");
-        keepsakes = loadD66Map("keepsakes.json");
+        keepsakes =
+                loadD66Map("keepsakes.json");
         appearances =
                 loadD66Map("appearances.json");
         explorerReasons =
-                loadD66Map("explorer-reasons.json");
-
-        // Profession data from professions.json
+                loadD66Map(
+                        "explorer-reasons.json");
         professions = loadProfessions();
 
-        // Name tables (one first/last pair per
-        // profession)
         firstNameTables = new HashMap<>();
         lastNameTables = new HashMap<>();
-        for (String prof : professions.keySet()) {
+        for (String prof
+                : professions.keySet()) {
             String key = prof.toLowerCase();
             firstNameTables.put(key,
                     loadD66Map("names/"
@@ -81,16 +77,17 @@ public class GameDataProvider {
                             + key + "-last.json"));
         }
 
-        // Garuda powers registry
-        garudaPowerRegistry = loadGarudaPowers();
+        garudaPowerRegistry =
+                loadGarudaPowers();
+        talentRegistry =
+                loadTalentRegistry();
 
-        // Run startup validation
         GameDataValidator.validate(this);
         loaded = true;
     }
 
     // =========================================
-    // Public accessors (immutable views)
+    // Public accessors
     // =========================================
 
     public List<Origin> getOrigins() {
@@ -98,13 +95,15 @@ public class GameDataProvider {
                 .unmodifiableList(origins);
     }
 
-    public Origin getOriginByD66(int d66Value) {
+    public Origin getOriginByD66(
+            int d66Value) {
         return origins.stream()
-                .filter(o -> o.matchesD66(d66Value))
+                .filter(o ->
+                        o.matchesD66(d66Value))
                 .findFirst()
                 .orElseThrow(() ->
                         new IllegalArgumentException(
-                                "No origin matches D66 value: "
+                                "No origin matches D66: "
                                         + d66Value));
     }
 
@@ -113,12 +112,14 @@ public class GameDataProvider {
                 .unmodifiableMap(quirks);
     }
 
-    public Map<Integer, String> getKeepsakes() {
+    public Map<Integer, String>
+    getKeepsakes() {
         return Collections
                 .unmodifiableMap(keepsakes);
     }
 
-    public Map<Integer, String> getAppearances() {
+    public Map<Integer, String>
+    getAppearances() {
         return Collections
                 .unmodifiableMap(appearances);
     }
@@ -126,11 +127,14 @@ public class GameDataProvider {
     public Map<Integer, String>
     getExplorerReasons() {
         return Collections
-                .unmodifiableMap(explorerReasons);
+                .unmodifiableMap(
+                        explorerReasons);
     }
 
-    public List<String> getValidProfessionNames() {
-        return List.copyOf(professions.keySet());
+    public List<String>
+    getValidProfessionNames() {
+        return List.copyOf(
+                professions.keySet());
     }
 
     public ProfessionData getProfession(
@@ -159,16 +163,23 @@ public class GameDataProvider {
         return garudaPowerRegistry;
     }
 
+    public TalentRegistry
+    getTalentRegistry() {
+        return talentRegistry;
+    }
+
     // =========================================
-    // Private loaders
+    // Resource loading
     // =========================================
 
-    private String loadResource(String filename) {
+    private String loadResource(
+            String filename) {
         try (InputStream is = getClass()
                 .getResourceAsStream(
                         "/" + filename)) {
             if (is == null) {
-                throw new GameDataLoadException(
+                throw new
+                        GameDataLoadException(
                         filename,
                         "Missing game data file");
             }
@@ -176,11 +187,17 @@ public class GameDataProvider {
                     is.readAllBytes(),
                     StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new GameDataLoadException(
+            throw new
+                    GameDataLoadException(
                     filename,
-                    "Failed to read game data", e);
+                    "Failed to read game data",
+                    e);
         }
     }
+
+    // =========================================
+    // D66 map loading
+    // =========================================
 
     private Map<Integer, String> loadD66Map(
             String filename) {
@@ -189,24 +206,32 @@ public class GameDataProvider {
         Map<Integer, String> map =
                 new LinkedHashMap<>();
         for (String key : obj.keySet()) {
-            map.put(Integer.parseInt(key),
+            map.put(
+                    Integer.parseInt(key),
                     obj.getString(key));
         }
         return map;
     }
 
+    // =========================================
+    // Origins
+    // =========================================
+
     private List<Origin> loadOrigins() {
         JSONArray arr = new JSONArray(
                 loadResource("origins.json"));
-        List<Origin> result = new ArrayList<>();
-        for (int i = 0; i < arr.length(); i++) {
-            result.add(
-                    parseOrigin(arr.getJSONObject(i)));
+        List<Origin> result =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            result.add(parseOrigin(
+                    arr.getJSONObject(i)));
         }
         return result;
     }
 
-    private Origin parseOrigin(JSONObject o) {
+    private Origin parseOrigin(
+            JSONObject o) {
         String location =
                 o.getString("location");
         String faction =
@@ -219,7 +244,8 @@ public class GameDataProvider {
                 o.getJSONObject("contacts");
         Map<Integer, String> contactsMap =
                 new HashMap<>();
-        for (String key : contactsObj.keySet()) {
+        for (String key
+                : contactsObj.keySet()) {
             contactsMap.put(
                     Integer.parseInt(key),
                     contactsObj.getString(key));
@@ -246,7 +272,8 @@ public class GameDataProvider {
                             "variableFactionTable");
             Map<Integer, String> factionMap =
                     new HashMap<>();
-            for (String key : vfObj.keySet()) {
+            for (String key
+                    : vfObj.keySet()) {
                 factionMap.put(
                         Integer.parseInt(key),
                         vfObj.getString(key));
@@ -265,22 +292,31 @@ public class GameDataProvider {
         }
     }
 
+    // =========================================
+    // Professions
+    // =========================================
+
     private Map<String, ProfessionData>
     loadProfessions() {
         JSONArray arr = new JSONArray(
-                loadResource("professions.json"));
+                loadResource(
+                        "professions.json"));
         Map<String, ProfessionData> map =
                 new LinkedHashMap<>();
-        for (int i = 0; i < arr.length(); i++) {
-            JSONObject p = arr.getJSONObject(i);
-            String name = p.getString("name");
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject p =
+                    arr.getJSONObject(i);
+            String name =
+                    p.getString("name");
             map.put(name,
                     parseProfessionData(p));
         }
         return map;
     }
 
-    private ProfessionData parseProfessionData(
+    private ProfessionData
+    parseProfessionData(
             JSONObject p) {
         String name = p.getString("name");
         Attribute keyAttr = Attribute.valueOf(
@@ -288,41 +324,47 @@ public class GameDataProvider {
 
         JSONArray specArr =
                 p.getJSONArray("specialties");
-        List<ProfessionData.SpecialtyData> specs =
-                new ArrayList<>();
+        List<ProfessionData.SpecialtyData>
+                specs = new ArrayList<>();
         for (int i = 0;
              i < specArr.length(); i++) {
             JSONObject s =
                     specArr.getJSONObject(i);
             specs.add(
-                    new ProfessionData.SpecialtyData(
+                    new ProfessionData
+                            .SpecialtyData(
                             s.getString("name"),
-                            s.getString("description"),
+                            s.getString(
+                                    "description"),
                             s.getString(
                                     "freeTalentName")));
         }
 
         JSONArray talArr =
                 p.getJSONArray("talents");
-        List<ProfessionData.TalentData> talents =
-                new ArrayList<>();
+        List<ProfessionData.TalentData>
+                talents = new ArrayList<>();
         for (int i = 0;
              i < talArr.length(); i++) {
             JSONObject t =
                     talArr.getJSONObject(i);
             talents.add(
-                    new ProfessionData.TalentData(
+                    new ProfessionData
+                            .TalentData(
                             t.getString("name"),
                             t.getString("category"),
                             t.getInt("maxLevel"),
-                            t.getString("description"),
-                            t.getString("effect")));
+                            t.getString(
+                                    "description"),
+                            t.getString(
+                                    "effect")));
         }
 
         JSONArray eqSets =
                 p.getJSONArray(
                         "startingEquipmentSets");
-        List<List<ProfessionData.EquipmentData>>
+        List<List<ProfessionData
+                .EquipmentData>>
                 equipSets = new ArrayList<>();
         for (int i = 0;
              i < eqSets.length(); i++) {
@@ -340,61 +382,106 @@ public class GameDataProvider {
                                 e.getString("name"),
                                 e.getString(
                                         "description"),
-                                e.getString("weight"),
-                                e.getInt("gearBonus")));
+                                e.getString(
+                                        "weight"),
+                                e.getInt(
+                                        "gearBonus")));
             }
             equipSets.add(items);
         }
 
-        return new ProfessionData(name, keyAttr,
-                specs, talents, equipSets);
+        return new ProfessionData(name,
+                keyAttr, specs, talents,
+                equipSets);
     }
 
     // =========================================
-    // Garuda powers loader
+    // Garuda powers
     // =========================================
 
     private GarudaPowerRegistry
     loadGarudaPowers() {
         JSONArray arr = new JSONArray(
-                loadResource("garuda-powers.json"));
+                loadResource(
+                        "garuda-powers.json"));
         List<GarudaPower> powers =
                 new ArrayList<>();
-
-        for (int i = 0; i < arr.length(); i++) {
-            JSONObject p = arr.getJSONObject(i);
-            String name =
-                    p.getString("name");
-            String description =
-                    p.getString("description");
-            String effect =
-                    p.getString("effect");
-            boolean isBasic =
-                    p.getBoolean("basic");
-            int energyCost =
-                    p.getInt("energyCost");
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject p =
+                    arr.getJSONObject(i);
 
             Set<BirdType> nativeTypes =
                     new HashSet<>();
             JSONArray typesArr =
-                    p.optJSONArray("nativeTypes");
+                    p.optJSONArray(
+                            "nativeTypes");
             if (typesArr != null) {
                 for (int j = 0;
                      j < typesArr.length();
                      j++) {
                     nativeTypes.add(
                             BirdType.valueOf(
-                                    typesArr
-                                            .getString(j)));
+                                    typesArr.getString(
+                                            j)));
                 }
             }
 
             powers.add(new GarudaPower(
-                    name, description, effect,
-                    isBasic, nativeTypes,
-                    energyCost));
+                    p.getString("name"),
+                    p.getString("description"),
+                    p.getString("effect"),
+                    p.getBoolean("isBasic"),
+                    nativeTypes,
+                    p.getInt("energyCost")));
+        }
+        return new GarudaPowerRegistry(
+                powers);
+    }
+
+    // =========================================
+    // Talent registry (Iteration 3)
+    // =========================================
+
+    private TalentRegistry
+    loadTalentRegistry() {
+        JSONArray arr = new JSONArray(
+                loadResource("talents.json"));
+        List<Talent> talents =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject t =
+                    arr.getJSONObject(i);
+            talents.add(new Talent(
+                    t.getString("name"),
+                    t.getString("description"),
+                    TalentCategory.valueOf(
+                            t.getString("category")),
+                    t.getInt("maxLevel"),
+                    t.getString("effect")));
         }
 
-        return new GarudaPowerRegistry(powers);
+        // Build profession-to-talent-name map
+        Map<String, List<String>>
+                profTalentNames =
+                new LinkedHashMap<>();
+        for (Map.Entry<String,
+                ProfessionData>
+                entry :
+                professions.entrySet()) {
+            List<String> names =
+                    new ArrayList<>();
+            for (ProfessionData.TalentData td
+                    : entry.getValue()
+                    .getTalents()) {
+                names.add(td.name());
+            }
+            profTalentNames.put(
+                    entry.getKey(), names);
+        }
+
+        return new TalentRegistry(
+                talents, profTalentNames);
     }
 }
