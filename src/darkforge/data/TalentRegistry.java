@@ -144,11 +144,6 @@ public class TalentRegistry {
                 allTalents);
     }
 
-    public Registry<TalentCategory, Talent>
-    getRegistry() {
-        return registry;
-    }
-
     public int size() {
         return allTalents.size();
     }

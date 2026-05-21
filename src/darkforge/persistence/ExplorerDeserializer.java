@@ -460,6 +460,12 @@ public class ExplorerDeserializer {
                     tName, "", category,
                     maxLevel, currentLevel, effect);
             explorer.addTalent(talent);
+            // Restore talent source tag
+            if (tObj.has("source")
+                    && !tObj.isNull("source")) {
+                talent.setSource(
+                        tObj.getString("source"));
+            }
         }
     }
 

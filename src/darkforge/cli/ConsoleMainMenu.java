@@ -1,41 +1,26 @@
 package darkforge.cli;
 
+import darkforge.crew.Crew;
 import darkforge.exception.*;
 import darkforge.facade.*;
 import darkforge.model.*;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
 /**
- * Top-level interactive menu loop that ties all
- * CLI functionality together: create, save, load,
- * search, view, and quit.
- *
- * Demonstrates the full Façade delegation chain:
- * every menu option routes through FacadeDarkforge
- * to the appropriate sub-Façade. Also demonstrates
- * exception handling at the highest level —
- * IOException for file operations and
- * CharacterCorruptionException for corrupted saves
- * are caught here and displayed to the player.
- *
- * Exception handling at the menu level:
- * - handleLoad(): three-tier catch —
- *   IOException (file not readable),
- *   CharacterCorruptionException (file corrupt),
- *   NumberFormatException (bad menu input) —
- *   each with a different recovery message.
- * - handleSave(): catches only IOException —
- *   serialization cannot fail if Explorer valid.
- * - handleCreate(): delegates exception handling
- *   to ConsoleCreationWizard (retry internally).
+ * Top-level interactive menu loop. Delegates all
+ * operations through FacadeDarkforge to the
+ * appropriate sub-Façade.
  */
 public class ConsoleMainMenu {
     private final Scanner scanner;
     private final FacadeDarkforge darkforge;
     private final ConsoleCreationWizard wizard;
+    private final ConsoleCrewWizard crewWizard;
     private final List<Explorer> sessionExplorers;
+    private final List<Crew> sessionCrews;
 
     public ConsoleMainMenu(Scanner scanner) {
         this.scanner = scanner;
@@ -43,17 +28,18 @@ public class ConsoleMainMenu {
                 FacadeDarkforge.getTheInstance();
         this.wizard =
                 new ConsoleCreationWizard(scanner);
-        this.sessionExplorers = new ArrayList<>();
+        this.crewWizard =
+                new ConsoleCrewWizard(scanner);
+        this.sessionExplorers =
+                new ArrayList<>();
+        this.sessionCrews =
+                new ArrayList<>();
     }
 
-    /**
-     * Run the main menu loop until the player
-     * chooses to quit.
-     */
     public void run() {
         System.out.println("\n"
                 + darkforge.getVersion()
-                + " — Main Menu");
+                + " \u2014 Main Menu");
 
         boolean running = true;
         while (running) {
@@ -69,9 +55,14 @@ public class ConsoleMainMenu {
                 case "4" -> handleViewAll();
                 case "5" -> handleSearch();
                 case "6" -> handleDelete();
+                case "7" ->
+                        handleCrewWizard();
+                case "8" ->
+                        handleBrowseTalents();
                 case "0", "Q", "q" -> {
                     System.out.println(
-                            "Farewell, Explorer.");
+                            "Farewell,"
+                                    + " Explorer.");
                     running = false;
                 }
                 default -> System.out.println(
@@ -87,30 +78,28 @@ public class ConsoleMainMenu {
     private void printMenu() {
         System.out.println("\n--- Menu ---");
         System.out.println(
-                "  1. Create New Explorer");
+                " 1. Create New Explorer");
         System.out.println(
-                "  2. Save Explorer to File");
+                " 2. Save Explorer to File");
         System.out.println(
-                "  3. Load Explorer from File");
+                " 3. Load Explorer from File");
         System.out.println(
-                "  4. View All Explorers");
+                " 4. View All Explorers");
         System.out.println(
-                "  5. Search Explorers");
+                " 5. Search Explorers");
         System.out.println(
-                "  6. Delete Save File");
-        System.out.println("  0. Quit");
+                " 6. Delete Save File");
+        System.out.println(
+                " 7. Create/Manage Crew");
+        System.out.println(
+                " 8. Browse Talents");
+        System.out.println(" 0. Quit");
     }
 
     // =========================================
-    // 1. Create — delegates to wizard
+    // 1. Create
     // =========================================
 
-    /**
-     * Delegate to ConsoleCreationWizard, which
-     * handles all exception-driven retry loops
-     * internally. If creation succeeds, add to
-     * session list.
-     */
     private void handleCreate() {
         Explorer e = wizard.run();
         if (e != null) {
@@ -119,15 +108,9 @@ public class ConsoleMainMenu {
     }
 
     // =========================================
-    // 2. Save — IOException catch
+    // 2. Save
     // =========================================
 
-    /**
-     * Save a session Explorer to a .darkforge.json
-     * file. Catches only IOException — the
-     * serializer cannot fail if the Explorer is
-     * valid (all fields guaranteed by factory).
-     */
     private void handleSave() {
         if (sessionExplorers.isEmpty()) {
             System.out.println(
@@ -152,17 +135,9 @@ public class ConsoleMainMenu {
     }
 
     // =========================================
-    // 3. Load — three-tier catch pattern
+    // 3. Load — three-tier catch
     // =========================================
 
-    /**
-     * Load an Explorer from a .darkforge.json
-     * file. Demonstrates three-tier catch:
-     * - IOException: file not readable
-     * - CharacterCorruptionException: file
-     *   corrupt (uses getUserMessage())
-     * - NumberFormatException: bad menu input
-     */
     private void handleLoad() {
         try {
             List<Path> saves =
@@ -179,14 +154,16 @@ public class ConsoleMainMenu {
             for (int i = 0;
                  i < saves.size(); i++) {
                 System.out.printf(
-                        "  %d. %s%n",
+                        " %d. %s%n",
                         i + 1,
                         saves.get(i)
                                 .getFileName());
             }
-            System.out.print("Choose file: ");
+            System.out.print(
+                    "Choose file: ");
             int idx = Integer.parseInt(
-                    scanner.nextLine().trim()) - 1;
+                    scanner.nextLine().trim())
+                    - 1;
 
             if (idx < 0
                     || idx >= saves.size()) {
@@ -213,13 +190,15 @@ public class ConsoleMainMenu {
                     "Load failed: "
                             + ex.getMessage());
         } catch (
-                CharacterCorruptionException ex) {
+                CharacterCorruptionException
+                        ex) {
             System.out.println(
                     "\u26a0 "
                             + ex.getUserMessage());
             System.out.println(
                     "Choose a different file.");
-        } catch (NumberFormatException ex) {
+        } catch (
+                NumberFormatException ex) {
             System.out.println(
                     "Invalid number.");
         }
@@ -243,15 +222,9 @@ public class ConsoleMainMenu {
     }
 
     // =========================================
-    // 5. Search — name-based search via Façade
+    // 5. Search
     // =========================================
 
-    /**
-     * Search session Explorers by name using
-     * SearchUtil through the Façade chain.
-     * Displays compact summary cards for
-     * matching results.
-     */
     private void handleSearch() {
         if (sessionExplorers.isEmpty()) {
             System.out.println(
@@ -270,16 +243,18 @@ public class ConsoleMainMenu {
         List<Explorer> results =
                 darkforge.creationAccess()
                         .searchByName(
-                                sessionExplorers, query);
+                                sessionExplorers,
+                                query);
         if (results.isEmpty()) {
-            System.out.println("No matches.");
+            System.out.println(
+                    "No matches.");
         } else {
             System.out.printf(
                     "%d match(es):%n",
                     results.size());
             for (Explorer e : results) {
                 System.out.println(
-                        "  " + darkforge
+                        " " + darkforge
                                 .displayAccess()
                                 .formatSummary(e));
             }
@@ -287,16 +262,9 @@ public class ConsoleMainMenu {
     }
 
     // =========================================
-    // 6. Delete — select, confirm, delete
+    // 6. Delete
     // =========================================
 
-    /**
-     * List saved files, let the player select
-     * one, confirm deletion, then delete.
-     * Catches IOException if the directory
-     * cannot be listed or the file cannot be
-     * deleted.
-     */
     private void handleDelete() {
         try {
             List<Path> saves =
@@ -313,7 +281,7 @@ public class ConsoleMainMenu {
             for (int i = 0;
                  i < saves.size(); i++) {
                 System.out.printf(
-                        "  %d. %s%n",
+                        " %d. %s%n",
                         i + 1,
                         saves.get(i)
                                 .getFileName());
@@ -321,7 +289,8 @@ public class ConsoleMainMenu {
             System.out.print(
                     "Choose file to delete: ");
             int idx = Integer.parseInt(
-                    scanner.nextLine().trim()) - 1;
+                    scanner.nextLine().trim())
+                    - 1;
 
             if (idx < 0
                     || idx >= saves.size()) {
@@ -337,14 +306,18 @@ public class ConsoleMainMenu {
             String confirm =
                     scanner.nextLine().trim();
 
-            if (confirm.equalsIgnoreCase("y")) {
+            if (confirm
+                    .equalsIgnoreCase("y")) {
                 boolean deleted =
-                        darkforge.persistenceAccess()
-                                .deleteExplorer(target);
+                        darkforge
+                                .persistenceAccess()
+                                .deleteExplorer(
+                                        target);
                 if (deleted) {
                     System.out.println(
                             "Deleted: "
-                                    + target.getFileName());
+                                    + target
+                                    .getFileName());
                 } else {
                     System.out.println(
                             "File not found.");
@@ -356,26 +329,146 @@ public class ConsoleMainMenu {
 
         } catch (IOException ex) {
             System.out.println(
-                    "Error: " + ex.getMessage());
-        } catch (NumberFormatException ex) {
+                    "Error: "
+                            + ex.getMessage());
+        } catch (
+                NumberFormatException ex) {
             System.out.println(
                     "Invalid number.");
         }
     }
 
     // =========================================
-    // Helper — select an Explorer from session
+    // 7. Create/Manage Crew
     // =========================================
 
-    /**
-     * Display the session Explorer list and
-     * prompt the player to select one by number.
-     *
-     * @param action verb for the prompt
-     *        (e.g. "save", "view")
-     * @return the selected Explorer, or null
-     *         if input is invalid
-     */
+    private void handleCrewWizard() {
+        Crew crew = crewWizard.run();
+        if (crew != null) {
+            sessionCrews.add(crew);
+            for (Explorer m
+                    : crew.getMembers()) {
+                if (!sessionExplorers
+                        .contains(m)) {
+                    sessionExplorers.add(m);
+                }
+            }
+        }
+    }
+
+    // =========================================
+    // 8. Browse Talents
+    // =========================================
+
+    private void handleBrowseTalents() {
+        System.out.println(
+                "\n--- Browse Talents ---");
+        System.out.println(
+                " 1. Browse by Category");
+        System.out.println(
+                " 2. Search by Name");
+        System.out.print("> ");
+        String choice =
+                scanner.nextLine().trim();
+
+        if (choice.equals("1")) {
+            browseTalentsByCategory();
+        } else if (choice.equals("2")) {
+            searchTalentsByName();
+        } else {
+            System.out.println(
+                    "Invalid option.");
+        }
+    }
+
+    private void browseTalentsByCategory() {
+        TalentCategory[] cats =
+                TalentCategory.values();
+        System.out.println(
+                "\nSelect category:");
+        for (int i = 0;
+             i < cats.length; i++) {
+            System.out.printf(
+                    " %d. %s%n",
+                    i + 1, cats[i].name());
+        }
+        System.out.print("> ");
+        try {
+            int idx = Integer.parseInt(
+                    scanner.nextLine().trim())
+                    - 1;
+            if (idx < 0
+                    || idx >= cats.length) {
+                System.out.println(
+                        "Invalid selection.");
+                return;
+            }
+            List<Talent> talents =
+                    darkforge.crewAccess()
+                            .browseTalents(
+                                    cats[idx]);
+            if (talents.isEmpty()) {
+                System.out.println(
+                        "No talents in "
+                                + cats[idx].name()
+                                + ".");
+            } else {
+                System.out.printf(
+                        "%n%s talents:%n",
+                        cats[idx].name());
+                for (Talent t : talents) {
+                    System.out.printf(
+                            "  \u2022 %s"
+                                    + " (max lvl %d)"
+                                    + " \u2014 %s%n",
+                            t.getName(),
+                            t.getMaxLevel(),
+                            t.getEffect());
+                }
+            }
+        } catch (
+                NumberFormatException e) {
+            System.out.println(
+                    "Invalid number.");
+        }
+    }
+
+    private void searchTalentsByName() {
+        System.out.print("Search: ");
+        String query =
+                scanner.nextLine().trim();
+        if (query.isEmpty()) {
+            System.out.println(
+                    "Enter a search term.");
+            return;
+        }
+        List<Talent> results =
+                darkforge.crewAccess()
+                        .searchTalents(query);
+        if (results.isEmpty()) {
+            System.out.println(
+                    "No matches.");
+        } else {
+            System.out.printf(
+                    "%d result(s):%n",
+                    results.size());
+            for (Talent t : results) {
+                System.out.printf(
+                        "  \u2022 %s [%s]"
+                                + " (max lvl %d)"
+                                + " \u2014 %s%n",
+                        t.getName(),
+                        t.getCategory().name(),
+                        t.getMaxLevel(),
+                        t.getEffect());
+            }
+        }
+    }
+
+    // =========================================
+    // Helper — select Explorer from session
+    // =========================================
+
     private Explorer selectExplorer(
             String action) {
         System.out.println(
@@ -384,7 +477,7 @@ public class ConsoleMainMenu {
         for (int i = 0;
              i < sessionExplorers.size();
              i++) {
-            System.out.printf("  %d. %s%n",
+            System.out.printf(" %d. %s%n",
                     i + 1,
                     sessionExplorers.get(i)
                             .getName());
@@ -392,7 +485,8 @@ public class ConsoleMainMenu {
         System.out.print("> ");
         try {
             int idx = Integer.parseInt(
-                    scanner.nextLine().trim()) - 1;
+                    scanner.nextLine().trim())
+                    - 1;
             if (idx < 0
                     || idx
                     >= sessionExplorers
@@ -402,7 +496,8 @@ public class ConsoleMainMenu {
                 return null;
             }
             return sessionExplorers.get(idx);
-        } catch (NumberFormatException e) {
+        } catch (
+                NumberFormatException e) {
             System.out.println(
                     "Invalid number.");
             return null;

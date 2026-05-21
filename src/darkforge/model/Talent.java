@@ -60,14 +60,6 @@ public class Talent extends GameEntity {
     currentLevel++;
   }
 
-  public void setCurrentLevel(int level) {
-    if (level < 0 || level > maxLevel) {
-      throw new IllegalArgumentException(
-          "Level must be 0-" + maxLevel + " for '" + name + "', got " + level);
-    }
-    this.currentLevel = level;
-  }
-
   @Override
   public String display() {
     String src = (source != null) ? " (" + source + ")" : "";

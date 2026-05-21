@@ -17,6 +17,7 @@ public class FacadeDarkforge {
     private final FacadeCreation creation;
     private final FacadeDisplay display;
     private final FacadePersistence persistence;
+    private final FacadeCrew crew;
 
     private FacadeDarkforge() {
         this.model =
@@ -29,22 +30,21 @@ public class FacadeDarkforge {
                 FacadeDisplay.getTheInstance();
         this.persistence =
                 FacadePersistence.getTheInstance();
+        this.crew =
+                FacadeCrew.getTheInstance();
     }
 
     public static FacadeDarkforge getTheInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Initialize all game data from JSON
-     * resources. Must be called once at startup.
-     */
     public void initialize() {
-        GameDataProvider.getTheInstance().initialize();
+        GameDataProvider.getTheInstance()
+                .initialize();
     }
 
     public String getVersion() {
-        return "DARKFORGE v2.0";
+        return "DARKFORGE v3.0";
     }
 
     public FacadeModel modelAccess() {
@@ -65,5 +65,9 @@ public class FacadeDarkforge {
 
     public FacadePersistence persistenceAccess() {
         return persistence;
+    }
+
+    public FacadeCrew crewAccess() {
+        return crew;
     }
 }
