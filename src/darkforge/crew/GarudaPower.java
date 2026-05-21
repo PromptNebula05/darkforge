@@ -83,9 +83,19 @@ public class GarudaPower extends GameEntity {
 
     @Override
     public String display() {
-        String typeStr = nativeTypes.isEmpty()
-                ? "Universal"
-                : nativeTypes.toString();
+        String typeStr;
+        if (nativeTypes.isEmpty()) {
+            typeStr = "Universal";
+        } else {
+            StringBuilder sb =
+                    new StringBuilder();
+            for (BirdType t : nativeTypes) {
+                if (!sb.isEmpty())
+                    sb.append(", ");
+                sb.append(t.name());
+            }
+            typeStr = sb.toString();
+        }
         return String.format(
                 "%s [%s] \u2014 %s (Energy: %d)",
                 getName(), typeStr, effect,

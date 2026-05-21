@@ -401,9 +401,11 @@ public class GameDataProvider {
 
     private GarudaPowerRegistry
     loadGarudaPowers() {
-        JSONArray arr = new JSONArray(
+        JSONObject root = new JSONObject(
                 loadResource(
                         "garuda-powers.json"));
+        JSONArray arr =
+                root.getJSONArray("powers");
         List<GarudaPower> powers =
                 new ArrayList<>();
         for (int i = 0;
