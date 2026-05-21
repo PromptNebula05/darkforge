@@ -93,7 +93,7 @@ public class OddJobber extends Explorer {
   }
 
   public int getAdaptabilityBonus() {
-    return (int) getTalents().stream()
+    return (int) getTalents().getAll().stream()
             .map(Talent::getCategory)
             .distinct().count();
   }

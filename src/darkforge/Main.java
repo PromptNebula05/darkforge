@@ -9,11 +9,11 @@ public class Main {
     System.out.println(
             "\n" + "=".repeat(50));
     System.out.println(
-            "  DARKFORGE v2.0 — Coriolis Explorer "
-                    + "Management");
+            "  DARKFORGE v3.0 — Coriolis Explorer"
+                    + " & Crew Management");
     System.out.println(
-            "  CS622 — Assignment 2: Handling Text "
-                    + "and Exceptions");
+            "  CS622 — Assignment 3: Collections"
+                    + " and Generics");
     System.out.println(
             "=".repeat(50));
 

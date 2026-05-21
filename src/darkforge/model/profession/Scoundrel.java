@@ -94,7 +94,7 @@ public class Scoundrel extends Explorer {
   }
 
   public List<String> getDeceptionTalents() {
-    return getTalents().stream()
+    return getTalents().getAll().stream()
             .filter(t -> t.getCategory()
                     == TalentCategory.STEALTH_MOBILITY)
             .map(Talent::getName)

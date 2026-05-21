@@ -35,49 +35,60 @@ public class ConsoleCrewWizard {
      *     if creation is aborted
      */
     public Crew run() {
-        printBanner();
+        try {
+            printBanner();
 
-        String name = promptCrewName();
-        List<Explorer> members =
-                promptMembers();
-        if (members.size() < 4) {
-            System.out.println(
-                    "Need at least 4 members."
-                            + " Aborting.");
+            String name = promptCrewName();
+            List<Explorer> members =
+                    promptMembers();
+            if (members.size() < 4) {
+                System.out.println(
+                        "Need at least 4 members."
+                                + " Aborting.");
+                return null;
+            }
+
+            Crew crew = new Crew(name);
+            for (Explorer m : members) {
+                crew.addMember(m);
+            }
+
+            promptRoleAssignment(crew);
+
+            Bird bird = promptBird();
+            crew.setBird(bird);
+
+            Vehicle shuttle =
+                    promptVehicleChoice(
+                            VehicleType.Category
+                                    .SHUTTLE);
+            if (shuttle != null) {
+                shuttle =
+                        promptVehicleCustomize(
+                                shuttle);
+                crew.setShuttle(shuttle);
+            }
+
+            Vehicle rover =
+                    promptVehicleChoice(
+                            VehicleType.Category
+                                    .ROVER);
+            if (rover != null) {
+                rover =
+                        promptVehicleCustomize(
+                                rover);
+                crew.setRover(rover);
+            }
+
+            promptSupply(crew);
+            reviewCrew(crew);
+            promptSave(crew);
+
+            return crew;
+        } catch (
+                NoSuchElementException e) {
             return null;
         }
-
-        Crew crew = new Crew(name);
-        for (Explorer m : members) {
-            crew.addMember(m);
-        }
-
-        promptRoleAssignment(crew);
-
-        Bird bird = promptBird();
-        crew.setBird(bird);
-
-        Vehicle shuttle = promptVehicleChoice(
-                VehicleType.Category.SHUTTLE);
-        if (shuttle != null) {
-            shuttle =
-                    promptVehicleCustomize(shuttle);
-            crew.setShuttle(shuttle);
-        }
-
-        Vehicle rover = promptVehicleChoice(
-                VehicleType.Category.ROVER);
-        if (rover != null) {
-            rover =
-                    promptVehicleCustomize(rover);
-            crew.setRover(rover);
-        }
-
-        promptSupply(crew);
-        reviewCrew(crew);
-        promptSave(crew);
-
-        return crew;
     }
 
     // =========================================

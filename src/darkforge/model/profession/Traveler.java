@@ -94,7 +94,7 @@ public class Traveler extends Explorer {
   }
 
   public List<String> getSurvivalTalents() {
-    return getTalents().stream()
+    return getTalents().getAll().stream()
             .filter(t -> t.getCategory()
                     == TalentCategory.VEHICLE_EXO)
             .map(Talent::getName)
