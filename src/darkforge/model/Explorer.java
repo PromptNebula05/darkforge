@@ -1,5 +1,6 @@
 package darkforge.model;
 
+import darkforge.collection.Inventory;
 import darkforge.data.GameDataProvider;
 import darkforge.data.ProfessionData;
 import darkforge.display.Displayable;
@@ -13,7 +14,7 @@ public abstract class Explorer extends GameEntity
           attributes;
   private Origin origin;
   private Specialty specialty;
-  private final List<Talent> talents;
+  private final Inventory<Talent> talents;
   private final LinkedHashMap<String,
           List<Equipment>> equipmentBySource =
           new LinkedHashMap<>();
@@ -29,7 +30,8 @@ public abstract class Explorer extends GameEntity
     super(name, description);
     this.attributes =
             new EnumMap<>(Attribute.class);
-    this.talents = new ArrayList<>();
+    this.talents =
+            new Inventory<>(name, -1);
   }
 
   // =========================================
@@ -48,14 +50,19 @@ public abstract class Explorer extends GameEntity
   // ProfessionData helper for subclasses
   // =========================================
 
-  protected ProfessionData loadProfessionData() {
-    String displayName = getProfessionName();
-    ProfessionData pd = GameDataProvider.getTheInstance()
-            .getProfession(displayName);
+  protected ProfessionData
+  loadProfessionData() {
+    String displayName =
+            getProfessionName();
+    ProfessionData pd =
+            GameDataProvider.getTheInstance()
+                    .getProfession(displayName);
     if (pd == null) {
-      pd = GameDataProvider.getTheInstance()
+      pd = GameDataProvider
+              .getTheInstance()
               .getProfession(
-                      displayName.replace(" ", ""));
+                      displayName.replace(
+                              " ", ""));
     }
     return pd;
   }
@@ -68,15 +75,18 @@ public abstract class Explorer extends GameEntity
           EnumMap<Attribute, Integer> attrs) {
     for (Attribute a : Attribute.values()) {
       if (!attrs.containsKey(a)) {
-        throw new IllegalArgumentException(
-                "Missing attribute: " + a);
+        throw
+                new IllegalArgumentException(
+                        "Missing attribute: "
+                                + a);
       }
     }
     this.attributes.putAll(attrs);
   }
 
   public int getAttribute(Attribute attr) {
-    return attributes.getOrDefault(attr, 0);
+    return attributes
+            .getOrDefault(attr, 0);
   }
 
   public EnumMap<Attribute, Integer>
@@ -100,7 +110,8 @@ public abstract class Explorer extends GameEntity
 
   public int getHeart() {
     return getAttribute(Attribute.INSIGHT)
-            + getAttribute(Attribute.PERCEPTION);
+            + getAttribute(
+            Attribute.PERCEPTION);
   }
 
   // =========================================
@@ -108,6 +119,7 @@ public abstract class Explorer extends GameEntity
   // =========================================
 
   public Origin getOrigin() { return origin; }
+
   public void setOrigin(Origin origin) {
     this.origin = origin;
   }
@@ -115,30 +127,47 @@ public abstract class Explorer extends GameEntity
   public Specialty getSpecialty() {
     return specialty;
   }
-  public void setSpecialty(Specialty specialty) {
+
+  public void setSpecialty(
+          Specialty specialty) {
     this.specialty = specialty;
   }
 
   // =========================================
-  // Talents
+  // Talents (Inventory<Talent>)
   // =========================================
 
-  public List<Talent> getTalents() {
-    return Collections.unmodifiableList(
-            talents);
+  public Inventory<Talent> getTalents() {
+    return talents;
   }
 
   public boolean addTalent(Talent talent) {
-    for (Talent existing : talents) {
-      if (existing.getName()
-              .equalsIgnoreCase(
-                      talent.getName())) {
-        existing.increaseLevel();
-        return false;
-      }
+    Talent existing =
+            talents.getByName(
+                    talent.getName());
+    if (existing != null) {
+      existing.increaseLevel();
+      return false;
     }
     talents.add(talent);
     return true;
+  }
+
+  /**
+   * Groups talents by TalentCategory using
+   * Inventory's Iterable support.
+   */
+  public Map<TalentCategory, List<Talent>>
+  getTalentsByCategory() {
+    Map<TalentCategory, List<Talent>>
+            grouped = new EnumMap<>(
+            TalentCategory.class);
+    for (Talent t : talents) {
+      grouped.computeIfAbsent(
+              t.getCategory(),
+              k -> new ArrayList<>()).add(t);
+    }
+    return grouped;
   }
 
   // =========================================
@@ -151,7 +180,8 @@ public abstract class Explorer extends GameEntity
             equipmentBySource.values()) {
       all.addAll(list);
     }
-    return Collections.unmodifiableList(all);
+    return Collections
+            .unmodifiableList(all);
   }
 
   public LinkedHashMap<String, List<Equipment>>
@@ -181,6 +211,7 @@ public abstract class Explorer extends GameEntity
   // =========================================
 
   public String getQuirk() { return quirk; }
+
   public void setQuirk(String quirk) {
     this.quirk = quirk;
   }
@@ -188,6 +219,7 @@ public abstract class Explorer extends GameEntity
   public String getKeepsake() {
     return keepsake;
   }
+
   public void setKeepsake(String keepsake) {
     this.keepsake = keepsake;
   }
@@ -195,29 +227,36 @@ public abstract class Explorer extends GameEntity
   public String getAppearance() {
     return appearance;
   }
-  public void setAppearance(String appearance) {
+
+  public void setAppearance(
+          String appearance) {
     this.appearance = appearance;
   }
 
   public String getResolvedContact() {
     return resolvedContact;
   }
+
   public void setResolvedContact(
           String resolvedContact) {
-    this.resolvedContact = resolvedContact;
+    this.resolvedContact =
+            resolvedContact;
   }
 
   public String getResolvedFaction() {
     return resolvedFaction;
   }
+
   public void setResolvedFaction(
           String resolvedFaction) {
-    this.resolvedFaction = resolvedFaction;
+    this.resolvedFaction =
+            resolvedFaction;
   }
 
   public String getExplorerReason() {
     return explorerReason;
   }
+
   public void setExplorerReason(
           String explorerReason) {
     this.explorerReason = explorerReason;
@@ -233,10 +272,11 @@ public abstract class Explorer extends GameEntity
             ? " (" + specialty.getName() + ")"
             : "";
     return String.format(
-            "%s — %s%s — Health %d / Hope %d "
+            "%s \u2014 %s%s \u2014 Health %d / Hope %d "
                     + "/ Heart %d",
             name, getProfessionName(), spec,
-            getHealth(), getHope(), getHeart());
+            getHealth(), getHope(),
+            getHeart());
   }
 
   @Override
