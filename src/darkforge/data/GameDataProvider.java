@@ -37,6 +37,16 @@ public class GameDataProvider {
     private GarudaPowerRegistry
             garudaPowerRegistry;
     private TalentRegistry talentRegistry;
+    private Map<Integer, String>
+            crewNamePrefixes;
+    private Map<Integer, String>
+            crewNameSuffixes;
+    private Map<Integer, String> birdColors;
+    private Map<Integer, String>
+            birdBodyFeatures;
+    private Map<Integer, String>
+            birdPersonalities;
+    private Map<Integer, String> birdNames;
     private boolean loaded = false;
 
     private GameDataProvider() {}
@@ -81,6 +91,8 @@ public class GameDataProvider {
                 loadGarudaPowers();
         talentRegistry =
                 loadTalentRegistry();
+        loadCrewNames();
+        loadBirdAppearances();
 
         GameDataValidator.validate(this);
         loaded = true;
@@ -166,6 +178,46 @@ public class GameDataProvider {
     public TalentRegistry
     getTalentRegistry() {
         return talentRegistry;
+    }
+
+    public Map<Integer, String>
+    getCrewNamePrefixes() {
+        return Collections
+                .unmodifiableMap(
+                        crewNamePrefixes);
+    }
+
+    public Map<Integer, String>
+    getCrewNameSuffixes() {
+        return Collections
+                .unmodifiableMap(
+                        crewNameSuffixes);
+    }
+
+    public Map<Integer, String>
+    getBirdColors() {
+        return Collections
+                .unmodifiableMap(birdColors);
+    }
+
+    public Map<Integer, String>
+    getBirdBodyFeatures() {
+        return Collections
+                .unmodifiableMap(
+                        birdBodyFeatures);
+    }
+
+    public Map<Integer, String>
+    getBirdPersonalities() {
+        return Collections
+                .unmodifiableMap(
+                        birdPersonalities);
+    }
+
+    public Map<Integer, String>
+    getBirdNames() {
+        return Collections
+                .unmodifiableMap(birdNames);
     }
 
     // =========================================
@@ -281,7 +333,8 @@ public class GameDataProvider {
             return new Origin(
                     location, freeTalent,
                     new darkforge.mechanics
-                            .D6Table<>(factionMap),
+                            .D6Table<>(factionMap,
+                            new Random()),
                     contactsMap,
                     d66Low, d66High);
         } else {
@@ -439,6 +492,56 @@ public class GameDataProvider {
         }
         return new GarudaPowerRegistry(
                 powers);
+    }
+
+    // =========================================
+    // Crew names (Iteration 3)
+    // =========================================
+
+    private Map<Integer, String>
+    parseIntKeyMap(JSONObject obj) {
+        Map<Integer, String> map =
+                new LinkedHashMap<>();
+        for (String key : obj.keySet()) {
+            map.put(
+                    Integer.parseInt(key),
+                    obj.getString(key));
+        }
+        return map;
+    }
+
+    private void loadCrewNames() {
+        JSONObject root = new JSONObject(
+                loadResource(
+                        "crew-names.json"));
+        crewNamePrefixes = parseIntKeyMap(
+                root.getJSONObject(
+                        "crewNamePrefixes"));
+        crewNameSuffixes = parseIntKeyMap(
+                root.getJSONObject(
+                        "crewNameSuffixes"));
+    }
+
+    // =========================================
+    // Bird appearances (Iteration 3)
+    // =========================================
+
+    private void loadBirdAppearances() {
+        JSONObject root = new JSONObject(
+                loadResource(
+                        "bird-appearances.json"));
+        birdColors = parseIntKeyMap(
+                root.getJSONObject(
+                        "birdColors"));
+        birdBodyFeatures = parseIntKeyMap(
+                root.getJSONObject(
+                        "birdBodyFeatures"));
+        birdPersonalities = parseIntKeyMap(
+                root.getJSONObject(
+                        "birdPersonalities"));
+        birdNames = parseIntKeyMap(
+                root.getJSONObject(
+                        "birdNames"));
     }
 
     // =========================================

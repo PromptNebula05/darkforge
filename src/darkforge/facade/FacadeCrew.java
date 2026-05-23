@@ -11,10 +11,15 @@ import darkforge.model.Talent;
 import darkforge.model.TalentCategory;
 import darkforge.persistence.CrewFileManager;
 
+import darkforge.mechanics.D6Table;
+import darkforge.mechanics.D66Table;
+
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Façade singleton for crew assembly, talent
@@ -82,6 +87,92 @@ public class FacadeCrew {
             BirdType type) {
         return getGarudaPowerRegistry()
                 .getAdvancedPowersFor(type);
+    }
+
+    // =========================================
+    // Random name generation (crew-names.json)
+    // =========================================
+
+    /**
+     * Generate a random crew name by rolling
+     * two D6 tables (prefix + suffix) from
+     * crew-names.json. If the prefix roll
+     * yields "EXPLORER_NAME", substitutes
+     * the given explorer name.
+     */
+    public String generateRandomCrewName(
+            String explorerName) {
+        GameDataProvider gdp =
+                GameDataProvider.getTheInstance();
+        D6Table<String> prefixTable =
+                new D6Table<>(
+                        gdp.getCrewNamePrefixes(),
+                        new Random());
+        D6Table<String> suffixTable =
+                new D6Table<>(
+                        gdp.getCrewNameSuffixes(),
+                        new Random());
+
+        String prefix =
+                prefixTable.selectRandom();
+        if ("EXPLORER_NAME"
+                .equals(prefix)) {
+            prefix =
+                    (explorerName != null
+                            && !explorerName
+                            .isEmpty())
+                            ? explorerName + "'s"
+                            : "The Unknown's";
+        }
+        String suffix =
+                suffixTable.selectRandom();
+        return prefix + " " + suffix;
+    }
+
+    // =========================================
+    // Random Bird appearance (D66 tables)
+    // =========================================
+
+    /**
+     * Generate random Bird appearance traits
+     * by rolling four D66 tables from
+     * bird-appearances.json.
+     * @return map with keys: name, color,
+     *     bodyFeature, personality
+     */
+    public Map<String, String>
+    generateRandomBirdAppearance() {
+        GameDataProvider gdp =
+                GameDataProvider.getTheInstance();
+        D66Table<String> colorTable =
+                new D66Table<>(
+                        gdp.getBirdColors(),
+                        new Random());
+        D66Table<String> featureTable =
+                new D66Table<>(
+                        gdp.getBirdBodyFeatures(),
+                        new Random());
+        D66Table<String> personalityTable =
+                new D66Table<>(
+                        gdp.getBirdPersonalities(),
+                        new Random());
+        D66Table<String> nameTable =
+                new D66Table<>(
+                        gdp.getBirdNames(),
+                        new Random());
+
+        Map<String, String> result =
+                new LinkedHashMap<>();
+        result.put("name",
+                nameTable.selectRandom());
+        result.put("color",
+                colorTable.selectRandom());
+        result.put("bodyFeature",
+                featureTable.selectRandom());
+        result.put("personality",
+                personalityTable
+                        .selectRandom());
+        return result;
     }
 
     // =========================================
