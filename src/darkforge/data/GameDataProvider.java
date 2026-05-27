@@ -47,6 +47,7 @@ public class GameDataProvider {
     private Map<Integer, String>
             birdPersonalities;
     private Map<Integer, String> birdNames;
+    private ItemCatalog itemCatalog;
     private boolean loaded = false;
 
     private GameDataProvider() {}
@@ -93,6 +94,7 @@ public class GameDataProvider {
                 loadTalentRegistry();
         loadCrewNames();
         loadBirdAppearances();
+        itemCatalog = loadItemCatalog();
 
         GameDataValidator.validate(this);
         loaded = true;
@@ -218,6 +220,10 @@ public class GameDataProvider {
     getBirdNames() {
         return Collections
                 .unmodifiableMap(birdNames);
+    }
+
+    public ItemCatalog getItemCatalog() {
+        return itemCatalog;
     }
 
     // =========================================
@@ -495,7 +501,7 @@ public class GameDataProvider {
     }
 
     // =========================================
-    // Crew names (Iteration 3)
+    // Crew names
     // =========================================
 
     private Map<Integer, String>
@@ -523,7 +529,7 @@ public class GameDataProvider {
     }
 
     // =========================================
-    // Bird appearances (Iteration 3)
+    // Bird appearances
     // =========================================
 
     private void loadBirdAppearances() {
@@ -545,7 +551,7 @@ public class GameDataProvider {
     }
 
     // =========================================
-    // Talent registry (Iteration 3)
+    // Talent registry
     // =========================================
 
     private TalentRegistry
@@ -588,5 +594,244 @@ public class GameDataProvider {
 
         return new TalentRegistry(
                 talents, profTalentNames);
+    }
+
+    // =========================================
+// Catalog loading
+// =========================================
+
+    private ItemCatalog loadItemCatalog() {
+        List<Item> items = new ArrayList<>();
+
+        // Ranged weapons
+        items.addAll(loadWeapons(
+                "weapons-ranged.json"));
+        // Melee weapons
+        items.addAll(loadWeapons(
+                "weapons-melee.json"));
+        // Heirloom weapons
+        items.addAll(loadWeapons(
+                "weapons-heirloom.json"));
+        // Armor
+        items.addAll(loadArmor(
+                "armor.json"));
+        // General equipment
+        items.addAll(loadGeneralEquipment(
+                "equipment-general.json"));
+        // Rover upgrades
+        items.addAll(loadVehicleModules(
+                "rover-upgrades.json"));
+        // Rover weapons (as VehicleModules)
+        items.addAll(loadVehicleWeapons(
+                "rover-weapons.json", false));
+        // Shuttle upgrades
+        items.addAll(loadVehicleModules(
+                "shuttle-upgrades.json"));
+        // Shuttle weapons
+        items.addAll(loadVehicleWeapons(
+                "shuttle-weapons.json", true));
+        // Cargo items
+        items.addAll(loadCargoItems(
+                "cargo-items.json"));
+
+        return new ItemCatalog(items);
+    }
+
+    private List<Weapon> loadWeapons(
+            String filename) {
+        JSONArray arr = new JSONArray(
+                loadResource(filename));
+        List<Weapon> weapons =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject w =
+                    arr.getJSONObject(i);
+            JSONArray featArr =
+                    w.optJSONArray("features");
+            List<String> features =
+                    new ArrayList<>();
+            if (featArr != null) {
+                for (int j = 0;
+                     j < featArr.length();
+                     j++) {
+                    features.add(
+                            featArr.getString(j));
+                }
+            }
+            weapons.add(new Weapon(
+                    w.getString("name"),
+                    w.getString("description"),
+                    w.getDouble("weight"),
+                    w.getInt("cost"),
+                    TechLevel.fromCode(
+                            w.getString("techLevel")),
+                    w.getBoolean("restricted"),
+                    EquipmentWeight.fromWeight(
+                            w.getDouble("weight")),
+                    w.getInt("gearBonus"),
+                    w.getInt("damage"),
+                    w.getInt("crit"),
+                    Grip.fromCode(
+                            w.getString("grip")),
+                    w.getString("range"),
+                    WeaponType.valueOf(
+                            w.getString(
+                                    "weaponType")),
+                    features));
+        }
+        return weapons;
+    }
+
+    private List<Armor> loadArmor(
+            String filename) {
+        JSONArray arr = new JSONArray(
+                loadResource(filename));
+        List<Armor> armorList =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject a =
+                    arr.getJSONObject(i);
+            JSONArray featArr =
+                    a.optJSONArray("features");
+            List<String> features =
+                    new ArrayList<>();
+            if (featArr != null) {
+                for (int j = 0;
+                     j < featArr.length();
+                     j++) {
+                    features.add(
+                            featArr.getString(j));
+                }
+            }
+            armorList.add(new Armor(
+                    a.getString("name"),
+                    a.getString("description"),
+                    a.getDouble("weight"),
+                    a.getInt("cost"),
+                    a.getString("category"),
+                    TechLevel.fromCode(
+                            a.getString("techLevel")),
+                    a.getBoolean("restricted"),
+                    EquipmentWeight.fromWeight(
+                            a.getDouble("weight")),
+                    a.optInt("gearBonus", 0),
+                    a.getInt("armorRating"),
+                    a.getInt("blightProtection"),
+                    a.getInt("extras"),
+                    features));
+        }
+        return armorList;
+    }
+
+    private List<CharacterItem>
+    loadGeneralEquipment(
+            String filename) {
+        JSONArray arr = new JSONArray(
+                loadResource(filename));
+        List<CharacterItem> items =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject e =
+                    arr.getJSONObject(i);
+            items.add(new CharacterItem(
+                    e.getString("name"),
+                    e.getString("description"),
+                    e.getDouble("weight"),
+                    e.getInt("cost"),
+                    e.getString("category"),
+                    TechLevel.fromCode(
+                            e.getString("techLevel")),
+                    e.getBoolean("restricted"),
+                    e.optInt("gearBonus", 0)));
+        }
+        return items;
+    }
+
+    private List<VehicleModule>
+    loadVehicleModules(
+            String filename) {
+        JSONArray arr = new JSONArray(
+                loadResource(filename));
+        List<VehicleModule> modules =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject m =
+                    arr.getJSONObject(i);
+            boolean isShuttle =
+                    m.getBoolean(
+                            "shuttleUpgrade");
+            modules.add(new VehicleModule(
+                    m.getString("name"),
+                    m.getString("description"),
+                    m.getInt("slotCost"),
+                    m.getInt("cpCost"),
+                    m.getString("moduleType"),
+                    m.getString("effect"),
+                    TechLevel.fromCode(
+                            m.getString("techLevel")),
+                    m.getBoolean("restricted"),
+                    null, // all compatible
+                    isShuttle));
+        }
+        return modules;
+    }
+
+    private List<VehicleModule>
+    loadVehicleWeapons(
+            String filename,
+            boolean shuttle) {
+        JSONArray arr = new JSONArray(
+                loadResource(filename));
+        List<VehicleModule> weapons =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject w =
+                    arr.getJSONObject(i);
+            weapons.add(new VehicleModule(
+                    w.getString("name"),
+                    w.getString("description"),
+                    1, // slot cost for weapons
+                    w.getInt("cpCost"),
+                    "weapon",
+                    String.format(
+                            "Dmg %d Crit %d %s",
+                            w.getInt("damage"),
+                            w.getInt("crit"),
+                            w.getString("range")),
+                    TechLevel.fromCode(
+                            w.getString("techLevel")),
+                    w.getBoolean("restricted"),
+                    null,
+                    shuttle));
+        }
+        return weapons;
+    }
+
+    private List<CargoItem> loadCargoItems(
+            String filename) {
+        JSONArray arr = new JSONArray(
+                loadResource(filename));
+        List<CargoItem> items =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject c =
+                    arr.getJSONObject(i);
+            items.add(new CargoItem(
+                    c.getString("name"),
+                    c.getString("description"),
+                    c.getInt("supplyPoints"),
+                    c.getString("cargoType"),
+                    c.getInt("cost"),
+                    TechLevel.fromCode(
+                            c.getString(
+                                    "techLevel"))));
+        }
+        return items;
     }
 }
