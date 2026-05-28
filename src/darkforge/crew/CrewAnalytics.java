@@ -187,6 +187,71 @@ public class CrewAnalytics {
     }
 
     // =========================================
+    // Catalog-aware crew analytics
+    // =========================================
+
+    /**
+     * Total rukh value of all CharacterItems
+     * across all crew members.
+     * flatMap + mapToInt + sum
+     */
+    public int getCrewInventoryValue() {
+        return crew.getMembers().stream()
+                .flatMap(e ->
+                        e.getAllItems().stream())
+                .mapToInt(Item::getCost)
+                .sum();
+    }
+
+    /**
+     * Per-explorer carry load as a map of
+     * name → load percentage.
+     * collect(toMap)
+     */
+    public Map<String, Double>
+    getCrewEquipLoadSummary() {
+        return crew.getMembers().stream()
+                .collect(Collectors.toMap(
+                        Explorer::getName,
+                        e -> {
+                            double max =
+                                    e.getMaxCarryWeight();
+                            return max > 0
+                                    ? e.getCurrentCarryWeight()
+                                      / max * 100.0
+                                    : 0.0;
+                        }));
+    }
+
+    /**
+     * Weapon type distribution across the
+     * entire crew.
+     * flatMap + filter + groupingBy + counting
+     */
+    public Map<WeaponType, Long>
+    getCrewWeaponDistribution() {
+        return crew.getMembers().stream()
+                .flatMap(e ->
+                        e.getAllItems().stream())
+                .filter(Weapon.class::isInstance)
+                .map(Weapon.class::cast)
+                .collect(Collectors.groupingBy(
+                        Weapon::getWeaponType,
+                        Collectors.counting()));
+    }
+
+    /**
+     * Explorer with the most equipped items.
+     * stream().max(comparingInt)
+     */
+    public Optional<Explorer>
+    getMostEquippedExplorer() {
+        return crew.getMembers().stream()
+                .max(Comparator.comparingInt(
+                        e -> e.getEquipped().size()));
+    }
+
+    // =========================================
     // Summary
     // =========================================
 
