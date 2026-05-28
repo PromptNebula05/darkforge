@@ -77,4 +77,45 @@ public final class ExplorerComparators {
                         role::getRoleFitness)
                 .reversed();
     }
+    
+    // =========================================
+    // Inventory-aware comparators
+    // =========================================
+
+    /**
+     * Compare by total inventory rukh value.
+     * Uses stream pipeline inside comparator.
+     */
+    public static Comparator<Explorer>
+    byInventoryValue() {
+        return Comparator.comparingInt(
+                e -> e.getAllItems().stream()
+                        .mapToInt(Item::getCost)
+                        .sum());
+    }
+
+    /**
+     * Compare by current carry load (% of max).
+     */
+    public static Comparator<Explorer>
+    byEquipLoad() {
+        return Comparator.comparingDouble(
+                e -> {
+                    double max =
+                            e.getMaxCarryWeight();
+                    return max > 0
+                            ? e.getCurrentCarryWeight()
+                              / max
+                            : 0.0;
+                });
+    }
+
+    /**
+     * Compare by number of equipped weapons.
+     */
+    public static Comparator<Explorer>
+    byWeaponCount() {
+        return Comparator.comparingInt(
+                e -> e.getEquipped().size());
+    }
 }
