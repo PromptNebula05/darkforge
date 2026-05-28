@@ -1,57 +1,66 @@
-# DARKFORGE v3.0
+# DARKFORGE v4.0
 
-Console-based Coriolis explorer and crew management project for CS622.
+A Java 21 character/crew management system for the Coriolis: The Great Dark tabletop RPG.
 
-This iteration adds Java Generics, Collections, and enhanced File I/O to the existing explorer management system. Players can now assemble crews of explorers, assign crew roles, choose a Garuda Bird companion, select vehicles, and persist full crew compositions as JSON.
+## What's New in Iteration 4
 
-## Current Iteration Focus
+- **Equipment Catalog** loaded from JSON resources (weapons, armor, modules, cargo)
+- **Generic interfaces** (InventoryHolder<T>, Equippable<T>) with composition via EquipmentLoadout<T>
+- **Three serialization approaches** compared: Binary, Hand-rolled JSON, Gson
+- **Extended stream analytics** for catalog and crew inventories
+- **Swing GUI** for catalog browsing, inventory management, vehicle upgrades
+- **Console catalog browser** (options 9-12)
 
-- Generic containers with bounded type parameters (`Inventory<T extends GameEntity>`, `Registry<K, V extends GameEntity>`).
-- Generic interface (`Selectable<T>`) with three implementations (D6Table, D66Table, WeightedSelector).
-- Wildcard bounds (`? extends T`, `? super T`) for type-safe collection operations.
-- Multiple collection classes: `EnumMap`, `LinkedHashMap`, `LinkedHashSet`, `ArrayList`, `HashSet`.
-- Collections utilities: `Collections.unmodifiableList/Set/Map`, composable `Comparator` chains.
-- Crew persistence via `CrewSerializer`/`CrewDeserializer`/`CrewFileManager` with try-with-resources.
-- Standalone `GenericsDemo` class demonstrating all generic patterns.
+## Requirements
 
-## Implemented Features
+- Java 21+
+- lib/json-20240303.jar (org.json)
+- lib/gson-2.10.1.jar (Google Gson)
+- lib/junit-platform-console-standalone-1.10.2.jar (testing)
 
-### Explorer Management (Iterations 1–2)
+## Build & Run
 
-- Create a new explorer by choosing profession, name, origin, specialty, attributes, talents, and personal details.
-- Render a formatted character sheet in the console.
-- Save explorers to `.darkforge.json` files.
-- Load explorers from disk with corruption checks and user-facing error messages.
-- Search, view, and delete saved explorers.
+Compile
 
-### Crew Assembly (Iteration 3)
+	javac -cp "lib/*" -d out \
+	src/darkforge/*.java
 
-- Assemble a crew of 4–5 explorers through a step-by-step wizard.
-- Assign crew roles (Delver, Scout, Burrower, Guard, Archaeologist) with fitness-based suggestions.
-- Choose a Garuda Bird companion (Ward, Guide, or Specter) with type-specific powers and energy management.
-- Select a shuttle and rover with stat blocks from the rulebook.
-- Customize vehicle names and paint colors.
-- Distribute supply points across the crew.
-- Save and load complete crew compositions as `.darkforge-crew.json` files.
-- Browse talents by category or search by name.
+Run CLI
 
-### Generics & Collections (Iteration 3)
+	java -cp "out:lib/*" darkforge.Main
 
-- `Inventory<T extends GameEntity>` — bounded generic container with capacity enforcement, search, filter, sort.
-- `EquipmentInventory` — weight-based specialization of `Inventory<Equipment>` (Ch. 6 encumbrance).
-- `Registry<K, V extends GameEntity>` — two-parameter generic for keyed grouping.
-- `Selectable<T>` — generic interface unifying D6Table, D66Table, and WeightedSelector.
-- `WeightedSelector<T>` — probability-weighted random selection.
-- `ExplorerComparators` — composable `Comparator` chains for multi-key sorting.
-- `CrewAnalytics` — attribute averages, talent coverage, optimal role assignment.
+Run GUI
 
-## Tech Stack
+	java -cp "out:lib/*" darkforge.gui.DarkforgeGui
 
-- Java 21
-- `org.json` via `lib/json-20240303.jar`
-- JUnit 5.10.2 for tests
+Run serialization benchmark
 
-The included IntelliJ project metadata is configured for Temurin 21.
+	java -cp "out:lib/*" darkforge.persistence.SerializationBenchmark
 
-## Project Layout
-Domain: Coriolis explorer creation and management
+Run tests
+
+	java -jar lib/junit-platform-* -cp out --scan-classpath
+
+## Project Structure
+
+	src/darkforge/
+	├── collection/ # Inventory, generics
+	├── console/ # CLI menus
+	├── crew/ # Crew, Vehicle, analytics
+	├── data/ # GameDataProvider, catalog
+	├── display/ # Displayable, formatters
+	├── facade/ # Facade pattern
+	├── gui/ # Swing GUI (NEW)
+	├── model/ # GameEntity hierarchy
+	├── persistence/ # Serialization (NEW)
+	src/resources/ # JSON catalog files (NEW)
+	src/test/ # JUnit 5 test suite
+
+## Architecture
+
+Hybrid composition + interfaces.
+
+Explorer implements InventoryHolder<CharacterItem> and Equippable<Weapon>.
+Vehicle implements InventoryHolder<CargoItem> and Equippable<VehicleModule>.
+
+Facade pattern provides simplified access via FacadeDarkforge → FacadeCrew / FacadeCatalog.
