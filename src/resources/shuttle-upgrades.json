@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Composite Plating",
+    "description": "Advanced layered hull armor for shuttles.",
+    "slotCost": 1,
+    "cpCost": 3,
+    "moduleType": "armor",
+    "effect": "Armor +1.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Enhanced Avionics",
+    "description": "Upgraded flight control systems.",
+    "slotCost": 1,
+    "cpCost": 4,
+    "moduleType": "sensor",
+    "effect": "+1 to pilot rolls.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Escape Pod",
+    "description": "Emergency ejection capsule for crew.",
+    "slotCost": 1,
+    "cpCost": 3,
+    "moduleType": "utility",
+    "effect": "Crew can eject safely in emergencies.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Extended Cargo Bay",
+    "description": "Expanded storage for additional supplies.",
+    "slotCost": 1,
+    "cpCost": 2,
+    "moduleType": "utility",
+    "effect": "Cargo capacity +500 supply.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Stealth Plating",
+    "description": "Radar-absorbing hull material.",
+    "slotCost": 2,
+    "cpCost": 6,
+    "moduleType": "armor",
+    "effect": "-2 to enemy sensor rolls targeting this shuttle.",
+    "techLevel": "G",
+    "restricted": true,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Medbay",
+    "description": "Onboard medical facility.",
+    "slotCost": 1,
+    "cpCost": 4,
+    "moduleType": "comfort",
+    "effect": "+2 gear bonus to medical rolls aboard. Allows surgery.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Graviton Booster",
+    "description": "Enhanced graviton drive for improved speed.",
+    "slotCost": 1,
+    "cpCost": 5,
+    "moduleType": "propulsion",
+    "effect": "Speed +1.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Shuttle Workshop",
+    "description": "Repair bay with tools for in-flight maintenance.",
+    "slotCost": 1,
+    "cpCost": 3,
+    "moduleType": "utility",
+    "effect": "+2 gear bonus to shuttle repair rolls.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Shuttle Armor Plating II",
+    "description": "Heavy reactive armor for combat shuttles.",
+    "slotCost": 2,
+    "cpCost": 6,
+    "moduleType": "armor",
+    "effect": "Armor +2.",
+    "techLevel": "G",
+    "restricted": true,
+    "shuttleUpgrade": true
+  },
+  {
+    "name": "Long-Range Antenna",
+    "description": "Boosted communications array for deep-space contact.",
+    "slotCost": 0,
+    "cpCost": 2,
+    "moduleType": "sensor",
+    "effect": "Doubles communication range.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": true
+  }
+]
