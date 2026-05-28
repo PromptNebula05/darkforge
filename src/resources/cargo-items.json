@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Standard Supplies",
+    "description": "Food, water, and consumables for crew sustenance.",
+    "supplyPoints": 100,
+    "cargoType": "supplies",
+    "cost": 200,
+    "techLevel": "O"
+  },
+  {
+    "name": "Extended Rations",
+    "description": "Long-lasting preserved food for deep expeditions.",
+    "supplyPoints": 200,
+    "cargoType": "supplies",
+    "cost": 500,
+    "techLevel": "O"
+  },
+  {
+    "name": "Trade Goods (General)",
+    "description": "Assorted commodities for frontier trade.",
+    "supplyPoints": 300,
+    "cargoType": "trade",
+    "cost": 1000,
+    "techLevel": "O"
+  },
+  {
+    "name": "Excavation Equipment",
+    "description": "Drilling, digging, and mining tools for archaeological digs.",
+    "supplyPoints": 500,
+    "cargoType": "excavation",
+    "cost": 3000,
+    "techLevel": "O"
+  },
+  {
+    "name": "Scientific Instruments",
+    "description": "Lab equipment, sample containers, and analysis tools.",
+    "supplyPoints": 250,
+    "cargoType": "scientific",
+    "cost": 5000,
+    "techLevel": "G"
+  },
+  {
+    "name": "Fuel Reserves",
+    "description": "Extra fuel for vehicle operations.",
+    "supplyPoints": 400,
+    "cargoType": "supplies",
+    "cost": 800,
+    "techLevel": "O"
+  },
+  {
+    "name": "Medical Supplies (Bulk)",
+    "description": "Crates of medical supplies for extended missions.",
+    "supplyPoints": 150,
+    "cargoType": "supplies",
+    "cost": 2000,
+    "techLevel": "G"
+  },
+  {
+    "name": "Ammunition Crates",
+    "description": "Bulk ammunition for vehicle and personal weapons.",
+    "supplyPoints": 200,
+    "cargoType": "supplies",
+    "cost": 1500,
+    "techLevel": "O"
+  }
+]

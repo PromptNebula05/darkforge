@@ -1,0 +1,156 @@
+[
+  {
+    "name": "Airlock",
+    "description": "Pressurized entry/exit chamber.",
+    "slotCost": 1,
+    "cpCost": 2,
+    "moduleType": "utility",
+    "effect": "Allows pressurized crew transfer in hostile environments.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Armor Plating I",
+    "description": "Reinforced hull panels.",
+    "slotCost": 1,
+    "cpCost": 2,
+    "moduleType": "armor",
+    "effect": "Armor +1.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Armor Plating II",
+    "description": "Advanced composite hull reinforcement.",
+    "slotCost": 1,
+    "cpCost": 4,
+    "moduleType": "armor",
+    "effect": "Armor +2.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Armor Plating III",
+    "description": "Maximum-grade reactive armor.",
+    "slotCost": 2,
+    "cpCost": 6,
+    "moduleType": "armor",
+    "effect": "Armor +3.",
+    "techLevel": "G",
+    "restricted": true,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Comfortable Bunk Beds",
+    "description": "Crew rest stations for extended expeditions.",
+    "slotCost": 1,
+    "cpCost": 1,
+    "moduleType": "comfort",
+    "effect": "Crew recovers 1 extra HP during rest aboard vehicle.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Enhanced Sensors",
+    "description": "Upgraded detection and scanning array.",
+    "slotCost": 1,
+    "cpCost": 3,
+    "moduleType": "sensor",
+    "effect": "+1 gear bonus to scanning/observation rolls from vehicle.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Enhanced Sensors II",
+    "description": "Military-grade sensor suite.",
+    "slotCost": 1,
+    "cpCost": 5,
+    "moduleType": "sensor",
+    "effect": "+2 gear bonus to scanning/observation rolls from vehicle.",
+    "techLevel": "G",
+    "restricted": true,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Cargo Crane",
+    "description": "Hydraulic loading arm for cargo operations.",
+    "slotCost": 1,
+    "cpCost": 2,
+    "moduleType": "utility",
+    "effect": "Halves time to load/unload cargo.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Blight Shield",
+    "description": "Anti-Blight energy barrier for the vehicle.",
+    "slotCost": 1,
+    "cpCost": 4,
+    "moduleType": "utility",
+    "effect": "Blight Protection +2 for the vehicle.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Turret Mount",
+    "description": "Weapon hardpoint for mounted weapons.",
+    "slotCost": 1,
+    "cpCost": 3,
+    "moduleType": "weapon",
+    "effect": "Allows installation of one rover weapon.",
+    "techLevel": "O",
+    "restricted": true,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Reinforced Chassis",
+    "description": "Strengthened frame for rough terrain.",
+    "slotCost": 1,
+    "cpCost": 3,
+    "moduleType": "armor",
+    "effect": "Hull +2.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Field Workshop",
+    "description": "Onboard repair bay with tools and spare parts.",
+    "slotCost": 2,
+    "cpCost": 4,
+    "moduleType": "utility",
+    "effect": "+2 gear bonus to vehicle repair rolls.",
+    "techLevel": "G",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Extended Fuel Tanks",
+    "description": "Additional fuel storage for long-range expeditions.",
+    "slotCost": 1,
+    "cpCost": 2,
+    "moduleType": "propulsion",
+    "effect": "Doubles operational range.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": false
+  },
+  {
+    "name": "Ram Plate",
+    "description": "Reinforced frontal plow for obstacle clearance.",
+    "slotCost": 0,
+    "cpCost": 1,
+    "moduleType": "armor",
+    "effect": "Reduces ram damage to vehicle by 2.",
+    "techLevel": "O",
+    "restricted": false,
+    "shuttleUpgrade": false
+  }
+]
