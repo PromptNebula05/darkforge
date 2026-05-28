@@ -9,6 +9,7 @@ import darkforge.data.GameDataProvider;
  * before any other operations.
  */
 public class FacadeDarkforge {
+
     private static final FacadeDarkforge INSTANCE =
             new FacadeDarkforge();
 
@@ -19,19 +20,15 @@ public class FacadeDarkforge {
     private final FacadePersistence persistence;
     private final FacadeCrew crew;
 
+    private FacadeCatalog catalog;
+
     private FacadeDarkforge() {
-        this.model =
-                FacadeModel.getTheInstance();
-        this.mechanics =
-                FacadeMechanics.getTheInstance();
-        this.creation =
-                FacadeCreation.getTheInstance();
-        this.display =
-                FacadeDisplay.getTheInstance();
-        this.persistence =
-                FacadePersistence.getTheInstance();
-        this.crew =
-                FacadeCrew.getTheInstance();
+        this.model = FacadeModel.getTheInstance();
+        this.mechanics = FacadeMechanics.getTheInstance();
+        this.creation = FacadeCreation.getTheInstance();
+        this.display = FacadeDisplay.getTheInstance();
+        this.persistence = FacadePersistence.getTheInstance();
+        this.crew = FacadeCrew.getTheInstance();
     }
 
     public static FacadeDarkforge getTheInstance() {
@@ -39,8 +36,10 @@ public class FacadeDarkforge {
     }
 
     public void initialize() {
-        GameDataProvider.getTheInstance()
-                .initialize();
+        GameDataProvider.getTheInstance().initialize();
+
+        catalog = new FacadeCatalog(
+                GameDataProvider.getTheInstance().getItemCatalog());
     }
 
     public String getVersion() {
@@ -69,5 +68,10 @@ public class FacadeDarkforge {
 
     public FacadeCrew crewAccess() {
         return crew;
+    }
+
+    // NEW
+    public FacadeCatalog catalogAccess() {
+        return catalog;
     }
 }
