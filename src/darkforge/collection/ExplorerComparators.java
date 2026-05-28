@@ -3,6 +3,7 @@ package darkforge.collection;
 import darkforge.crew.CrewRole;
 import darkforge.model.Attribute;
 import darkforge.model.Explorer;
+import darkforge.model.Item;
 
 import java.util.Comparator;
 
@@ -77,7 +78,7 @@ public final class ExplorerComparators {
                         role::getRoleFitness)
                 .reversed();
     }
-    
+
     // =========================================
     // Inventory-aware comparators
     // =========================================

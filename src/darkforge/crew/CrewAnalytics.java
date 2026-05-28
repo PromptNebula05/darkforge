@@ -4,6 +4,9 @@ import darkforge.model.Attribute;
 import darkforge.model.Explorer;
 import darkforge.model.Talent;
 import darkforge.model.TalentCategory;
+import darkforge.model.Item;
+import darkforge.model.Weapon;
+import darkforge.model.WeaponType;
 
 import java.util.*;
 import java.util.stream.Collectors;
