@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Coiler Cannon",
+    "description": "Shuttle-mounted electromagnetic cannon.",
+    "damage": 5,
+    "crit": 2,
+    "gearBonus": 2,
+    "range": "Long–Extreme",
+    "cpCost": 6,
+    "techLevel": "G",
+    "restricted": true,
+    "features": []
+  },
+  {
+    "name": "Lumin Cannon",
+    "description": "Focused energy weapon for anti-ship combat.",
+    "damage": 6,
+    "crit": 1,
+    "gearBonus": 1,
+    "range": "Medium–Long",
+    "cpCost": 8,
+    "techLevel": "G",
+    "restricted": true,
+    "features": ["Energy"]
+  },
+  {
+    "name": "Torpedo Launcher",
+    "description": "Heavy ordnance launcher for capital strikes.",
+    "damage": 8,
+    "crit": 1,
+    "gearBonus": 0,
+    "range": "Extreme",
+    "cpCost": 10,
+    "techLevel": "G",
+    "restricted": true,
+    "features": ["Guided", "Blast"]
+  },
+  {
+    "name": "Point Defense Array",
+    "description": "Automated close-in defense system.",
+    "damage": 3,
+    "crit": 3,
+    "gearBonus": 2,
+    "range": "Short",
+    "cpCost": 4,
+    "techLevel": "G",
+    "restricted": false,
+    "features": ["Autofire", "Automated"]
+  },
+  {
+    "name": "Countermeasure Dispenser",
+    "description": "Electronic and physical countermeasures.",
+    "damage": 0,
+    "crit": 0,
+    "gearBonus": 0,
+    "range": "Short",
+    "cpCost": 3,
+    "techLevel": "G",
+    "restricted": false,
+    "features": ["Countermeasure"]
+  }
+]
