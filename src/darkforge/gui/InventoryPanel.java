@@ -1,26 +1,49 @@
 package darkforge.gui;
 
-import darkforge.model.*;
-import darkforge.collection.*;
+import darkforge.crew.Crew;
+import darkforge.model.CharacterItem;
+import darkforge.model.Explorer;
+import darkforge.model.Weapon;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Inventory management panel.
- * Displays an entity's current inventory
- * with weight/slot usage. Supports equip,
- * unequip, remove, and sort operations.
+ * Holds a reference to the active Crew
+ * supplied by DarkforgeGui via setCrew(...).
+ * The user can select any Explorer in that
+ * crew and view their full inventory, with
+ * the Equipped column driven by
+ * Explorer.getEquipped(). Sort, equip,
+ * unequip, and remove operations dispatch
+ * through the existing Explorer /
+ * EquipmentLoadout API — no new model logic
+ * is introduced.
  */
 public class InventoryPanel
         extends JPanel {
 
+    private Crew currentCrew;
+
+    private final JComboBox<Explorer>
+            explorerSelector;
     private final DefaultTableModel
             inventoryModel;
+    private final JTable inventoryTable;
     private final JLabel statusLabel;
     private final JComboBox<String>
             sortBox;
+    private final JButton equipBtn;
+    private final JButton unequipBtn;
+    private final JButton removeBtn;
+    private final JButton refreshBtn;
+
+    private final List<CharacterItem>
+            currentRows = new ArrayList<>();
 
     public InventoryPanel() {
         setLayout(
@@ -29,13 +52,41 @@ public class InventoryPanel
                 .createEmptyBorder(
                         10, 10, 10, 10));
 
-        // ---- Top: Status ----
+        // ---- Top: Explorer + actions ----
         JPanel top = new JPanel(
                 new FlowLayout(
                         FlowLayout.LEFT));
-        statusLabel = new JLabel(
-                "No entity selected");
-        top.add(statusLabel);
+
+        top.add(new JLabel("Explorer:"));
+        explorerSelector =
+                new JComboBox<>();
+        explorerSelector.setRenderer(
+                new DefaultListCellRenderer() {
+                    @Override
+                    public Component
+                    getListCellRendererComponent(
+                            JList<?> list,
+                            Object value,
+                            int index,
+                            boolean isSelected,
+                            boolean cellHasFocus) {
+                        super.getListCellRendererComponent(
+                                list, value, index,
+                                isSelected,
+                                cellHasFocus);
+                        if (value
+                                instanceof Explorer e) {
+                            setText(
+                                    e.getName()
+                                            + " — "
+                                            + e.getProfessionName());
+                        } else if (value == null) {
+                            setText("(no crew)");
+                        }
+                        return this;
+                    }
+                });
+        top.add(explorerSelector);
 
         top.add(new JLabel("Sort:"));
         sortBox = new JComboBox<>(
@@ -45,53 +96,344 @@ public class InventoryPanel
                 });
         top.add(sortBox);
 
-        JButton equipBtn =
-                new JButton("Equip");
-        JButton unequipBtn =
+        equipBtn = new JButton("Equip");
+        unequipBtn =
                 new JButton("Unequip");
-        JButton removeBtn =
+        removeBtn =
                 new JButton("Remove");
+        refreshBtn =
+                new JButton("Refresh");
         top.add(equipBtn);
         top.add(unequipBtn);
         top.add(removeBtn);
+        top.add(refreshBtn);
         add(top, BorderLayout.NORTH);
 
-        // ---- Center: Table ----
+        // ---- Center: Inventory table ----
         String[] cols = {
                 "Item", "Type", "Weight",
                 "Cost", "Equipped"
         };
         inventoryModel =
                 new DefaultTableModel(
-                        cols, 0);
-        JTable table =
+                        cols, 0) {
+                    @Override
+                    public boolean isCellEditable(
+                            int r, int c) {
+                        return false;
+                    }
+                };
+        inventoryTable =
                 new JTable(inventoryModel);
-        add(new JScrollPane(table),
+        inventoryTable
+                .setAutoCreateRowSorter(true);
+        add(new JScrollPane(
+                        inventoryTable),
                 BorderLayout.CENTER);
 
-        // Lambda event handlers
+        // ---- Bottom: status bar ----
+        statusLabel = new JLabel(
+                "No crew loaded — use File"
+                        + " → Open Crew to load one.");
+        statusLabel.setBorder(
+                BorderFactory
+                        .createEmptyBorder(
+                                4, 4, 4, 4));
+        add(statusLabel,
+                BorderLayout.SOUTH);
+
+        // ---- Lambda event handlers ----
+        explorerSelector.addActionListener(
+                e -> refreshInventory());
         sortBox.addActionListener(
                 e -> refreshInventory());
         equipBtn.addActionListener(
-                e -> JOptionPane
-                        .showMessageDialog(this,
-                                "Select an explorer"
-                                        + " first."));
+                e -> handleEquip());
         unequipBtn.addActionListener(
-                e -> JOptionPane
-                        .showMessageDialog(this,
-                                "Select an explorer"
-                                        + " first."));
+                e -> handleUnequip());
         removeBtn.addActionListener(
-                e -> JOptionPane
-                        .showMessageDialog(this,
-                                "Select an explorer"
-                                        + " first."));
+                e -> handleRemove());
+        refreshBtn.addActionListener(
+                e -> reloadCrew());
+
+        explorerSelector.setEnabled(false);
+        updateButtonState();
     }
 
+    /**
+     * Set the active Crew for this panel.
+     * Called by DarkforgeGui when the user
+     * picks a crew via File → Open Crew.
+     */
+    public void setCrew(Crew crew) {
+        this.currentCrew = crew;
+        reloadCrew();
+    }
+
+    /**
+     * Reload the explorer dropdown from
+     * the active Crew (or show the no-crew
+     * state if no crew is set). Also called
+     * when the user clicks Refresh.
+     */
+    private void reloadCrew() {
+        Explorer previouslySelected =
+                (Explorer)
+                        explorerSelector
+                                .getSelectedItem();
+        explorerSelector.removeAllItems();
+        if (currentCrew == null) {
+            explorerSelector
+                    .setEnabled(false);
+            statusLabel.setText(
+                    "No crew loaded — use"
+                            + " File → Open Crew"
+                            + " to load one.");
+            inventoryModel.setRowCount(0);
+            currentRows.clear();
+            updateButtonState();
+            return;
+        }
+        List<Explorer> members =
+                currentCrew.getMembers();
+        if (members.isEmpty()) {
+            explorerSelector
+                    .setEnabled(false);
+            statusLabel.setText(
+                    currentCrew.getName()
+                            + " has no members.");
+            inventoryModel.setRowCount(0);
+            currentRows.clear();
+            updateButtonState();
+            return;
+        }
+        explorerSelector
+                .setEnabled(true);
+        for (Explorer e : members) {
+            explorerSelector.addItem(e);
+        }
+        if (previouslySelected != null
+                && members.contains(
+                previouslySelected)) {
+            explorerSelector
+                    .setSelectedItem(
+                            previouslySelected);
+        }
+        refreshInventory();
+    }
+
+    /**
+     * Repopulate the inventory table from
+     * the currently selected Explorer.
+     */
     private void refreshInventory() {
-        // Placeholder — populated when
-        // an explorer is selected
         inventoryModel.setRowCount(0);
+        currentRows.clear();
+
+        Explorer selected =
+                (Explorer)
+                        explorerSelector
+                                .getSelectedItem();
+        if (selected == null) {
+            statusLabel.setText(
+                    "No explorer selected");
+            updateButtonState();
+            return;
+        }
+
+        List<CharacterItem> items =
+                new ArrayList<>(
+                        selected.getAllItems());
+        sortItems(items);
+
+        List<Weapon> equipped =
+                selected.getEquipped();
+
+        for (CharacterItem item : items) {
+            boolean isEquipped =
+                    (item instanceof Weapon w)
+                            && equipped.contains(w);
+            inventoryModel.addRow(
+                    new Object[] {
+                            item.getName(),
+                            item.getItemType(),
+                            item.getWeightClass()
+                                    .getDisplayName(),
+                            item.getCost(),
+                            isEquipped ? "\u2713" : ""
+                    });
+            currentRows.add(item);
+        }
+
+        statusLabel.setText(
+                String.format(
+                        "%s: %d item(s) | %d"
+                                + " equipped | load"
+                                + " %.1f / %.1f",
+                        selected.getName(),
+                        items.size(),
+                        equipped.size(),
+                        selected
+                                .getCurrentCarryWeight(),
+                        selected
+                                .getMaxCarryWeight()));
+        updateButtonState();
+    }
+
+    private void sortItems(
+            List<CharacterItem> items) {
+        String mode = (String)
+                sortBox.getSelectedItem();
+        Comparator<CharacterItem> cmp =
+                switch (mode == null
+                        ? "Name" : mode) {
+                    case "Weight" ->
+                            Comparator
+                                    .comparingDouble(
+                                            CharacterItem::getWeight);
+                    case "Cost" ->
+                            Comparator
+                                    .comparingInt(
+                                            CharacterItem::getCost);
+                    case "Type" ->
+                            Comparator
+                                    .comparing(
+                                            CharacterItem::getItemType);
+                    default ->
+                            Comparator
+                                    .comparing(
+                                            CharacterItem::getName);
+                };
+        items.sort(cmp);
+    }
+
+    private void updateButtonState() {
+        boolean hasSelection =
+                explorerSelector
+                        .getSelectedItem() != null
+                        && !currentRows.isEmpty();
+        equipBtn.setEnabled(hasSelection);
+        unequipBtn.setEnabled(hasSelection);
+        removeBtn.setEnabled(hasSelection);
+    }
+
+    private CharacterItem
+    getSelectedRowItem() {
+        int viewRow =
+                inventoryTable.getSelectedRow();
+        if (viewRow < 0) return null;
+        int modelRow =
+                inventoryTable
+                        .convertRowIndexToModel(
+                                viewRow);
+        if (modelRow < 0
+                || modelRow
+                >= currentRows.size()) {
+            return null;
+        }
+        return currentRows.get(modelRow);
+    }
+
+    private void handleEquip() {
+        Explorer explorer = (Explorer)
+                explorerSelector
+                        .getSelectedItem();
+        CharacterItem item =
+                getSelectedRowItem();
+        if (explorer == null
+                || item == null) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Select a row first.");
+            return;
+        }
+        if (!(item instanceof Weapon weapon)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Only weapons can be"
+                            + " equipped.");
+            return;
+        }
+        boolean ok = explorer.equip(weapon);
+        if (!ok) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Could not equip (slots"
+                            + " full or already"
+                            + " equipped).");
+        }
+        refreshInventory();
+    }
+
+    private void handleUnequip() {
+        Explorer explorer = (Explorer)
+                explorerSelector
+                        .getSelectedItem();
+        CharacterItem item =
+                getSelectedRowItem();
+        if (explorer == null
+                || item == null) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Select a row first.");
+            return;
+        }
+        if (!(item instanceof Weapon weapon)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Only weapons can be"
+                            + " unequipped.");
+            return;
+        }
+        boolean ok = explorer.unequip(weapon);
+        if (!ok) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "That weapon is not"
+                            + " currently equipped.");
+        }
+        refreshInventory();
+    }
+
+    private void handleRemove() {
+        Explorer explorer = (Explorer)
+                explorerSelector
+                        .getSelectedItem();
+        CharacterItem item =
+                getSelectedRowItem();
+        if (explorer == null
+                || item == null) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Select a row first.");
+            return;
+        }
+        int confirm =
+                JOptionPane.showConfirmDialog(
+                        this,
+                        "Remove '"
+                                + item.getName()
+                                + "' from "
+                                + explorer.getName()
+                                + "?",
+                        "Confirm Remove",
+                        JOptionPane.YES_NO_OPTION);
+        if (confirm
+                != JOptionPane.YES_OPTION) {
+            return;
+        }
+        // Auto-unequip first if needed
+        if (item instanceof Weapon w
+                && explorer.isEquipped(w)) {
+            explorer.unequip(w);
+        }
+        boolean ok =
+                explorer.removeItem(item);
+        if (!ok) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Could not remove item.");
+        }
+        refreshInventory();
     }
 }
