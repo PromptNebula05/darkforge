@@ -4,8 +4,8 @@ import darkforge.crew.*;
 import darkforge.data.GameDataProvider;
 import darkforge.data.GarudaPowerRegistry;
 import darkforge.data.TalentRegistry;
-import darkforge.exception
-        .CharacterCorruptionException;
+import darkforge.exception.CharacterCorruptionException;
+import darkforge.model.Item;
 import darkforge.model.Explorer;
 import darkforge.model.Talent;
 import darkforge.model.TalentCategory;
@@ -25,6 +25,7 @@ import java.util.Random;
  * Façade singleton for crew assembly, talent
  * browsing, and crew persistence operations.
  */
+
 public class FacadeCrew {
     private static final FacadeCrew INSTANCE =
             new FacadeCrew();
@@ -213,5 +214,46 @@ public class FacadeCrew {
     getGarudaPowerRegistry() {
         return GameDataProvider.getTheInstance()
                 .getGarudaPowerRegistry();
+    }
+    // =========================================
+    // Cross-entity inventory search
+    // =========================================
+
+    /**
+     * Polymorphic cross-entity search across
+     * every Explorer and Vehicle currently in
+     * the crew. Delegates to
+     * CrewInventorySearch.searchAllInventories
+     * so the facade does not need to expose the
+     * raw Crew reference to callers.
+     *
+     * INTENT:        Surface the cross-entity
+     *                inventory search capability
+     *                through the Facade pattern
+     *                so the CLI and other clients
+     *                do not depend on the
+     *                CrewInventorySearch class
+     *                directly.
+     * EXAMPLE:       facade.crewAccess()
+     *                  .searchAllInventories("coiler")
+     *                → returns every matching item
+     *                  held by any Explorer or by
+     *                  either crew vehicle.
+     * DEFINITIONS:   keyword — case-insensitive
+     *                          substring; matched
+     *                          against item name and
+     *                          description.
+     * PRECONDITIONS: crew is initialized (non-null);
+     *                keyword is non-null.
+     * POSTCONDITIONS: returns a (possibly empty)
+     *                 List<Item> sourced from every
+     *                 InventoryHolder in the crew;
+     *                 crew state is unchanged.
+     */
+    public List<Item> searchAllInventories(
+            Crew crew, String keyword) {
+        return CrewInventorySearch
+                .searchAllInventories(
+                        crew, keyword);
     }
 }
