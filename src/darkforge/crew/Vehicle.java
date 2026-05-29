@@ -199,7 +199,7 @@ public class Vehicle extends GameEntity
         return type.getPassengers();
     }
 
-    public int getCargoCapacity() {
+    public int getCargo() {
         return type.getCargo();
     }
 
