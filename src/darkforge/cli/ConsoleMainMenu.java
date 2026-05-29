@@ -44,7 +44,6 @@ public class ConsoleMainMenu {
         System.out.println("\n"
                 + darkforge.getVersion()
                 + " — Main Menu");
-
         boolean running = true;
         while (running) {
             printMenu();
@@ -70,6 +69,7 @@ public class ConsoleMainMenu {
                 case "10" -> addCatalogItemToExplorer();
                 case "11" -> installVehicleModule();
                 case "12" -> runSerializationBenchmark();
+                case "13" -> searchCrewInventories();
                 case "0", "Q", "q" -> {
                     System.out.println("Farewell, Explorer.");
                     running = false;
@@ -97,6 +97,7 @@ public class ConsoleMainMenu {
         System.out.println(" 10. Add Catalog Item to Explorer");
         System.out.println(" 11. Install Vehicle Module");
         System.out.println(" 12. Serialization Benchmark");
+        System.out.println(" 13. Search All Crew Inventories");
         System.out.println(" 0. Quit");
     }
 
@@ -357,7 +358,7 @@ public class ConsoleMainMenu {
     }
 
     // =========================================
-    // 9–12. Catalog, vehicles, benchmark
+    // 9–13. Catalog, vehicles, benchmark, cross-entity search
     // =========================================
 
     /**
@@ -445,7 +446,6 @@ public class ConsoleMainMenu {
     private void installVehicleModule() {
         Crew crew = selectCrew("upgrade vehicle");
         if (crew == null) return;
-
         Vehicle rover = crew.getRover();
         Vehicle shuttle = crew.getShuttle();
         if (rover == null && shuttle == null) {
@@ -470,7 +470,6 @@ public class ConsoleMainMenu {
             System.out.println("Invalid selection.");
             return;
         }
-
         // Avoid relying on ItemCatalog-specific helper names here:
         // pull modules from the catalog via the facade, then filter by compatibility.
         List<VehicleModule> modules = darkforge.catalogAccess()
@@ -478,7 +477,6 @@ public class ConsoleMainMenu {
         List<VehicleModule> compatible = modules.stream()
                 .filter(m -> m.isCompatibleWith(vehicle.getType()))
                 .toList();
-
         if (compatible.isEmpty()) {
             System.out.println("No compatible modules found.");
             return;
@@ -517,6 +515,59 @@ public class ConsoleMainMenu {
             SerializationBenchmark.main(new String[]{});
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Prompt the user to pick a crew from the session, read a search keyword,
+     * and print every item in that crew that matches — regardless of whether
+     * the item is held by an Explorer or by a Vehicle.
+     *
+     * INTENT:         Surface the cross-entity inventory search capability
+     *                 (CrewInventorySearch.searchAllInventories) through the
+     *                 CLI so the user can verify Iteration 4's polymorphic
+     *                 InventoryHolder<T> design end-to-end.
+     * EXAMPLE:        > 13
+     *                 Select crew to search inventories:
+     *                  1. Sirocco Vanguard
+     *                 > 1
+     *                 Enter search keyword: coiler
+     *                 3 match(es) for "coiler":
+     *                   Coiler Rifle      weapon       500
+     *                   Coiler Caster     module       3
+     *                   ...
+     * DEFINITIONS:    keyword — case-insensitive substring; matched against
+     *                           item name and description.
+     * PRECONDITIONS:  sessionCrews is non-empty (otherwise selectCrew prints
+     *                 a message and returns null).
+     * POSTCONDITIONS: Matching items printed in table form; no state changes
+     *                 to crew or catalog.
+     */
+    private void searchCrewInventories() {
+        Crew crew = selectCrew("search inventories");
+        if (crew == null) return;
+        System.out.print("Enter search keyword: ");
+        String keyword = scanner.nextLine().trim();
+        if (keyword.isEmpty()) {
+            System.out.println("Empty keyword; nothing searched.");
+            return;
+        }
+        List<Item> matches = darkforge.crewAccess()
+                .searchAllInventories(crew, keyword);
+        if (matches.isEmpty()) {
+            System.out.println("No items match \"" + keyword + "\".");
+            return;
+        }
+        System.out.printf("%n%d match(es) for \"%s\":%n",
+                matches.size(), keyword);
+        System.out.printf("%-30s %-12s %-8s%n",
+                "Item", "Type", "Cost");
+        System.out.println("-".repeat(56));
+        for (Item item : matches) {
+            System.out.printf("%-30s %-12s %-8d%n",
+                    item.getName(),
+                    item.getItemType(),
+                    item.getCost());
         }
     }
 
