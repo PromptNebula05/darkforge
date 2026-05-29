@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -25,20 +26,16 @@ public class ConsoleMainMenu {
 
     private final Scanner scanner;
     private final FacadeDarkforge darkforge;
-
     private final ConsoleCreationWizard wizard;
     private final ConsoleCrewWizard crewWizard;
-
     private final List<Explorer> sessionExplorers;
     private final List<Crew> sessionCrews;
 
     public ConsoleMainMenu(Scanner scanner) {
         this.scanner = scanner;
         this.darkforge = FacadeDarkforge.getTheInstance();
-
         this.wizard = new ConsoleCreationWizard(scanner);
         this.crewWizard = new ConsoleCrewWizard(scanner);
-
         this.sessionExplorers = new ArrayList<>();
         this.sessionCrews = new ArrayList<>();
     }
@@ -52,8 +49,14 @@ public class ConsoleMainMenu {
         while (running) {
             printMenu();
             System.out.print("> ");
-
-            String choice = scanner.nextLine().trim();
+            String choice;
+            try {
+                choice = scanner.nextLine().trim();
+            } catch (NoSuchElementException e) {
+                // Input exhausted (e.g. piped/empty stdin in tests).
+                // Exit the menu loop cleanly instead of crashing.
+                break;
+            }
             switch (choice) {
                 case "1" -> handleCreate();
                 case "2" -> handleSave();
@@ -63,12 +66,10 @@ public class ConsoleMainMenu {
                 case "6" -> handleDelete();
                 case "7" -> handleCrewWizard();
                 case "8" -> handleBrowseTalents();
-
                 case "9" -> browseEquipmentCatalog();
                 case "10" -> addCatalogItemToExplorer();
                 case "11" -> installVehicleModule();
                 case "12" -> runSerializationBenchmark();
-
                 case "0", "Q", "q" -> {
                     System.out.println("Farewell, Explorer.");
                     running = false;
@@ -119,10 +120,8 @@ public class ConsoleMainMenu {
             System.out.println("No Explorers to save.");
             return;
         }
-
         Explorer selected = selectExplorer("save");
         if (selected == null) return;
-
         try {
             Path path = darkforge.persistenceAccess()
                     .saveExplorer(selected);
@@ -143,26 +142,21 @@ public class ConsoleMainMenu {
                 System.out.println("No save files found.");
                 return;
             }
-
             System.out.println("\nSaved files:");
             for (int i = 0; i < saves.size(); i++) {
                 System.out.printf(" %d. %s%n",
                         i + 1,
                         saves.get(i).getFileName());
             }
-
             System.out.print("Choose file: ");
             int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
             if (idx < 0 || idx >= saves.size()) {
                 System.out.println("Invalid selection.");
                 return;
             }
-
             Explorer loaded = darkforge.persistenceAccess()
                     .loadExplorer(saves.get(idx));
-
             sessionExplorers.add(loaded);
-
             System.out.println("Loaded: " + loaded.getName());
             System.out.println(
                     darkforge.displayAccess()
@@ -187,7 +181,6 @@ public class ConsoleMainMenu {
             System.out.println("No Explorers in session.");
             return;
         }
-
         for (Explorer e : sessionExplorers) {
             System.out.println(
                     darkforge.displayAccess()
@@ -205,23 +198,19 @@ public class ConsoleMainMenu {
             System.out.println("No Explorers in session.");
             return;
         }
-
         System.out.print("Search name: ");
         String query = scanner.nextLine().trim();
         if (query.isEmpty()) {
             System.out.println("Enter a search term.");
             return;
         }
-
         List<Explorer> results =
                 darkforge.creationAccess()
                         .searchByName(sessionExplorers, query);
-
         if (results.isEmpty()) {
             System.out.println("No matches.");
             return;
         }
-
         System.out.printf("%d match(es):%n", results.size());
         for (Explorer e : results) {
             System.out.println(" " + darkforge.displayAccess().formatSummary(e));
@@ -236,40 +225,32 @@ public class ConsoleMainMenu {
         try {
             List<Path> saves =
                     darkforge.persistenceAccess().listSaves();
-
             if (saves.isEmpty()) {
                 System.out.println("No save files found.");
                 return;
             }
-
             System.out.println("\nSaved files:");
             for (int i = 0; i < saves.size(); i++) {
                 System.out.printf(" %d. %s%n",
                         i + 1,
                         saves.get(i).getFileName());
             }
-
             System.out.print("Choose file to delete: ");
             int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
-
             if (idx < 0 || idx >= saves.size()) {
                 System.out.println("Invalid selection.");
                 return;
             }
-
             Path target = saves.get(idx);
             System.out.printf("Delete '%s'? (y/n): ",
                     target.getFileName());
-
             String confirm = scanner.nextLine().trim();
             if (!confirm.equalsIgnoreCase("y")) {
                 System.out.println("Deletion cancelled.");
                 return;
             }
-
             boolean deleted = darkforge.persistenceAccess()
                     .deleteExplorer(target);
-
             if (deleted) {
                 System.out.println("Deleted: " + target.getFileName());
             } else {
@@ -289,9 +270,7 @@ public class ConsoleMainMenu {
     private void handleCrewWizard() {
         Crew crew = crewWizard.run();
         if (crew == null) return;
-
         sessionCrews.add(crew);
-
         for (Explorer m : crew.getMembers()) {
             if (!sessionExplorers.contains(m)) {
                 sessionExplorers.add(m);
@@ -308,7 +287,6 @@ public class ConsoleMainMenu {
         System.out.println(" 1. Browse by Category");
         System.out.println(" 2. Search by Name");
         System.out.print("> ");
-
         String choice = scanner.nextLine().trim();
         if (choice.equals("1")) {
             browseTalentsByCategory();
@@ -321,7 +299,6 @@ public class ConsoleMainMenu {
 
     private void browseTalentsByCategory() {
         TalentCategory[] cats = TalentCategory.values();
-
         System.out.println("\nSelect category:");
         for (int i = 0; i < cats.length; i++) {
             System.out.printf(" %d. %s%n",
@@ -329,24 +306,20 @@ public class ConsoleMainMenu {
                     cats[i].name());
         }
         System.out.print("> ");
-
         try {
             int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
             if (idx < 0 || idx >= cats.length) {
                 System.out.println("Invalid selection.");
                 return;
             }
-
             List<Talent> talents =
                     darkforge.crewAccess()
                             .browseTalents(cats[idx]);
-
             if (talents.isEmpty()) {
                 System.out.println("No talents in "
                         + cats[idx].name() + ".");
                 return;
             }
-
             System.out.printf("%n%s talents:%n", cats[idx].name());
             for (Talent t : talents) {
                 System.out.printf("  • %s (max lvl %d) — %s%n",
@@ -362,21 +335,17 @@ public class ConsoleMainMenu {
     private void searchTalentsByName() {
         System.out.print("Search: ");
         String query = scanner.nextLine().trim();
-
         if (query.isEmpty()) {
             System.out.println("Enter a search term.");
             return;
         }
-
         List<Talent> results =
                 darkforge.crewAccess()
                         .searchTalents(query);
-
         if (results.isEmpty()) {
             System.out.println("No matches.");
             return;
         }
-
         System.out.printf("%d result(s):%n", results.size());
         for (Talent t : results) {
             System.out.printf("  • %s [%s] (max lvl %d) — %s%n",
@@ -409,32 +378,27 @@ public class ConsoleMainMenu {
     private void addCatalogItemToExplorer() {
         Crew crew = selectCrew("modify");
         if (crew == null) return;
-
         if (crew.getCrewSize() == 0) {
             System.out.println("Crew has no members.");
             return;
         }
-
         System.out.print("Search catalog: ");
         String keyword = scanner.nextLine().trim();
         if (keyword.isEmpty()) {
             System.out.println("Enter a keyword.");
             return;
         }
-
         List<Item> items = darkforge.catalogAccess().search(keyword);
         if (items.isEmpty()) {
             System.out.println("No items found.");
             return;
         }
-
         for (int i = 0; i < items.size(); i++) {
             System.out.printf("  %d. %s (%d rukh)%n",
                     i + 1,
                     items.get(i).getName(),
                     items.get(i).getCost());
         }
-
         System.out.print("Select item #: ");
         int idx;
         try {
@@ -447,21 +411,18 @@ public class ConsoleMainMenu {
             System.out.println("Invalid selection.");
             return;
         }
-
         Item selected = items.get(idx);
         if (!(selected instanceof CharacterItem)) {
             System.out.println("Not a character item.");
             return;
         }
         CharacterItem ci = (CharacterItem) selected;
-
         List<Explorer> members = crew.getMembers();
         for (int i = 0; i < members.size(); i++) {
             System.out.printf("  %d. %s%n",
                     i + 1,
                     members.get(i).getName());
         }
-
         System.out.print("Select explorer #: ");
         int eIdx;
         try {
@@ -474,7 +435,6 @@ public class ConsoleMainMenu {
             System.out.println("Invalid selection.");
             return;
         }
-
         boolean added = members.get(eIdx).addItem(ci);
         System.out.println(added ? "Item added." : "Could not add item.");
     }
@@ -488,12 +448,10 @@ public class ConsoleMainMenu {
 
         Vehicle rover = crew.getRover();
         Vehicle shuttle = crew.getShuttle();
-
         if (rover == null && shuttle == null) {
             System.out.println("This crew has no vehicles.");
             return;
         }
-
         System.out.println("Select vehicle:");
         if (rover != null) {
             System.out.println("  1. " + rover.display());
@@ -502,10 +460,8 @@ public class ConsoleMainMenu {
             System.out.println("  2. " + shuttle.display());
         }
         System.out.print("> ");
-
         String vChoice = scanner.nextLine().trim();
         Vehicle vehicle;
-
         if ("1".equals(vChoice) && rover != null) {
             vehicle = rover;
         } else if ("2".equals(vChoice) && shuttle != null) {
@@ -519,7 +475,6 @@ public class ConsoleMainMenu {
         // pull modules from the catalog via the facade, then filter by compatibility.
         List<VehicleModule> modules = darkforge.catalogAccess()
                 .filterByType(VehicleModule.class);
-
         List<VehicleModule> compatible = modules.stream()
                 .filter(m -> m.isCompatibleWith(vehicle.getType()))
                 .toList();
@@ -528,7 +483,6 @@ public class ConsoleMainMenu {
             System.out.println("No compatible modules found.");
             return;
         }
-
         for (int i = 0; i < compatible.size(); i++) {
             VehicleModule m = compatible.get(i);
             System.out.printf("  %d. %s (%d CP)%n",
@@ -536,7 +490,6 @@ public class ConsoleMainMenu {
                     m.getName(),
                     m.getCpCost());
         }
-
         System.out.print("Select module #: ");
         int mIdx;
         try {
@@ -549,7 +502,6 @@ public class ConsoleMainMenu {
             System.out.println("Invalid selection.");
             return;
         }
-
         boolean ok = vehicle.equip(compatible.get(mIdx));
         System.out.println(ok
                 ? "Module installed."
@@ -580,7 +532,6 @@ public class ConsoleMainMenu {
                     sessionExplorers.get(i).getName());
         }
         System.out.print("> ");
-
         try {
             int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
             if (idx < 0 || idx >= sessionExplorers.size()) {
@@ -599,7 +550,6 @@ public class ConsoleMainMenu {
             System.out.println("No crews available. Create a crew first.");
             return null;
         }
-
         System.out.println("\nSelect crew to " + action + ":");
         for (int i = 0; i < sessionCrews.size(); i++) {
             System.out.printf(" %d. %s%n",
@@ -607,7 +557,6 @@ public class ConsoleMainMenu {
                     sessionCrews.get(i).getName());
         }
         System.out.print("> ");
-
         try {
             int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
             if (idx < 0 || idx >= sessionCrews.size()) {

@@ -22,7 +22,7 @@ public class GsonCatalogSerializer {
 
     public GsonCatalogSerializer() {
         this.gson = new GsonBuilder()
-                .registerTypeAdapter(
+                .registerTypeHierarchyAdapter(
                         Item.class,
                         new ItemTypeAdapter())
                 .setPrettyPrinting()
@@ -95,15 +95,25 @@ public class GsonCatalogSerializer {
             implements JsonSerializer<Item>,
             JsonDeserializer<Item> {
 
+        /**
+         * Internal Gson WITHOUT the
+         * hierarchy adapter, used to
+         * read/write concrete subclass
+         * fields via reflection without
+         * recursing back into this adapter.
+         */
+        private static final Gson PLAIN =
+                new Gson();
+
         @Override
         public JsonElement serialize(
                 Item src, Type typeOfSrc,
                 JsonSerializationContext
                         context) {
-            JsonObject obj =
-                    context.serialize(src,
-                                    src.getClass())
-                            .getAsJsonObject();
+            JsonObject obj = PLAIN
+                    .toJsonTree(src,
+                            src.getClass())
+                    .getAsJsonObject();
             obj.addProperty(
                     "itemType",
                     src.getItemType());
@@ -120,29 +130,37 @@ public class GsonCatalogSerializer {
                 JsonParseException {
             JsonObject obj =
                     json.getAsJsonObject();
+            JsonElement typeEl =
+                    obj.get("itemType");
+            if (typeEl == null
+                    || typeEl.isJsonNull()) {
+                throw new JsonParseException(
+                        "Missing 'itemType'"
+                                + " discriminator on"
+                                + " Item JSON object");
+            }
             String type =
-                    obj.get("itemType")
-                            .getAsString();
+                    typeEl.getAsString();
             return switch (type) {
                 case "weapon" ->
-                        context.deserialize(
+                        PLAIN.fromJson(
                                 obj,
                                 Weapon.class);
                 case "armor" ->
-                        context.deserialize(
+                        PLAIN.fromJson(
                                 obj,
                                 Armor.class);
                 case "module" ->
-                        context.deserialize(
+                        PLAIN.fromJson(
                                 obj,
                                 VehicleModule
                                         .class);
                 case "cargo" ->
-                        context.deserialize(
+                        PLAIN.fromJson(
                                 obj,
                                 CargoItem.class);
                 case "equipment" ->
-                        context.deserialize(
+                        PLAIN.fromJson(
                                 obj,
                                 CharacterItem
                                         .class);

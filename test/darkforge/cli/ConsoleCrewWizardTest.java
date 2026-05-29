@@ -2,7 +2,6 @@ package darkforge.cli;
 
 import darkforge.crew.*;
 import darkforge.facade.FacadeDarkforge;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +82,7 @@ class ConsoleCrewWizardTest {
         String output = captureOutput(
                 () -> wizardWith("").run());
         assertTrue(output.contains(
-                "DARKFORGE v3.0"));
+                "DARKFORGE v4.0"));
         assertTrue(output.contains(
                 "Crew Assembly Wizard"));
     }
@@ -97,7 +96,7 @@ class ConsoleCrewWizardTest {
         String output = captureOutput(
                 () -> wizardWith(
                         "\n\nTest Crew\n")
-                        .run());
+                        .runCreate());
         assertTrue(output.contains(
                 "Name cannot be empty"));
     }
@@ -111,22 +110,22 @@ class ConsoleCrewWizardTest {
         String output = captureOutput(
                 () -> {
                     Crew result = wizardWith(
-                            "My Crew\n9\n").run();
+                            "My Crew\n9\n").runCreate();
                     assertNull(result);
                 });
         assertNotNull(output);
     }
 
     // =========================================
-    // v3.0 banner version
+    // v4.0 banner version
     // =========================================
 
     @Test
     void wizardUsesV3Banner() {
         String output = captureOutput(
                 () -> wizardWith("Test\n")
-                        .run());
-        assertTrue(output.contains("v3.0"));
+                        .runCreate());
+        assertTrue(output.contains("v4.0"));
     }
 
     // =========================================
@@ -138,7 +137,7 @@ class ConsoleCrewWizardTest {
         assertDoesNotThrow(() -> {
             try {
                 wizardWith(
-                        "Test\n0\n").run();
+                        "Test\n0\n").runCreate();
             } catch (
                     java.util
                             .NoSuchElementException
@@ -148,14 +147,14 @@ class ConsoleCrewWizardTest {
     }
 
     // =========================================
-    // Menu prompt appears
+    // Member prompt appears
     // =========================================
 
     @Test
     void wizardShowsMemberPrompt() {
         String output = captureOutput(
                 () -> wizardWith(
-                        "Test Crew\n").run());
+                        "Test Crew\n").runCreate());
         assertTrue(
                 output.contains("Member")
                         || output.contains("member")

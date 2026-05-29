@@ -101,4 +101,9 @@ public class GarudaPower extends GameEntity {
                 getName(), typeStr, effect,
                 energyCost);
     }
+
+    @Override
+    public String toString() {
+        return display();
+    }
 }

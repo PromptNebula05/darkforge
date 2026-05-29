@@ -43,7 +43,7 @@ public class FacadeDarkforge {
     }
 
     public String getVersion() {
-        return "DARKFORGE v3.0";
+        return "DARKFORGE v4.0";
     }
 
     public FacadeModel modelAccess() {

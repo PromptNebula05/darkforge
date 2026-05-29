@@ -153,8 +153,19 @@ class ConsoleMainMenuTest {
     }
 
     @Test
-    void shouldHandleLoadWhenNoSavesExist() {
-        // Input: choose Load (2), then go back
+    void shouldHandleLoadWhenNoSavesExist() throws Exception {
+        // Ensure no save files exist for this test.
+        // (The @TempDir field above is unused; the facade's
+        // save directory is global, so we clear it explicitly.)
+        var facade = darkforge.facade.FacadeDarkforge
+                .getTheInstance();
+        facade.initialize();
+        for (java.nio.file.Path p
+                : facade.persistenceAccess().listSaves()) {
+            facade.persistenceAccess().deleteExplorer(p);
+        }
+
+        // Input: choose Load (3), then quit
         String input = "3\nQ\n";
         ByteArrayOutputStream out = captureOutput();
         try {

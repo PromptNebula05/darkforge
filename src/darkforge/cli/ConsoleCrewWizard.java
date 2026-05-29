@@ -69,6 +69,21 @@ public class ConsoleCrewWizard {
         }
         return activeCrew;
     }
+    /**
+     * Test-friendly creation entry point.
+     *
+     * Runs the banner + new-crew creation flow directly, bypassing the
+     * management menu. Returns the resulting Crew (or null if creation
+     * was aborted or input was exhausted).
+     *
+     * The full management menu remains available via {@link #run()}
+     * for the interactive console UI.
+     */
+    public Crew runCreate() {
+        printBanner();
+        createNewCrew();
+        return activeCrew;
+    }
 
     // =========================================
     // Crew management menu
@@ -998,66 +1013,37 @@ public class ConsoleCrewWizard {
 
     private String promptCrewName() {
         while (true) {
-            System.out.println(
-                    "\n--- Crew Naming ---");
-            System.out.println(
-                    " 1. Enter custom name");
-            System.out.println(
-                    " 2. Roll random name (D6)");
-            System.out.print("> ");
-            String choice =
-                    scanner.nextLine().trim();
+            System.out.print(
+                    "\nCrew name (type 'random' to roll a D6 name): ");
+            String input = scanner.nextLine().trim();
 
-            if (choice.equals("1")) {
-                System.out.print(
-                        "Crew name: ");
-                String input =
-                        scanner.nextLine()
-                                .trim();
-                if (!input.isEmpty())
-                    return input;
-                System.out.println(
-                        "Name cannot be"
-                                + " empty.");
+            if (input.isEmpty()) {
+                System.out.println("Name cannot be empty.");
+                continue;
+            }
 
-            } else if (
-                    choice.equals("2")) {
-                // Prompt for an Explorer
-                // name in case D6 prefix
-                // roll = 1 (EXPLORER_NAME)
+            if (input.equalsIgnoreCase("random")
+                    || input.equalsIgnoreCase("roll")) {
+                // Prompt for an Explorer name in case the D6 prefix
+                // roll = 1 (EXPLORER_NAME).
                 System.out.print(
-                        "Explorer name for"
-                                + " the roll (or"
-                                + " Enter to skip):"
-                                + " ");
-                String eName =
-                        scanner.nextLine()
-                                .trim();
-                String generated =
-                        darkforge.crewAccess()
-                                .generateRandomCrewName(
-                                        eName.isEmpty()
-                                                ? null
-                                                : eName);
-                System.out.println(
-                        "\n  Rolled: "
-                                + generated);
-                System.out.print(
-                        "Accept? (y/n): ");
-                String confirm =
-                        scanner.nextLine()
-                                .trim();
-                if (confirm
-                        .equalsIgnoreCase(
-                                "y")) {
+                        "Explorer name for the roll (or"
+                                + " Enter to skip): ");
+                String eName = scanner.nextLine().trim();
+                String generated = darkforge.crewAccess()
+                        .generateRandomCrewName(
+                                eName.isEmpty() ? null : eName);
+                System.out.println("\n  Rolled: " + generated);
+                System.out.print("Accept? (y/n): ");
+                String confirm = scanner.nextLine().trim();
+                if (confirm.equalsIgnoreCase("y")) {
                     return generated;
                 }
-                // Loop back for re-roll
-                // or manual entry
-            } else {
-                System.out.println(
-                        "Enter 1 or 2.");
+                // Otherwise loop back to re-prompt
+                continue;
             }
+
+            return input;
         }
     }
 
@@ -1708,7 +1694,7 @@ public class ConsoleCrewWizard {
         System.out.println(
                 "\n" + "=".repeat(50));
         System.out.println(
-                " DARKFORGE v3.0 \u2014 Crew"
+                " DARKFORGE v4.0 \u2014 Crew"
                         + " Assembly Wizard");
         System.out.println(
                 "=".repeat(50));

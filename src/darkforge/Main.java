@@ -2,18 +2,20 @@ package darkforge;
 
 import darkforge.cli.ConsoleMainMenu;
 import darkforge.facade.FacadeDarkforge;
+
 import java.util.Scanner;
 
 public class Main {
+
   public static void main(String[] args) {
     System.out.println(
             "\n" + "=".repeat(50));
     System.out.println(
-            "  DARKFORGE v3.0 — Coriolis Explorer"
+            "  DARKFORGE v4.0 — Coriolis Explorer"
                     + " & Crew Management");
     System.out.println(
-            "  CS622 — Assignment 3: Collections"
-                    + " and Generics");
+            "  CS622 — Assignment 4: Interfaces,"
+                    + " Serialization & GUI");
     System.out.println(
             "=".repeat(50));
 
