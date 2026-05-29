@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Toolkit",
+    "description": "Portable repair and maintenance tools.",
+    "category": "Tools & Kits",
+    "gearBonus": 2,
+    "weight": 1.0,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 300
+  },
+  {
+    "name": "Medkit",
+    "description": "Field medical kit with supplies for trauma care.",
+    "category": "Medicine & Drugs",
+    "gearBonus": 2,
+    "weight": 0.5,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 400
+  },
+  {
+    "name": "Advanced Medkit",
+    "description": "Guild-grade medical supplies with diagnostic tools.",
+    "category": "Medicine & Drugs",
+    "gearBonus": 3,
+    "weight": 1.0,
+    "techLevel": "G",
+    "restricted": false,
+    "cost": 1500
+  },
+  {
+    "name": "Compass",
+    "description": "Magnetic compass for surface navigation.",
+    "category": "Camp & Navigation",
+    "gearBonus": 1,
+    "weight": 0.0,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 50
+  },
+  {
+    "name": "Rope (50m)",
+    "description": "Durable synthetic climbing rope.",
+    "category": "Delving & Climbing",
+    "gearBonus": 1,
+    "weight": 1.0,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 100
+  },
+  {
+    "name": "Climbing Harness",
+    "description": "Full-body harness with carabiners and belay device.",
+    "category": "Delving & Climbing",
+    "gearBonus": 2,
+    "weight": 1.0,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 200
+  },
+  {
+    "name": "Grav Piton Gun",
+    "description": "Fires anchor pitons into rock faces. Guild precision tool.",
+    "category": "Delving & Climbing",
+    "gearBonus": 3,
+    "weight": 1.0,
+    "techLevel": "G",
+    "restricted": false,
+    "cost": 1000
+  },
+  {
+    "name": "Portable Scanner",
+    "description": "Handheld scanner for environment and life-sign detection.",
+    "category": "Light & Scanning",
+    "gearBonus": 2,
+    "weight": 0.5,
+    "techLevel": "G",
+    "restricted": false,
+    "cost": 800
+  },
+  {
+    "name": "Headlamp",
+    "description": "Bright LED headlamp for hands-free illumination.",
+    "category": "Light & Scanning",
+    "gearBonus": 1,
+    "weight": 0.0,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 50
+  },
+  {
+    "name": "Floodlight",
+    "description": "Powerful portable area light.",
+    "category": "Light & Scanning",
+    "gearBonus": 2,
+    "weight": 1.0,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 200
+  },
+  {
+    "name": "Communicator",
+    "description": "Short-range encrypted communicator.",
+    "category": "Communication & Computers",
+    "gearBonus": 1,
+    "weight": 0.0,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 200
+  },
+  {
+    "name": "Marfid Terminal",
+    "description": "Portable computer terminal for data analysis and hacking.",
+    "category": "Communication & Computers",
+    "gearBonus": 2,
+    "weight": 1.0,
+    "techLevel": "G",
+    "restricted": false,
+    "cost": 1500
+  },
+  {
+    "name": "Marfid Heavy Terminal",
+    "description": "Large-format data terminal with advanced processing.",
+    "category": "Communication & Computers",
+    "gearBonus": 3,
+    "weight": 4.0,
+    "techLevel": "G",
+    "restricted": false,
+    "cost": 5000
+  },
+  {
+    "name": "Tent (2-person)",
+    "description": "Lightweight shelter for two explorers.",
+    "category": "Camp & Navigation",
+    "gearBonus": 1,
+    "weight": 1.0,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 150
+  },
+  {
+    "name": "Water Purifier",
+    "description": "Filters and purifies water from any source.",
+    "category": "Camp & Navigation",
+    "gearBonus": 1,
+    "weight": 0.5,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 100
+  },
+  {
+    "name": "Explosives (1 charge)",
+    "description": "Controlled demolition charge.",
+    "category": "Digging & Explosives",
+    "gearBonus": 0,
+    "weight": 1.0,
+    "techLevel": "O",
+    "restricted": true,
+    "cost": 500
+  },
+  {
+    "name": "Decontamination Unit",
+    "description": "Portable Blight decontamination station.",
+    "category": "Medicine & Drugs",
+    "gearBonus": 3,
+    "weight": 5.0,
+    "techLevel": "G",
+    "restricted": false,
+    "cost": 8000
+  },
+  {
+    "name": "Binoculars",
+    "description": "Enhanced optics for long-range observation.",
+    "category": "Light & Scanning",
+    "gearBonus": 2,
+    "weight": 0.5,
+    "techLevel": "O",
+    "restricted": false,
+    "cost": 250
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Coiler Caster",
+    "description": "Vehicle-mounted electromagnetic cannon.",
+    "damage": 4,
+    "crit": 2,
+    "gearBonus": 2,
+    "range": "Medium–Long",
+    "cpCost": 5,
+    "techLevel": "G",
+    "restricted": true,
+    "features": []
+  },
+  {
+    "name": "Fusillard Spewer (Mounted)",
+    "description": "Vehicle-mounted suppressive fire system.",
+    "damage": 4,
+    "crit": 3,
+    "gearBonus": 2,
+    "range": "Short–Medium",
+    "cpCost": 6,
+    "techLevel": "G",
+    "restricted": true,
+    "features": ["Autofire", "Heavy"]
+  },
+  {
+    "name": "Missile Launcher",
+    "description": "Guided missile system for anti-vehicle combat.",
+    "damage": 6,
+    "crit": 1,
+    "gearBonus": 1,
+    "range": "Long–Extreme",
+    "cpCost": 8,
+    "techLevel": "G",
+    "restricted": true,
+    "features": ["Blast", "Guided"]
+  },
+  {
+    "name": "Defense Chaff",
+    "description": "Chaff dispenser for countermeasures.",
+    "damage": 0,
+    "crit": 0,
+    "gearBonus": 0,
+    "range": "Short",
+    "cpCost": 3,
+    "techLevel": "G",
+    "restricted": false,
+    "features": ["Countermeasure"]
+  },
+  {
+    "name": "Smoke Launcher",
+    "description": "Creates obscuring smoke screens.",
+    "damage": 0,
+    "crit": 0,
+    "gearBonus": 0,
+    "range": "Short",
+    "cpCost": 2,
+    "techLevel": "O",
+    "restricted": false,
+    "features": ["Smoke"]
+  },
+  {
+    "name": "Vulcan Autocannon",
+    "description": "Rotary-barrel autocannon. High volume of fire.",
+    "damage": 5,
+    "crit": 2,
+    "gearBonus": 1,
+    "range": "Medium",
+    "cpCost": 6,
+    "techLevel": "O",
+    "restricted": true,
+    "features": ["Autofire"]
+  }
+]
