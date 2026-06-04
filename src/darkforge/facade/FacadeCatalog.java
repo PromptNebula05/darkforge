@@ -2,18 +2,28 @@ package darkforge.facade;
 
 import darkforge.data.*;
 import darkforge.model.*;
+
 import java.util.*;
 import java.util.function.Predicate;
 
 /**
- * Simplified facade for the equipment catalog.
- * Follows the existing FacadeCrew pattern.
- * Accessed via FacadeDarkforge.catalogAccess().
+ * Simplified facade for the equipment
+ * catalog. Follows the existing
+ * FacadeCrew pattern. Accessed via
+ * FacadeDarkforge.catalogAccess().
+ *
+ * Exposes the catalog's search, filter,
+ * analytics, and info surface to the
+ * GUI and CLI, plus a reload() entry
+ * point that re-reads the JSON catalog
+ * files via GameDataProvider and
+ * rebinds both cached references in one
+ * synchronized step.
  */
 public class FacadeCatalog {
 
-    private final ItemCatalog catalog;
-    private final CatalogAnalytics analytics;
+    private ItemCatalog catalog;
+    private CatalogAnalytics analytics;
 
     FacadeCatalog(ItemCatalog catalog) {
         this.catalog = catalog;
@@ -96,5 +106,35 @@ public class FacadeCatalog {
 
     public ItemCatalog getRawCatalog() {
         return catalog;
+    }
+
+    // =========================================
+    // Reload
+    // =========================================
+
+    /**
+     * Re-reads the JSON catalog files via
+     * GameDataProvider and rebinds this
+     * facade's cached ItemCatalog and
+     * CatalogAnalytics. Returns the
+     * freshly-loaded catalog so callers
+     * can swap their own references in
+     * one step.
+     *
+     * Safe to call from a worker thread —
+     * no Swing components are touched.
+     * Callers that hold the previous
+     * ItemCatalog reference (for example,
+     * a GUI table model) must replace it
+     * with the value returned here.
+     */
+    public synchronized ItemCatalog reload() {
+        ItemCatalog fresh = GameDataProvider
+                .getTheInstance()
+                .reload();
+        this.catalog = fresh;
+        this.analytics =
+                new CatalogAnalytics(fresh);
+        return fresh;
     }
 }
