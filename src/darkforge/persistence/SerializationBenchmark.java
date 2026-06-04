@@ -1,13 +1,25 @@
 package darkforge.persistence;
 
+import darkforge.data.GameDataProvider;
 import darkforge.data.ItemCatalog;
-import java.io.IOException;
-import java.nio.file.*;
+import darkforge.facade.FacadeDarkforge;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
- * Benchmarks all three serialization approaches
- * on the full catalog, measuring roundtrip time
- * and output file size.
+ * Benchmarks all three serialization
+ * approaches on the full catalog,
+ * measuring roundtrip time and output
+ * file size.
+ *
+ * Exposes an instance run() method that
+ * returns a BenchmarkResult so callers
+ * (including the GUI Tools menu) can
+ * consume the measurements
+ * programmatically. main() is preserved
+ * for the existing CLI workflow and
+ * prints result.summary().
  */
 public class SerializationBenchmark {
 
@@ -15,108 +27,104 @@ public class SerializationBenchmark {
 
     public static void main(String[] args)
             throws Exception {
-        darkforge.facade.FacadeDarkforge
-                .getTheInstance().initialize();
+        BenchmarkResult result =
+                new SerializationBenchmark()
+                        .run();
+        System.out.println(
+                result.summary());
+    }
+
+    /**
+     * Runs all three serialization
+     * benchmarks and returns the
+     * aggregated result. Safe to call
+     * from a worker thread — no Swing
+     * components are touched.
+     */
+    public BenchmarkResult run()
+            throws Exception {
+        FacadeDarkforge.getTheInstance()
+                .initialize();
         ItemCatalog catalog =
-                darkforge.data.GameDataProvider
+                GameDataProvider
                         .getTheInstance()
                         .getItemCatalog();
-
         Path dir = Path.of(
                 System.getProperty(
                         "java.io.tmpdir"),
                 "darkforge-bench");
         Files.createDirectories(dir);
 
-        System.out.println(
-                "=== Serialization Benchmark"
-                        + " ===");
-        System.out.printf(
-                "Catalog size: %d items%n%n",
-                catalog.size());
-
-        benchmarkBinary(catalog, dir);
-        benchmarkJson(catalog, dir);
-        benchmarkGson(catalog, dir);
+        BenchmarkResult result =
+                new BenchmarkResult(ROUNDS);
+        benchmarkBinary(
+                result, catalog, dir);
+        benchmarkJson(
+                result, catalog, dir);
+        benchmarkGson(
+                result, catalog, dir);
+        return result;
     }
 
-    private static void benchmarkBinary(
+    private void benchmarkBinary(
+            BenchmarkResult result,
             ItemCatalog catalog,
             Path dir) throws Exception {
         BinaryCatalogSerializer ser =
                 new BinaryCatalogSerializer();
         Path file = dir.resolve(
                 "catalog.bin");
-
         long start = System.nanoTime();
-        for (int i = 0;
-             i < ROUNDS; i++) {
+        for (int i = 0; i < ROUNDS; i++) {
             ser.serialize(catalog, file);
             ser.deserialize(file);
         }
         long elapsed =
                 System.nanoTime() - start;
-        long fileSize =
-                Files.size(file);
-
-        System.out.printf(
-                "Binary:  %,d ms |"
-                        + " %,d bytes%n",
-                elapsed / 1_000_000,
-                fileSize);
+        long fileSize = Files.size(file);
+        result.record(
+                "Binary", elapsed, fileSize);
     }
 
-    private static void benchmarkJson(
+    private void benchmarkJson(
+            BenchmarkResult result,
             ItemCatalog catalog,
             Path dir) throws Exception {
         JsonCatalogSerializer ser =
                 new JsonCatalogSerializer();
         Path file = dir.resolve(
                 "catalog.json");
-
         long start = System.nanoTime();
-        for (int i = 0;
-             i < ROUNDS; i++) {
+        for (int i = 0; i < ROUNDS; i++) {
             ser.serializeToFile(
                     catalog, file);
             ser.deserializeFromFile(file);
         }
         long elapsed =
                 System.nanoTime() - start;
-        long fileSize =
-                Files.size(file);
-
-        System.out.printf(
-                "JSON:    %,d ms |"
-                        + " %,d bytes%n",
-                elapsed / 1_000_000,
-                fileSize);
+        long fileSize = Files.size(file);
+        result.record(
+                "JSON", elapsed, fileSize);
     }
 
-    private static void benchmarkGson(
+    private void benchmarkGson(
+            BenchmarkResult result,
             ItemCatalog catalog,
             Path dir) throws Exception {
         GsonCatalogSerializer ser =
                 new GsonCatalogSerializer();
         Path file = dir.resolve(
                 "catalog-gson.json");
-
         long start = System.nanoTime();
-        for (int i = 0;
-             i < ROUNDS; i++) {
+        for (int i = 0; i < ROUNDS; i++) {
             ser.serializeToFile(
                     catalog, file);
             ser.deserializeFromFile(file);
         }
         long elapsed =
                 System.nanoTime() - start;
-        long fileSize =
-                Files.size(file);
-
-        System.out.printf(
-                "Gson:    %,d ms |"
-                        + " %,d bytes%n",
-                elapsed / 1_000_000,
-                fileSize);
+        long fileSize = Files.size(file);
+        result.record(
+                "Gson", elapsed, fileSize);
     }
 }

@@ -3,7 +3,9 @@ package darkforge.data;
 import darkforge.crew.BirdType;
 import darkforge.crew.GarudaPower;
 import darkforge.exception.GameDataLoadException;
+import darkforge.mechanics.D6Table;
 import darkforge.model.*;
+
 import org.json.*;
 
 import java.io.*;
@@ -11,8 +13,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * Singleton that loads and caches all static game
- * data from JSON resource files at startup.
+ * Singleton that loads and caches all
+ * static game data from JSON resource
+ * files. initialize() populates every
+ * table once at startup; reload() re-reads
+ * just the 10 item-catalog JSON files and
+ * rebuilds the cached ItemCatalog so the
+ * GUI can pick up edits without
+ * restarting the application.
  */
 public class GameDataProvider {
 
@@ -27,7 +35,8 @@ public class GameDataProvider {
     private Map<Integer, String> quirks;
     private Map<Integer, String> keepsakes;
     private Map<Integer, String> appearances;
-    private Map<Integer, String> explorerReasons;
+    private Map<Integer, String>
+            explorerReasons;
     private Map<String, ProfessionData>
             professions;
     private Map<String, Map<Integer, String>>
@@ -63,7 +72,6 @@ public class GameDataProvider {
 
     public synchronized void initialize() {
         if (loaded) return;
-
         origins = loadOrigins();
         quirks = loadD66Map("quirks.json");
         keepsakes =
@@ -74,7 +82,6 @@ public class GameDataProvider {
                 loadD66Map(
                         "explorer-reasons.json");
         professions = loadProfessions();
-
         firstNameTables = new HashMap<>();
         lastNameTables = new HashMap<>();
         for (String prof
@@ -87,7 +94,6 @@ public class GameDataProvider {
                     loadD66Map("names/"
                             + key + "-last.json"));
         }
-
         garudaPowerRegistry =
                 loadGarudaPowers();
         talentRegistry =
@@ -95,9 +101,42 @@ public class GameDataProvider {
         loadCrewNames();
         loadBirdAppearances();
         itemCatalog = loadItemCatalog();
-
         GameDataValidator.validate(this);
         loaded = true;
+    }
+
+    /**
+     * Re-reads the 10 item-catalog JSON
+     * resource files (weapons, armor,
+     * gear, vehicle modules, cargo) and
+     * rebuilds the cached ItemCatalog.
+     * Other static game data (origins,
+     * quirks, professions, talents, name
+     * tables, bird appearances) is not
+     * reloaded.
+     *
+     * Safe to call from a worker thread —
+     * no Swing components are touched.
+     * Callers that hold the previous
+     * ItemCatalog reference must replace
+     * it with the value returned here.
+     *
+     * @return the freshly-rebuilt
+     *         ItemCatalog
+     * @throws IllegalStateException if
+     *         initialize() has not yet
+     *         been called
+     */
+    public synchronized ItemCatalog reload() {
+        if (!loaded) {
+            throw new IllegalStateException(
+                    "GameDataProvider must be"
+                            + " initialized before"
+                            + " reload() can be"
+                            + " called");
+        }
+        this.itemCatalog = loadItemCatalog();
+        return this.itemCatalog;
     }
 
     // =========================================
@@ -254,13 +293,19 @@ public class GameDataProvider {
     }
 
     // =========================================
-    // D66 map loading
+    // JSON parsing helpers
     // =========================================
 
     private Map<Integer, String> loadD66Map(
             String filename) {
-        JSONObject obj = new JSONObject(
-                loadResource(filename));
+        return parseIntKeyMap(
+                new JSONObject(
+                        loadResource(
+                                filename)));
+    }
+
+    private Map<Integer, String>
+    parseIntKeyMap(JSONObject obj) {
         Map<Integer, String> map =
                 new LinkedHashMap<>();
         for (String key : obj.keySet()) {
@@ -297,7 +342,6 @@ public class GameDataProvider {
         boolean variableFaction =
                 o.optBoolean(
                         "variableFaction", false);
-
         JSONObject contactsObj =
                 o.getJSONObject("contacts");
         Map<Integer, String> contactsMap =
@@ -308,7 +352,6 @@ public class GameDataProvider {
                     Integer.parseInt(key),
                     contactsObj.getString(key));
         }
-
         JSONObject tObj =
                 o.getJSONObject("freeTalent");
         Talent freeTalent = new Talent(
@@ -318,12 +361,10 @@ public class GameDataProvider {
                         tObj.getString("category")),
                 tObj.getInt("maxLevel"),
                 tObj.getString("effect"));
-
         JSONArray range =
                 o.getJSONArray("d66Range");
         int d66Low = range.getInt(0);
         int d66High = range.getInt(1);
-
         if (variableFaction) {
             JSONObject vfObj =
                     o.getJSONObject(
@@ -338,8 +379,7 @@ public class GameDataProvider {
             }
             return new Origin(
                     location, freeTalent,
-                    new darkforge.mechanics
-                            .D6Table<>(factionMap,
+                    new D6Table<>(factionMap,
                             new Random()),
                     contactsMap,
                     d66Low, d66High);
@@ -380,7 +420,6 @@ public class GameDataProvider {
         String name = p.getString("name");
         Attribute keyAttr = Attribute.valueOf(
                 p.getString("keyAttribute"));
-
         JSONArray specArr =
                 p.getJSONArray("specialties");
         List<ProfessionData.SpecialtyData>
@@ -398,7 +437,6 @@ public class GameDataProvider {
                             s.getString(
                                     "freeTalentName")));
         }
-
         JSONArray talArr =
                 p.getJSONArray("talents");
         List<ProfessionData.TalentData>
@@ -418,7 +456,6 @@ public class GameDataProvider {
                             t.getString(
                                     "effect")));
         }
-
         JSONArray eqSets =
                 p.getJSONArray(
                         "startingEquipmentSets");
@@ -448,7 +485,6 @@ public class GameDataProvider {
             }
             equipSets.add(items);
         }
-
         return new ProfessionData(name,
                 keyAttr, specs, talents,
                 equipSets);
@@ -471,7 +507,6 @@ public class GameDataProvider {
              i < arr.length(); i++) {
             JSONObject p =
                     arr.getJSONObject(i);
-
             Set<BirdType> nativeTypes =
                     new HashSet<>();
             JSONArray typesArr =
@@ -487,7 +522,6 @@ public class GameDataProvider {
                                             j)));
                 }
             }
-
             powers.add(new GarudaPower(
                     p.getString("name"),
                     p.getString("description"),
@@ -501,20 +535,51 @@ public class GameDataProvider {
     }
 
     // =========================================
-    // Crew names
+    // Talents
     // =========================================
 
-    private Map<Integer, String>
-    parseIntKeyMap(JSONObject obj) {
-        Map<Integer, String> map =
-                new LinkedHashMap<>();
-        for (String key : obj.keySet()) {
-            map.put(
-                    Integer.parseInt(key),
-                    obj.getString(key));
+    private TalentRegistry
+    loadTalentRegistry() {
+        JSONArray arr = new JSONArray(
+                loadResource("talents.json"));
+        List<Talent> talents =
+                new ArrayList<>();
+        for (int i = 0;
+             i < arr.length(); i++) {
+            JSONObject t =
+                    arr.getJSONObject(i);
+            talents.add(new Talent(
+                    t.getString("name"),
+                    t.getString("description"),
+                    TalentCategory.valueOf(
+                            t.getString("category")),
+                    t.getInt("maxLevel"),
+                    t.getString("effect")));
         }
-        return map;
+        Map<String, List<String>>
+                profTalentNames =
+                new LinkedHashMap<>();
+        for (Map.Entry<String,
+                ProfessionData>
+                entry :
+                professions.entrySet()) {
+            List<String> names =
+                    new ArrayList<>();
+            for (ProfessionData.TalentData td
+                    : entry.getValue()
+                    .getTalents()) {
+                names.add(td.name());
+            }
+            profTalentNames.put(
+                    entry.getKey(), names);
+        }
+        return new TalentRegistry(
+                talents, profTalentNames);
     }
+
+    // =========================================
+    // Crew names
+    // =========================================
 
     private void loadCrewNames() {
         JSONObject root = new JSONObject(
@@ -551,89 +616,31 @@ public class GameDataProvider {
     }
 
     // =========================================
-    // Talent registry
+    // Item catalog
     // =========================================
-
-    private TalentRegistry
-    loadTalentRegistry() {
-        JSONArray arr = new JSONArray(
-                loadResource("talents.json"));
-        List<Talent> talents =
-                new ArrayList<>();
-        for (int i = 0;
-             i < arr.length(); i++) {
-            JSONObject t =
-                    arr.getJSONObject(i);
-            talents.add(new Talent(
-                    t.getString("name"),
-                    t.getString("description"),
-                    TalentCategory.valueOf(
-                            t.getString("category")),
-                    t.getInt("maxLevel"),
-                    t.getString("effect")));
-        }
-
-        // Build profession-to-talent-name map
-        Map<String, List<String>>
-                profTalentNames =
-                new LinkedHashMap<>();
-        for (Map.Entry<String,
-                ProfessionData>
-                entry :
-                professions.entrySet()) {
-            List<String> names =
-                    new ArrayList<>();
-            for (ProfessionData.TalentData td
-                    : entry.getValue()
-                    .getTalents()) {
-                names.add(td.name());
-            }
-            profTalentNames.put(
-                    entry.getKey(), names);
-        }
-
-        return new TalentRegistry(
-                talents, profTalentNames);
-    }
-
-    // =========================================
-// Catalog loading
-// =========================================
 
     private ItemCatalog loadItemCatalog() {
         List<Item> items = new ArrayList<>();
-
-        // Ranged weapons
         items.addAll(loadWeapons(
                 "weapons-ranged.json"));
-        // Melee weapons
         items.addAll(loadWeapons(
                 "weapons-melee.json"));
-        // Heirloom weapons
         items.addAll(loadWeapons(
                 "weapons-heirloom.json"));
-        // Armor
         items.addAll(loadArmor(
                 "armor.json"));
-        // General equipment
         items.addAll(loadGeneralEquipment(
                 "equipment-general.json"));
-        // Rover upgrades
         items.addAll(loadVehicleModules(
                 "rover-upgrades.json"));
-        // Rover weapons (as VehicleModules)
         items.addAll(loadVehicleWeapons(
                 "rover-weapons.json", false));
-        // Shuttle upgrades
         items.addAll(loadVehicleModules(
                 "shuttle-upgrades.json"));
-        // Shuttle weapons
         items.addAll(loadVehicleWeapons(
                 "shuttle-weapons.json", true));
-        // Cargo items
         items.addAll(loadCargoItems(
                 "cargo-items.json"));
-
         return new ItemCatalog(items);
     }
 
@@ -774,7 +781,7 @@ public class GameDataProvider {
                     TechLevel.fromCode(
                             m.getString("techLevel")),
                     m.getBoolean("restricted"),
-                    null, // all compatible
+                    null,
                     isShuttle));
         }
         return modules;
@@ -795,7 +802,7 @@ public class GameDataProvider {
             weapons.add(new VehicleModule(
                     w.getString("name"),
                     w.getString("description"),
-                    1, // slot cost for weapons
+                    1,
                     w.getInt("cpCost"),
                     "weapon",
                     String.format(
