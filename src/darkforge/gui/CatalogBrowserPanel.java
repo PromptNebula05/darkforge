@@ -1,7 +1,10 @@
 package darkforge.gui;
 
+import darkforge.concurrency.BackgroundTask;
 import darkforge.data.*;
+import darkforge.facade.FacadeDarkforge;
 import darkforge.model.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -15,14 +18,23 @@ import java.util.function.Predicate;
  * Catalog browser with real-time search, category dropdown, and cost
  * range slider. All event handlers use lambda listeners.
  *
+ * Reload: a Reload Catalog button beside the existing search controls
+ * re-reads the JSON catalog resources via FacadeCatalog.reload(). The
+ * JSON I/O runs off the EDT through BackgroundTask&lt;ItemCatalog&gt;;
+ * the new catalog is rebound and the results table is refreshed on
+ * the EDT through onResult.
+ *
  * Picker mode: when {@link #enablePickerMode} is called, an extra
  * action button appears at the bottom that fires a Consumer with the
  * selected catalog Item. Used by InventoryPanel's "Add Item…" dialog.
  */
 public class CatalogBrowserPanel extends JPanel {
 
-    private final ItemCatalog catalog;
+    // =========================================
+    // Fields
+    // =========================================
 
+    private ItemCatalog catalog;
     private final JLabel costValueLabel;
     private final DefaultTableModel tableModel;
     private final JTable table;
@@ -30,7 +42,8 @@ public class CatalogBrowserPanel extends JPanel {
     private final JComboBox<String> categoryBox;
     private final JSlider costSlider;
     private final JLabel resultCount;
-
+    private final JButton reloadButton;
+    private final JLabel statusLabel;
     private final List<Item> currentRows = new ArrayList<>();
 
     // Picker mode state
@@ -38,6 +51,10 @@ public class CatalogBrowserPanel extends JPanel {
     private Consumer<Item> onAddRequested;
     private JButton addBtn;
     private JPanel pickerBar;
+
+    // =========================================
+    // Constructor
+    // =========================================
 
     public CatalogBrowserPanel() {
         this.catalog = GameDataProvider.getTheInstance().getItemCatalog();
@@ -52,8 +69,7 @@ public class CatalogBrowserPanel extends JPanel {
 
         controls.add(new JLabel("Category:"));
         categoryBox = new JComboBox<>();
-        categoryBox.addItem("All");
-        catalog.getCategories().stream().sorted().forEach(categoryBox::addItem);
+        rebuildCategoryBox();
         controls.add(categoryBox);
 
         // ---- Max cost (slider + live readout) ----
@@ -65,12 +81,20 @@ public class CatalogBrowserPanel extends JPanel {
         costSlider.setFocusable(false);
         controls.add(costSlider);
 
-        costValueLabel = new JLabel("≤ 5,000 rukh");       // new field
+        costValueLabel = new JLabel("≤ 5,000 rukh");
         costValueLabel.setPreferredSize(new Dimension(110, 22));
         controls.add(costValueLabel);
 
         resultCount = new JLabel("0 items");
         controls.add(resultCount);
+
+        // ---- Reload (off-EDT via BackgroundTask) ----
+        reloadButton = new JButton("Reload Catalog");
+        reloadButton.addActionListener(e -> reloadCatalogAsync());
+        controls.add(reloadButton);
+
+        statusLabel = new JLabel(" ");
+        controls.add(statusLabel);
 
         add(controls, BorderLayout.NORTH);
 
@@ -95,8 +119,13 @@ public class CatalogBrowserPanel extends JPanel {
                     "≤ " + String.format("%,d", costSlider.getValue()) + " rukh");
             refreshResults();
         });
+
         refreshResults();
     }
+
+    // =========================================
+    // Picker mode
+    // =========================================
 
     /**
      * Switch this panel into picker mode. Shows an extra button beneath
@@ -114,7 +143,6 @@ public class CatalogBrowserPanel extends JPanel {
                                  Consumer<Item> onAdd) {
         this.rowFilter = (rowFilter != null) ? rowFilter : (item -> true);
         this.onAddRequested = onAdd;
-
         if (pickerBar == null) {
             pickerBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             addBtn = new JButton(buttonLabel != null ? buttonLabel : "Add");
@@ -142,6 +170,10 @@ public class CatalogBrowserPanel extends JPanel {
         }
     }
 
+    // =========================================
+    // Results table
+    // =========================================
+
     private void refreshResults() {
         String query = searchField.getText().trim().toLowerCase();
         String category = (String) categoryBox.getSelectedItem();
@@ -151,7 +183,8 @@ public class CatalogBrowserPanel extends JPanel {
             boolean matchesSearch = query.isEmpty()
                     || item.getName().toLowerCase().contains(query)
                     || item.getDescription().toLowerCase().contains(query);
-            boolean matchesCategory = "All".equals(category)
+            boolean matchesCategory = category == null
+                    || "All".equals(category)
                     || item.getCategory().equals(category);
             boolean matchesCost = item.getCost() <= maxCost;
             boolean matchesPicker = rowFilter.test(item);
@@ -172,5 +205,72 @@ public class CatalogBrowserPanel extends JPanel {
             currentRows.add(item);
         }
         resultCount.setText(results.size() + " items");
+    }
+
+    // =========================================
+    // Reload
+    // =========================================
+
+    /**
+     * Rebuild the category dropdown from the current catalog. The
+     * previously-selected category is preserved when it still exists;
+     * otherwise the selection falls back to "All".
+     */
+    private void rebuildCategoryBox() {
+        String previous = (String) categoryBox.getSelectedItem();
+        categoryBox.removeAllItems();
+        categoryBox.addItem("All");
+        catalog.getCategories().stream().sorted().forEach(categoryBox::addItem);
+        if (previous != null) {
+            for (int i = 0; i < categoryBox.getItemCount(); i++) {
+                if (previous.equals(categoryBox.getItemAt(i))) {
+                    categoryBox.setSelectedIndex(i);
+                    return;
+                }
+            }
+        }
+        categoryBox.setSelectedItem("All");
+    }
+
+    /**
+     * Rebind this panel to a freshly-loaded ItemCatalog and refresh
+     * the visible results. Must run on the EDT (called only from the
+     * reload BackgroundTask's onResult).
+     */
+    private void rebindTableModel(ItemCatalog freshCatalog) {
+        this.catalog = freshCatalog;
+        rebuildCategoryBox();
+        refreshResults();
+    }
+
+    /**
+     * Re-read the JSON catalog resources off the EDT and rebind this
+     * panel when the worker completes. JSON I/O happens in compute();
+     * the rebind, status update, and button re-enable happen on the
+     * EDT through SwingWorker.done().
+     */
+    private void reloadCatalogAsync() {
+        reloadButton.setEnabled(false);
+        statusLabel.setText("Reloading catalog...");
+
+        new BackgroundTask<ItemCatalog>() {
+            @Override
+            protected ItemCatalog compute() {
+                return FacadeDarkforge.getTheInstance()
+                        .catalogAccess()
+                        .reload();
+            }
+        }
+                .onResult(freshCatalog -> {
+                    rebindTableModel(freshCatalog);
+                    statusLabel.setText(
+                            "Catalog reloaded (" + freshCatalog.size() + " items)");
+                    reloadButton.setEnabled(true);
+                })
+                .onError(err -> {
+                    statusLabel.setText("Reload failed: " + err.getMessage());
+                    reloadButton.setEnabled(true);
+                })
+                .execute();
     }
 }
