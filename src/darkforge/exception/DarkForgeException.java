@@ -10,7 +10,7 @@ package darkforge.exception;
  * - userMessage: player-facing, no jargon, displayed by CLI
  * - technicalDetail: developer-facing, used by getMessage()
  */
-public abstract class DarkForgeException extends Exception {
+public abstract class DarkForgeException extends RuntimeException {
   private final String userMessage;
   private final String technicalDetail;
 
