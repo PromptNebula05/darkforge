@@ -11,22 +11,27 @@ public class Main {
     System.out.println(
             "\n" + "=".repeat(50));
     System.out.println(
-            "  DARKFORGE v4.0 — Coriolis Explorer"
-                    + " & Crew Management");
+            " DARKFORGE v5.0 — Coriolis"
+                    + " Explorer & Crew"
+                    + " Management");
     System.out.println(
-            "  CS622 — Assignment 4: Interfaces,"
-                    + " Serialization & GUI");
+            " CS622 — Assignment 5:"
+                    + " Concurrency & SwingWorker");
     System.out.println(
             "=".repeat(50));
 
-    FacadeDarkforge.getTheInstance()
-            .initialize();
+    FacadeDarkforge facade =
+            FacadeDarkforge.getTheInstance();
+    facade.initialize();
 
     try (Scanner scanner =
                  new Scanner(System.in)) {
       ConsoleMainMenu menu =
               new ConsoleMainMenu(scanner);
       menu.run();
+    } finally {
+      facade.concurrencyAccess()
+              .shutdown();
     }
 
     System.out.println(

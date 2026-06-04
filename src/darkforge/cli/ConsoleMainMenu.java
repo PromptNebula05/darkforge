@@ -70,6 +70,7 @@ public class ConsoleMainMenu {
                 case "11" -> installVehicleModule();
                 case "12" -> runSerializationBenchmark();
                 case "13" -> searchCrewInventories();
+                case "14" -> new ConsoleDiceSimulator().run(scanner);
                 case "0", "Q", "q" -> {
                     System.out.println("Farewell, Explorer.");
                     running = false;
@@ -98,6 +99,7 @@ public class ConsoleMainMenu {
         System.out.println(" 11. Install Vehicle Module");
         System.out.println(" 12. Serialization Benchmark");
         System.out.println(" 13. Search All Crew Inventories");
+        System.out.println(" 14. Dice Probability Simulator");
         System.out.println(" 0. Quit");
     }
 
