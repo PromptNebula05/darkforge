@@ -1,29 +1,55 @@
 package darkforge.gui;
 
+import darkforge.concurrency.BackgroundTask;
 import darkforge.crew.Crew;
-import darkforge.exception.CharacterCorruptionException;
+import darkforge.exception
+        .CharacterCorruptionException;
 import darkforge.facade.FacadeDarkforge;
+import darkforge.persistence
+        .BenchmarkResult;
+import darkforge.persistence
+        .SerializationBenchmark;
+
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser
+        .FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
 /**
- * Main GUI frame for DARKFORGE.
- * Tabbed interface: Catalog Browser,
- * Inventory Manager, Vehicle Upgrades.
+ * Main GUI frame for DARKFORGE. Hosts a
+ * tabbed interface with the catalog
+ * browser, inventory manager, vehicle
+ * upgrades, and dice simulator, and a
+ * menu bar with File (Open Crew...,
+ * Exit) and Tools (Run Serialization
+ * Benchmark...).
+ *
+ * The serialization benchmark runs off
+ * the EDT through a
+ * BackgroundTask<BenchmarkResult> and
+ * renders its summary in a JOptionPane
+ * when complete.
  */
 public class DarkforgeGui extends JFrame {
+
+    // =========================================
+    // Fields
+    // =========================================
 
     private final InventoryPanel
             inventoryPanel;
     private final VehicleUpgradePanel
             vehicleUpgradePanel;
 
+    // =========================================
+    // Constructor
+    // =========================================
+
     public DarkforgeGui() {
-        super("DARKFORGE v4.0 — Equipment"
+        super("DARKFORGE v5.0 — Equipment"
                 + " Manager");
         setDefaultCloseOperation(
                 EXIT_ON_CLOSE);
@@ -50,39 +76,64 @@ public class DarkforgeGui extends JFrame {
                 inventoryPanel);
         tabs.addTab("⚙ Vehicle Upgrades",
                 vehicleUpgradePanel);
+        tabs.addTab("🎲 Dice Simulator",
+                new DiceSimulatorPanel());
         add(tabs);
 
-        // Menu bar — Phase 9 addition
+        // Menu bar
         setJMenuBar(buildMenuBar());
     }
+
+    // =========================================
+    // Menu bar
+    // =========================================
 
     /**
      * Build the application menu bar.
      * File → Open Crew... loads a saved
      * crew file and pushes the resulting
      * Crew into both wired panels.
+     * Tools → Run Serialization
+     * Benchmark... runs the persistence
+     * benchmark off the EDT and shows
+     * the result in a dialog.
      */
     private JMenuBar buildMenuBar() {
         JMenuBar bar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
 
+        // File menu
+        JMenu fileMenu = new JMenu("File");
         JMenuItem openCrew =
                 new JMenuItem("Open Crew...");
         openCrew.addActionListener(
                 e -> openCrewDialog());
         fileMenu.add(openCrew);
-
         fileMenu.addSeparator();
-
         JMenuItem exit =
                 new JMenuItem("Exit");
         exit.addActionListener(
                 e -> dispose());
         fileMenu.add(exit);
-
         bar.add(fileMenu);
+
+        // Tools menu
+        JMenu toolsMenu = new JMenu("Tools");
+        JMenuItem benchmarkItem =
+                new JMenuItem(
+                        "Run Serialization"
+                                + " Benchmark...");
+        benchmarkItem.addActionListener(
+                e -> runBenchmarkAsync(
+                        benchmarkItem));
+        toolsMenu.add(benchmarkItem);
+        bar.add(toolsMenu);
+
         return bar;
     }
+
+    // =========================================
+    // Open Crew dialog
+    // =========================================
 
     /**
      * Show a JFileChooser over the user's
@@ -121,7 +172,6 @@ public class DarkforgeGui extends JFrame {
         Path savesDir = Path.of(
                 System.getProperty("user.home"),
                 ".darkforge", "saves");
-
         JFileChooser chooser =
                 new JFileChooser(
                         savesDir.toFile());
@@ -150,7 +200,7 @@ public class DarkforgeGui extends JFrame {
             vehicleUpgradePanel
                     .setCrew(loaded);
             setTitle(
-                    "DARKFORGE v4.0 —"
+                    "DARKFORGE v5.0 —"
                             + " Equipment Manager"
                             + " — "
                             + loaded.getName());
@@ -172,6 +222,55 @@ public class DarkforgeGui extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
         }
     }
+
+    // =========================================
+    // Serialization benchmark runner
+    // =========================================
+
+    /**
+     * Run the persistence benchmark off
+     * the EDT and render the resulting
+     * BenchmarkResult summary in a dialog.
+     * The triggering menu item is disabled
+     * while the task runs and re-enabled
+     * from onResult / onError on the EDT.
+     */
+    private void runBenchmarkAsync(
+            JMenuItem trigger) {
+        trigger.setEnabled(false);
+
+        new BackgroundTask<BenchmarkResult>() {
+            @Override
+            protected BenchmarkResult compute()
+                    throws Exception {
+                return new SerializationBenchmark()
+                        .run();
+            }
+        }
+                .onResult(result -> {
+                    JOptionPane.showMessageDialog(
+                            DarkforgeGui.this,
+                            result.summary(),
+                            "Serialization Benchmark",
+                            JOptionPane
+                                    .INFORMATION_MESSAGE);
+                    trigger.setEnabled(true);
+                })
+                .onError(err -> {
+                    JOptionPane.showMessageDialog(
+                            DarkforgeGui.this,
+                            "Benchmark failed: "
+                                    + err.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    trigger.setEnabled(true);
+                })
+                .execute();
+    }
+
+    // =========================================
+    // Main
+    // =========================================
 
     public static void main(
             String[] args) {
