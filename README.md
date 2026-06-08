@@ -20,7 +20,7 @@ A Java 21 character/crew management system for the *Coriolis: The Great Dark* ta
 
 - Java 21+
 - `lib/json-20240303.jar` (org.json)
-- `lib/gson-2.11.0.jar` (Google Gson)
+- `lib/gson-2.10.1.jar` (Google Gson)
 - `lib/junit-platform-console-standalone-1.10.2.jar` (testing)
 
 ## Build & Run
