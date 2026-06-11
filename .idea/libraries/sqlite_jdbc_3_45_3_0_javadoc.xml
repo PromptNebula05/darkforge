@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="sqlite-jdbc-3.45.3.0-javadoc">
+    <ANNOTATIONS>
+      <root url="jar://$PROJECT_DIR$/lib/sqlite-jdbc-3.45.3.0-javadoc.jar!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/sqlite-jdbc-3.45.3.0-javadoc.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/sqlite-jdbc-3.45.3.0-javadoc.jar!/" />
+    </JAVADOC>
+    <NATIVE>
+      <root url="jar://$PROJECT_DIR$/lib/sqlite-jdbc-3.45.3.0-javadoc.jar!/" />
+    </NATIVE>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/sqlite-jdbc-3.45.3.0-javadoc.jar!/" />
+    </SOURCES>
+    <jarDirectory url="jar://$PROJECT_DIR$/lib/sqlite-jdbc-3.45.3.0-javadoc.jar!/" recursive="false" />
+    <jarDirectory url="jar://$PROJECT_DIR$/lib/sqlite-jdbc-3.45.3.0-javadoc.jar!/" recursive="false" type="SOURCES" />
+  </library>
+</component>

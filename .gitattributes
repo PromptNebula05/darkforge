@@ -1,0 +1,11 @@
+# Normalize all text files to LF in the repo and on checkout
+* text=auto eol=lf
+
+# Be explicit for the file types in DARKFORGE
+*.java   text eol=lf
+*.sql    text eol=lf
+*.md     text eol=lf
+*.gitignore text eol=lf
+
+# Keep the binary jar untouched
+*.jar    binary
