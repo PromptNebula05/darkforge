@@ -33,6 +33,8 @@ public class FacadeDarkforge {
 
     private FacadeConcurrency concurrency;
 
+    private FacadeDatabase database;
+
     private FacadeDarkforge() {
         this.model = FacadeModel
                 .getTheInstance();
@@ -64,11 +66,13 @@ public class FacadeDarkforge {
 
         concurrency =
                 new FacadeConcurrency();
+
+        database = new FacadeDatabase();
     }
 
-    // Iteration v5.0
+    // Iteration v6.0
     public String getVersion() {
-        return "DARKFORGE v5.0";
+        return "DARKFORGE v6.0";
     }
 
     // =========================================
@@ -109,5 +113,9 @@ public class FacadeDarkforge {
     public FacadeConcurrency
     concurrencyAccess() {
         return concurrency;
+    }
+
+    public FacadeDatabase databaseAccess() {
+        return database;
     }
 }
