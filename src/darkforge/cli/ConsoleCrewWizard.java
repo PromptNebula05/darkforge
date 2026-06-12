@@ -1694,7 +1694,7 @@ public class ConsoleCrewWizard {
         System.out.println(
                 "\n" + "=".repeat(50));
         System.out.println(
-                " DARKFORGE v5.0 \u2014 Crew"
+                " DARKFORGE v6.0 \u2014 Crew"
                         + " Assembly Wizard");
         System.out.println(
                 "=".repeat(50));
