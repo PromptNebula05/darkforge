@@ -82,7 +82,7 @@ class ConsoleCrewWizardTest {
         String output = captureOutput(
                 () -> wizardWith("").run());
         assertTrue(output.contains(
-                "DARKFORGE v5.0"));
+                "DARKFORGE v6.0"));
         assertTrue(output.contains(
                 "Crew Assembly Wizard"));
     }
@@ -117,7 +117,7 @@ class ConsoleCrewWizardTest {
     }
 
     // =========================================
-    // v5.0 banner version
+    // v6.0 banner version
     // =========================================
 
     @Test
@@ -125,7 +125,7 @@ class ConsoleCrewWizardTest {
         String output = captureOutput(
                 () -> wizardWith("Test\n")
                         .runCreate());
-        assertTrue(output.contains("v5.0"));
+        assertTrue(output.contains("v6.0"));
     }
 
     // =========================================
